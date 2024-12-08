@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('/img/backgroundRegister.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            top: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* Pusatkan secara vertikal */
+            height: 75px;
+            /* Atur tinggi header */
+        }
+
+        header .logo {
+            font-weight: 700;
+            color: #fc5200;
+            text-decoration: none;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            font-weight: 700;
+            color: #fc5200;
+            text-decoration: none;
+            margin-left: 65px;
+            display: flex;
+            align-items: center;
+            width: 135px;
+            height: 75px;
+        }
+
+        header nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        header nav a {
+            text-decoration: none;
+            background-color: #f97316;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 50px;
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 9999px;
+        }
+
+        header nav a:hover {
+            background-color: rgb(215, 84, 14);
+        }
+
+        #container {
+            background: rgba(11, 9, 9, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            color: white;
+            margin-top: 30px;
+            /* Memberi jarak dari header */
+        }
+
+        img {
+            width: 45px;
+            height: 45px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fc5200;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #e04b00;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: white;
+        }
+
+        #headerlogo {
+            display: flex;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        form{
+            font-weight: bold;
+        }
+
+        .footer a {
+            color: #fe712a;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <div id="headerlogo">
+            <a th:href="@{/}" class="logo"><img src="/img/RanTreker Logo.png" alt=""> </a>
+        </div>
+
+        <nav>
+            <a href="">Login</a>
+        </nav>
+    </header>
+
+    <div id="container">
+        <h1>Register</h1>
+        <hr>
+        <form method="POST" th:action="@{/register}" th:object="${user}">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" th:field="*{name}" required>
+            <p style="color: red;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" th:field="*{email}" required>
+            <p style="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create a password"  th:field="*{password}" required>
+            <p style="color: red;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+            <label for="retypepassword">Re-enter Password</label>
+            <input type="password" id="retypepassword" name="retypepassword" placeholder="Re-enter password" th:field="*{retypepassword}">
+            <p style="color: red;" th:if="${#fields.hasErrors('retypepassword')}" th:errors="*{retypepassword}"></p>
+
+            <input type="hidden" id="peran" name="peran" value="user">
+
+            <p style="color: red;" th:if="${#fields.hasErrors('peran')}" th:errors="*{peran}"></p>
+
+            <button type="submit" value="register">Sign Up</button>
+            <p>Have an account? <a th:href="@{/login}" style="color: #fc5200;">Login</a></p>
+        </form>
+        <div class="footer">
+            By signing up, you agree to our <span style="color: #fc5200;">Terms</span> and <span style="color: #fc5200;">Privacy Policy</span>.
+        </div>
+    </div>
+</body>
+
+</html>
