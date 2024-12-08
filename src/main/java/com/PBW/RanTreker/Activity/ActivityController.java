@@ -33,7 +33,11 @@ public class ActivityController {
             return "entryRun";
         }
 
-        System.out.println(activity.getId_user().getClass());
+        // save image kalo ada
+
+        // update image_location attribute
+
+        
         activityRepository.save(activity);
         return "redirect:/activity";
     }

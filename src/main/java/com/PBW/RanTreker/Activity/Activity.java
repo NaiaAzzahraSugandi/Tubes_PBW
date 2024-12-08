@@ -3,6 +3,8 @@ package com.PBW.RanTreker.Activity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +41,7 @@ public class Activity {
     @Size(max = 150, message = "Description is over 150 characters long!")
     private String description;
     
+    private MultipartFile image_file;
     private String image_location;
 
     public String toString(){
