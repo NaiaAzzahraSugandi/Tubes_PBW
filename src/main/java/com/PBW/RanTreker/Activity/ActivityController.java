@@ -23,11 +23,16 @@ public class ActivityController {
     @Autowired
     JDBCActivityRepository activityRepository;
 
+    @GetMapping("/dashboard")
+    public String dashboard(Model model){
+        String nama = (String) session.getAttribute("nama");
+        model.addAttribute("nama", nama);
+        return "dashboard";
+    }
+
+
     @GetMapping("/activity")
     public String activityView(Model model){
-        // mock the session
-        session.setAttribute("id_user", 2);
-        
         int id_user = (int) session.getAttribute("id_user");
         List<Activity> activities = activityRepository.findAll(id_user);
         model.addAttribute("totalActivity", activities.size());
@@ -37,7 +42,8 @@ public class ActivityController {
 
     @GetMapping("/activityEntry")
     public String activityEntryView(Activity activity, Model model){
-        model.addAttribute("id_user", (Integer)session.getAttribute("id_user"));
+        int id_user = (int) session.getAttribute("id_user");
+        model.addAttribute("id_user", id_user);
         return "entryRun";
     }
 
