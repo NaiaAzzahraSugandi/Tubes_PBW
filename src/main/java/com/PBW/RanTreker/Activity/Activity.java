@@ -16,6 +16,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class Activity {
+    private Integer id;
+
     @NotNull
     private Integer id_user;
 

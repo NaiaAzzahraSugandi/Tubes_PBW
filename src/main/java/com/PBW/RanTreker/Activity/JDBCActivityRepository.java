@@ -2,6 +2,8 @@ package com.PBW.RanTreker.Activity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,36 @@ public class JDBCActivityRepository {
                             activity.getImage_location());
     }
     
-    public List<Activity> findAll(Integer id_user){
+    public List<Activity> findAll(Integer id_user,
+                                  String title,
+                                  LocalDate startDate,
+                                  LocalDate endDate,
+                                  String time,
+                                  String duration,
+                                  String distance){
         String sql = "SELECT * FROM activities WHERE id_user = " + id_user;
-        return jdbcTemplate.query(sql, this::mapRowToActivity);
+
+        List<Object> filterList = new ArrayList<>();
+        if(title.length() > 0){
+            sql += " AND title ILIKE ?";
+            filterList.add("%" + title + "%");
+        }
+        if(startDate != null){
+            sql += " AND date >= ?";
+            filterList.add(startDate);
+        }
+        if(endDate != null){
+            sql += " AND date <= ?";
+            filterList.add(endDate);
+        }
+
+        sql += " ORDER BY time " + time + ", duration " + duration + ", distance " + distance;
+        return jdbcTemplate.query(sql, this::mapRowToActivity, filterList.toArray());
     }
 
     public Activity mapRowToActivity(ResultSet resultSet, int rowNum) throws SQLException{
         return new Activity(
+                resultSet.getInt("id"),
                 resultSet.getInt("id_user"),
                 resultSet.getString("title"),
                 resultSet.getInt("distance"),

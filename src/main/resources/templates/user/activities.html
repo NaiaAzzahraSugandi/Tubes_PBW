@@ -251,8 +251,8 @@
         <thead>
           <tr>
             <th>Num.</th>
-            <th>Date</th>
             <th>Title</th>
+            <th>Date</th>
             <th>Time</th>
             <th>Duration</th>
             <th>Distance</th>
@@ -262,14 +262,14 @@
         <tbody>
           <tr th:each="activity, stat : ${activities}">
             <td th:text="${stat.index + 1} + '.'" style="text-align: center;"></td>
-            <td th:text="${activity.date}"></td>
             <td th:text="${activity.title}"></td>
+            <td th:text="${#temporals.format(activity.date, 'dd-MM-yyyy')}"></td>
             <td th:text="${activity.time}"></td>
             <td th:text="${activity.duration}"></td>
             <td th:text="${activity.distance} + ' km'"></td>
             <td style="text-align: center;">
               <a href="#" class="action-link">Edit</a>
-              <a href="#" class="delete-link">Hapus</a>
+              <a href="#" class="delete-link">Delete</a>
             </td>
           </tr>
           <tr th:if="${activities.empty}">

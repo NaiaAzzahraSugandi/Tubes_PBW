@@ -1,5 +1,6 @@
 package com.PBW.RanTreker.Activity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,14 @@ public class ActivityController {
     @GetMapping("/activity")
     public String activityView(Model model,
                             @RequestParam(value = "title", required = false, defaultValue = "") String title,
-                            @RequestParam(value = "startDate", required = false, defaultValue= "") String startDate,
-                            @RequestParam(value = "endDate", required = false, defaultValue= "") String endDate,
+                            @RequestParam(value = "startDate", required = false, defaultValue= "") LocalDate startDate,
+                            @RequestParam(value = "endDate", required = false, defaultValue= "") LocalDate endDate,
                             @RequestParam(value = "time", required = false, defaultValue= "") String time,
                             @RequestParam(value = "duration", required = false, defaultValue= "") String duration,
                             @RequestParam(value = "distance", required = false, defaultValue= "") String distance){
                                 
         int id_user = (int) session.getAttribute("id_user");
-        List<Activity> activities = activityRepository.findAll(id_user);
+        List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration, distance);
 
         // add models for filter
         model.addAttribute("title", title);
@@ -71,6 +72,7 @@ public class ActivityController {
         }
 
         // save image kalo ada
+
 
         // update image_location attribute
 
