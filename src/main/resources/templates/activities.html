@@ -183,7 +183,7 @@
       <a th:href="@{/dashboard}">Dashboard</a>
       <a th:href="@{/activityEntry}">Entry</a>
       <a th:href="@{/activity}">Activities</a>
-      <a th:href="@{/}">Logout</a>
+      <a th:href="@{/logout}">Logout</a>
     </div>
   </div>
 
@@ -222,6 +222,9 @@
               <a href="#" class="action-link">Edit</a>
               <a href="#" class="delete-link">Hapus</a>
             </td>
+          </tr>
+          <tr th:if="${activities.empty}">
+            <td colspan="7" style="text-align: center;">No activities yet.</td>
           </tr>
         </tbody>
       </table>

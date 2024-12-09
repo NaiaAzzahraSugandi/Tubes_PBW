@@ -34,7 +34,7 @@ public class LoginController {
         if(email == null || email.length() == 0){
             return "login";
         }
-        return "redirect:/activity";
+        return "redirect:/dashboard";
     }
 
     @PostMapping("/login")
@@ -61,8 +61,9 @@ public class LoginController {
 
         session.setAttribute("id_user", user.getId_user());
         session.setAttribute("email", user.getEmail());
+        session.setAttribute("nama", user.getName());
         session.setAttribute("peran", user.getPeran());
-        return "redirect:/activity";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/logout")
