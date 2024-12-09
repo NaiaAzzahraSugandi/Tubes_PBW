@@ -213,30 +213,30 @@
       
           <div class="filter-items">
             <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+            <input type="date" id="endDate" name="endDate" th:value="${endDate}" onchange="this.form.submit()">
           </div>
           
           <div class="filter-items">
             <label for="time">Time:</label>
-            <select id="time" name="time">
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+            <select id="time" name="time" onchange="this.form.submit()">
+              <option value="ASC" th:selected="${time == 'ASC'}">Ascending</option>
+              <option value="DESC" th:selected="${time == 'DESC'}">Descending</option>
             </select>
           </div>
       
           <div class="filter-items">
             <label for="duration">Duration:</label>
-            <select id="duration" name="duration">
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+            <select id="duration" name="duration" onchange="this.form.submit()">
+              <option value="ASC" th:selected="${duration == 'ASC'}">Ascending</option>
+              <option value="DESC" th:selected="${duration == 'DESC'}">Descending</option>
             </select>
           </div>
       
           <div class="filter-items">
             <label for="distance">Distance:</label>
-            <select id="distance" name="distance">
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
+            <select id="distance" name="distance" onchange="this.form.submit()">
+              <option value="ASC" th:selected="${distance == 'ASC'}">Ascending</option>
+              <option value="DESC" th:selected="${distance == 'DESC'}">Descending</option>
             </select>
           </div>
         </div>        
