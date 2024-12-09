@@ -62,7 +62,7 @@
     }
 
     .container {
-      padding: 20px;
+      padding: 20px 35px 20px 35px;
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -148,10 +148,10 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a href="#">Dashboard</a>
+      <a th:href="@{/dashboard}">Dashboard</a>
       <a th:href="@{/activityEntry}">Entry</a>
       <a th:href="@{/activity}">Activities</a>
-      <a th:href="@{/}">Logout</a>
+      <a th:href="@{/logout}">Logout</a>
     </div>
   </div>
 

@@ -1,5 +1,7 @@
 package com.PBW.RanTreker.User;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,20 @@ public class UserService {
         return true;
     }
 
-    public boolean login(){
+    public User login(String email, String password) throws Exception{
+        Optional<User> findUser = userRepository.findByUsername(email);
+        // throw exception email belum terdaftar kalau gaada
+        if(!findUser.isPresent()){
+            throw new Exception("EmailFault");
+        }
 
-        return true;
+        User user = findUser.get();
+        // cek password
+        // kalau salah throw exception salah password
+        if(!user.getPassword().equals(password)){
+            throw new Exception("PasswordFault");
+        }
+
+        return user;
     }
 }
