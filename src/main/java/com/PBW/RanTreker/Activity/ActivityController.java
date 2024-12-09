@@ -1,6 +1,8 @@
 package com.PBW.RanTreker.Activity;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import jakarta.validation.Valid;
 public class ActivityController {
     private final HttpSession session;
 
-    public ActivityController(HttpSession session){
+    public ActivityController(HttpSession session) {
         this.session = session;
     }
 
@@ -26,7 +28,7 @@ public class ActivityController {
     JDBCActivityRepository activityRepository;
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model){
+    public String dashboard(Model model) {
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
         return "/user/dashboard";
@@ -34,15 +36,16 @@ public class ActivityController {
 
     @GetMapping("/activity")
     public String activityView(Model model,
-                            @RequestParam(value = "title", required = false, defaultValue = "") String title,
-                            @RequestParam(value = "startDate", required = false, defaultValue= "") LocalDate startDate,
-                            @RequestParam(value = "endDate", required = false, defaultValue= "") LocalDate endDate,
-                            @RequestParam(value = "time", required = false, defaultValue= "") String time,
-                            @RequestParam(value = "duration", required = false, defaultValue= "") String duration,
-                            @RequestParam(value = "distance", required = false, defaultValue= "") String distance){
-                                
+            @RequestParam(value = "title", required = false, defaultValue = "") String title,
+            @RequestParam(value = "startDate", required = false, defaultValue = "") LocalDate startDate,
+            @RequestParam(value = "endDate", required = false, defaultValue = "") LocalDate endDate,
+            @RequestParam(value = "time", required = false, defaultValue = "") String time,
+            @RequestParam(value = "duration", required = false, defaultValue = "") String duration,
+            @RequestParam(value = "distance", required = false, defaultValue = "") String distance) {
+
         int id_user = (int) session.getAttribute("id_user");
-        List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration, distance);
+        List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration,
+                distance);
 
         // add models for filter
         model.addAttribute("title", title);
@@ -59,25 +62,45 @@ public class ActivityController {
     }
 
     @GetMapping("/activityEntry")
-    public String activityEntryView(Activity activity, Model model){
+    public String activityEntryView(Activity activity, Model model) {
         int id_user = (int) session.getAttribute("id_user");
         model.addAttribute("id_user", id_user);
         return "/user/entryRun";
     }
 
     @PostMapping("/activityEntry")
-    public String activityEntry(@Valid Activity activity, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+    public String activityEntry(@Valid Activity activity, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "/user/entryRun";
         }
 
-        // save image kalo ada
+        // // Get the current date in the desired format (ddMMyyyy)
+        // String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+        // // Get the user ID from the activity object
+        // Integer userId = activity.getId_user();
+        // // Generate the file name using the current date and user ID
+        // String fileName = formattedDate + "_" + userId + ".jpg"; // or .png based on your requirement
 
+        // // Save image if it exists
+        // if (activity.getImage_file() != null && !activity.getImage_file().isEmpty()) {
+        //     try {
+        //         // Define the directory where the image will be saved
+        //         String directory = "path/to/your/image/directory"; // Update this path
+        //         // Create the file object
+        //         File file = new File(directory, fileName);
+        //         // Save the image file
+        //         activity.getImage_file().transferTo(file);
+        //         // Set the image location in the activity object
+        //         activity.setImage_location(file.getAbsolutePath());
+        //     } catch (IOException e) {
+        //         e.printStackTrace();
+        //         // Handle the exception (e.g., log the error, return an error message)
+        //     }
+        // }
 
-        // update image_location attribute
-
-        
+        // Save the activity record to the database
         activityRepository.save(activity);
+
         return "redirect:/activity";
     }
 }
