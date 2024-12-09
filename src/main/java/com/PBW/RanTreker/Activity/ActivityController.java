@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -32,26 +31,9 @@ public class ActivityController {
     }
 
     @GetMapping("/activity")
-    public String activityView(Model model,
-                            @RequestParam(value = "title", required = false, defaultValue = "") String title,
-                            @RequestParam(value = "startDate", required = false, defaultValue= "") String startDate,
-                            @RequestParam(value = "endDate", required = false, defaultValue= "") String endDate,
-                            @RequestParam(value = "time", required = false, defaultValue= "") String time,
-                            @RequestParam(value = "duration", required = false, defaultValue= "") String duration,
-                            @RequestParam(value = "distance", required = false, defaultValue= "") String distance){
-                                
+    public String activityView(Model model){
         int id_user = (int) session.getAttribute("id_user");
         List<Activity> activities = activityRepository.findAll(id_user);
-
-        // add models for filter
-        model.addAttribute("title", title);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        model.addAttribute("time", time);
-        model.addAttribute("duration", duration);
-        model.addAttribute("distance", distance);
-
-        // add models for table
         model.addAttribute("totalActivity", activities.size());
         model.addAttribute("activities", activities);
         return "/user/activities";
