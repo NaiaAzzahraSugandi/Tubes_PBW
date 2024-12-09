@@ -196,7 +196,7 @@
         <button>Search</button>
       </div>
 
-      <h2>24 Activities</h2> 
+      <h2 th:text="${totalActivity} + ' Activities'"></h2> 
 
       <table>
         <thead>
@@ -211,25 +211,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1.</td>
-            <td>Min, 17/11/2024</td> 
-            <td>Morning Run</td>
-            <td>34:15</td>
-            <td>5,00 km</td>
-            <td>7 m</td>
-            <td>
-              <a href="#" class="action-link">Edit</a>
-              <a href="#" class="delete-link">Hapus</a>
-            </td>
-          </tr>
-          <tr>
-            <td>2.</td>
-            <td>Sab, 9/11/2024</td> 
-            <td>Morning Run</td>
-            <td>33:58</td>
-            <td>5,00 km</td>
-            <td>14 m</td>
+          <tr th:each="activity, stat : ${activities}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${activity.date}"></td>
+            <td th:text="${activity.title}"></td>
+            <td th:text="${activity.time}"></td>
+            <td th:text="${activity.duration}"></td>
+            <td th:text="${activity.distance} + ' km'"></td>
             <td>
               <a href="#" class="action-link">Edit</a>
               <a href="#" class="delete-link">Hapus</a>
