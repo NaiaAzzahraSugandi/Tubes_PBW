@@ -128,16 +128,23 @@
       flex-grow: 1; 
       padding: 8px;
       border: 1px solid #ccc;
-      border-radius: 5px 0 0 5px; 
+      border-radius: 5px; 
     }
 
-    .search-box button {
-      padding: 8px 12px;
-      background-color: #fc4c02; 
-      color: white;
-      border: none;
-      border-radius: 0 5px 5px 0; 
-      cursor: pointer;
+    .filter-box{
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      border : 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+    }
+
+    .filter-items{
+      display: flex;
+      flex-direction: column;
+      gap : 5px;
+      flex: 1;
     }
 
     /* Style for action links */
@@ -189,12 +196,54 @@
 
   <div class="content">
     <div class="container"> 
-      <h1>My Activities</h1> 
+      <h1>My Activities</h1>
 
-      <div class="search-box">
-        <input type="text" placeholder="My Morning Workout">
-        <button>Search</button>
-      </div>
+      <p style="font-weight: bold;">Search</p>
+      <form th:action="@{/activity}" method="GET">
+        <div class="search-box">
+          <input type="text" id="title" name="title" th:value="${title}" placeholder="My Morning Workout">
+        </div>
+        
+        <p style="font-weight: bold;">Filters</p>
+        <div class="filter-box">
+          <div class="filter-items">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+          </div>
+      
+          <div class="filter-items">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+          </div>
+          
+          <div class="filter-items">
+            <label for="time">Time:</label>
+            <select id="time" name="time">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+      
+          <div class="filter-items">
+            <label for="duration">Duration:</label>
+            <select id="duration" name="duration">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+      
+          <div class="filter-items">
+            <label for="distance">Distance:</label>
+            <select id="distance" name="distance">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>        
+      </form>
+      
+      <br>
+      <hr>
 
       <h2 th:text="${totalActivity} + ' Activities'"></h2> 
 
@@ -202,23 +251,23 @@
         <thead>
           <tr>
             <th>Num.</th>
-            <th>Date<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Title<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Filter 1</a><a href="#">Filter 2</a></div></div></th>
-            <th>Time<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Duration<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Distance<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Filter 1</a><a href="#">Filter 2</a></div></div></th>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Distance</th>
             <th>Actions</th> 
           </tr>
         </thead>
         <tbody>
           <tr th:each="activity, stat : ${activities}">
-            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${stat.index + 1} + '.'" style="text-align: center;"></td>
             <td th:text="${activity.date}"></td>
             <td th:text="${activity.title}"></td>
             <td th:text="${activity.time}"></td>
             <td th:text="${activity.duration}"></td>
             <td th:text="${activity.distance} + ' km'"></td>
-            <td>
+            <td style="text-align: center;">
               <a href="#" class="action-link">Edit</a>
               <a href="#" class="delete-link">Hapus</a>
             </td>
