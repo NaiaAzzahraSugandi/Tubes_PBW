@@ -27,9 +27,8 @@ public class ActivityController {
     public String dashboard(Model model){
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
-        return "dashboard";
+        return "/user/dashboard";
     }
-
 
     @GetMapping("/activity")
     public String activityView(Model model){
@@ -37,20 +36,20 @@ public class ActivityController {
         List<Activity> activities = activityRepository.findAll(id_user);
         model.addAttribute("totalActivity", activities.size());
         model.addAttribute("activities", activities);
-        return "activities";
+        return "/user/activities";
     }
 
     @GetMapping("/activityEntry")
     public String activityEntryView(Activity activity, Model model){
         int id_user = (int) session.getAttribute("id_user");
         model.addAttribute("id_user", id_user);
-        return "entryRun";
+        return "/user/entryRun";
     }
 
     @PostMapping("/activityEntry")
     public String activityEntry(@Valid Activity activity, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "entryRun";
+            return "/user/entryRun";
         }
 
         // save image kalo ada
