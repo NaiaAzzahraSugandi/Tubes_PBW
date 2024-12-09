@@ -9,6 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class User {
+    private Integer id_user;
+     
     @NotBlank(message = "Name is required!")
     @Size(min = 4, max = 60,  message = "Name should be 4 or more characters long!")
     private String name;

@@ -3,6 +3,7 @@ package com.PBW.RanTreker.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +22,7 @@ public class JDBCUserRepository {
     
     private User mapRowToUser(ResultSet resultSet, int rowNum) throws SQLException {
         return new User(
+            resultSet.getInt("id"),
             resultSet.getString("name"),
             resultSet.getString("email"),
             resultSet.getString("password"),
@@ -29,9 +31,9 @@ public class JDBCUserRepository {
         );
     }
 
-    public List<User> findByUsername(String email) {
+    public Optional<User> findByUsername(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
         List<User> results = jdbcTemplate.query(sql, this::mapRowToUser, email);
-        return results;
+        return results.size() == 0 ? Optional.empty() : Optional.of(results.get(0));
     }
 }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Registration</title>
+    <title>Login</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -12,7 +12,7 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background: url('berlari.jpg') no-repeat center center fixed;
+            background: url('/img/backgroundRegister.jpg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -168,28 +168,25 @@
 <body>
     <header>
         <div id="headerlogo">
-            <a href="#" class="logo"><img src="text-logo.png" alt=""></a>
+            <a th:href="@{/}" class="logo"><img src="/img/RanTreker Logo.png" alt=""></a>
         </div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </nav>
     </header>
 
     <main>
         <div class="container">
             <h1>Login</h1>
             <hr>
-            <form>
+            <form method="POST" th:action="@{/login}">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <p style="color: red;" th:if="${error} == 'EmailFault'">Email belum terdaftar</p>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <p style="color: red;" th:if="${error} == 'PasswordFault'">Password salah!</p>
 
                 <button type="submit">Log In</button>
-                <p>New Here? <a href="index.html">Sign up</a></p>
+                <p>New Here? <a th:href="@{/register}" style="color: #fc5200;">Sign up</a></p>
             </form>
         </div>
     </main>
