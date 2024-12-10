@@ -86,10 +86,10 @@ public class JDBCActivityRepository {
         return jdbcTemplate.query(sql, this::mapRowToActivity);
     }
 
-    public void updateRun(int id, String title, String description){
-        String sql = "UPDATE activities SET title = ? SET description = ? WHERE id = ?";
-        
+    public void updateRun(int id, String title, String description, String image_location){
+        String sql = "UPDATE activities SET title = ?, description = ?, image_location = ?  WHERE id = ?";
+
         // update the data
-        jdbcTemplate.update(sql, title, description);
+        jdbcTemplate.update(sql, title, description, image_location, id);
     }
 }

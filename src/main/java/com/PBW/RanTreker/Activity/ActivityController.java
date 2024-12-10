@@ -106,20 +106,24 @@ public class ActivityController {
                 String directory = "public/images/";
                 Path uploadPath = Paths.get(directory);
 
+                // buat directorynya kalau belum ada
                 if(!Files.exists(uploadPath)){
                     Files.createDirectories(uploadPath);
                 }
 
+                // save file ke directory
                 try (InputStream inputStream = image.getInputStream()){
                     Files.copy(inputStream, Paths.get(directory + fileName), StandardCopyOption.REPLACE_EXISTING);
                 }
-            } catch (IOException e) {
+
+                // update kolom image_location
+                activity.setImage_location(fileName);
+            } 
+            catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
 
-        // update kolom image_location
-        activity.setImage_location(fileName);
         // Save activity ke database
         activityRepository.save(activity);
 
@@ -131,7 +135,65 @@ public class ActivityController {
     public String showEditPage(Model model, @RequestParam("id") Integer id) {
         Activity activity = activityRepository.findById(id).get(0);
         model.addAttribute("activity", activity);
+        model.addAttribute("prevImage", activity.getImage_location());
 
         return "/user/editRun";
+    }
+
+    @PostMapping("/editRun")
+    @RequiredRole("user")
+    public String editRun(@Valid Activity activity, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            // log errors
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getDefaultMessage());
+            });
+            // tambah model activity untuk mencegah data hilang
+            model.addAttribute("activity", activity);
+            return "/user/editRun";
+        }
+
+        try{
+            // periksa apakah user submit image baru
+            if(!activity.getImage_file().isEmpty()){
+                // buang image yang lama
+                String directory = "public/images/";
+                Path oldImagePath = Paths.get(directory + activity.getImage_location());
+    
+                try{
+                    Files.delete(oldImagePath);
+                }
+                catch(IOException e){
+                    System.out.println(e.getMessage());
+                }
+    
+                // save image yang baru
+                MultipartFile image = activity.getImage_file();
+                // ambil tanggal hari ini
+                String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+                // ambil waktu sekarang
+                String formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+                // ambil id user
+                Integer userId = activity.getId_user();
+                // generate file name
+                String fileName = formattedDate + "_" + formattedTime + "_" + userId + ".jpg";
+    
+                try (InputStream inputStream = image.getInputStream()){
+                    Files.copy(inputStream, Paths.get(directory + fileName), StandardCopyOption.REPLACE_EXISTING);
+                }
+
+                // set isi kolom image_location dengan lokasi baru
+                activity.setImage_location(fileName);
+    
+            }
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+        
+        // update run
+        activityRepository.updateRun(activity.getId(), activity.getTitle(), activity.getDescription(), activity.getImage_location());
+
+        return "redirect:/user/activity";
     }
 }

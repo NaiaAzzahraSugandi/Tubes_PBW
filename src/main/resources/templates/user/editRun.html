@@ -159,8 +159,10 @@
     <div class="container">
       <h1>Edit Run</h1>
 
-      <form method="POST" th:action="@{/editRun}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
-        <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
+      <form method="POST" th:action="@{/user/editRun}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id" th:value="${activity.id}">
+        <input type="hidden" id="id_user" name="id_user" th:value="${activity.id_user}">
+        <input type="hidden" id="image_location" name="image_location" th:value="${activity.image_location}">
         <div>
           <label for="title">Title:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
@@ -193,7 +195,7 @@
           <textarea id="description" name="description" th:field="*{description}" placeholder="Describe your run!"></textarea>
         </div>
 
-        <div>
+        <div th:if="${activity.image_location}">
           <label for="">Photo:</label>
           <img th:src="@{'/images/' + ${activity.image_location}}" alt="" width="125px" height="125px">
         </div>
