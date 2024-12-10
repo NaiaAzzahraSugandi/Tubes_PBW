@@ -1,7 +1,13 @@
 package com.PBW.RanTreker.Activity;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -12,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -74,31 +81,38 @@ public class ActivityController {
             return "/user/entryRun";
         }
 
-        // // Get the current date in the desired format (ddMMyyyy)
-        // String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
-        // // Get the user ID from the activity object
-        // Integer userId = activity.getId_user();
-        // // Generate the file name using the current date and user ID
-        // String fileName = formattedDate + "_" + userId + ".jpg"; // or .png based on your requirement
+        MultipartFile image = activity.getImage_file();
+        // ambil tanggal hari ini
+        String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+        // ambil waktu sekarang
+        String formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+        // ambil id user
+        Integer userId = activity.getId_user();
+        // generate file name
+        String fileName = formattedDate + "_" + formattedTime + "_" + userId + ".jpg";
 
-        // // Save image if it exists
-        // if (activity.getImage_file() != null && !activity.getImage_file().isEmpty()) {
-        //     try {
-        //         // Define the directory where the image will be saved
-        //         String directory = "path/to/your/image/directory"; // Update this path
-        //         // Create the file object
-        //         File file = new File(directory, fileName);
-        //         // Save the image file
-        //         activity.getImage_file().transferTo(file);
-        //         // Set the image location in the activity object
-        //         activity.setImage_location(file.getAbsolutePath());
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        //         // Handle the exception (e.g., log the error, return an error message)
-        //     }
-        // }
+        // Save image kalo usernya submit
+        if (activity.getImage_file() != null && !activity.getImage_file().isEmpty()) {
+            try {
+                // directorynya mau disimpan dimana
+                String directory = "public/images/";
+                Path uploadPath = Paths.get(directory);
 
-        // Save the activity record to the database
+                if(!Files.exists(uploadPath)){
+                    Files.createDirectories(uploadPath);
+                }
+
+                try (InputStream inputStream = image.getInputStream()){
+                    Files.copy(inputStream, Paths.get(directory + fileName), StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        // update kolom image_location
+        activity.setImage_location(fileName);
+        // Save activity ke database
         activityRepository.save(activity);
 
         return "redirect:/activity";
