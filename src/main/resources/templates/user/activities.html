@@ -271,7 +271,7 @@
             <td th:text="${activity.duration}"></td>
             <td th:text="${activity.distance} + ' km'"></td>
             <td style="text-align: center;">
-              <a href="#" class="action-link">Edit</a>
+              <a th:href="@{/user/editRun(id=${activity.id})}" class="action-link">Edit</a>
               <a href="#" class="delete-link">Delete</a>
             </td>
           </tr>
