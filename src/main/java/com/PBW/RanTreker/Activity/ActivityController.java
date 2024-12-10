@@ -17,13 +17,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.PBW.RanTreker.RequiredRole;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
+@RequestMapping("/user")
 public class ActivityController {
     private final HttpSession session;
 
@@ -35,6 +39,7 @@ public class ActivityController {
     JDBCActivityRepository activityRepository;
 
     @GetMapping("/dashboard")
+    @RequiredRole("user")
     public String dashboard(Model model) {
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
@@ -42,6 +47,7 @@ public class ActivityController {
     }
 
     @GetMapping("/activity")
+    @RequiredRole("user")
     public String activityView(Model model,
             @RequestParam(value = "title", required = false, defaultValue = "") String title,
             @RequestParam(value = "startDate", required = false, defaultValue = "") LocalDate startDate,
@@ -69,6 +75,7 @@ public class ActivityController {
     }
 
     @GetMapping("/activityEntry")
+    @RequiredRole("user")
     public String activityEntryView(Activity activity, Model model) {
         int id_user = (int) session.getAttribute("id_user");
         model.addAttribute("id_user", id_user);
@@ -76,6 +83,7 @@ public class ActivityController {
     }
 
     @PostMapping("/activityEntry")
+    @RequiredRole("user")
     public String activityEntry(@Valid Activity activity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/user/entryRun";
