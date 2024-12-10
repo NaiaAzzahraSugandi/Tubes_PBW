@@ -125,4 +125,13 @@ public class ActivityController {
 
         return "redirect:/activity";
     }
+
+    @GetMapping("/editRun")
+    @RequiredRole("user")
+    public String showEditPage(Model model, @RequestParam("id") Integer id) {
+        Activity activity = activityRepository.findById(id).get(0);
+        model.addAttribute("activity", activity);
+
+        return "/user/editRun";
+    }
 }

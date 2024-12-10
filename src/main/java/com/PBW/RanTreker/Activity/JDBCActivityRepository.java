@@ -81,4 +81,8 @@ public class JDBCActivityRepository {
                 resultSet.getString("image_location"));
     }
 
+    public List<Activity> findById(int id){
+        String sql = "SELECT * FROM activities WHERE id = ?";
+        return jdbcTemplate.query(sql, this::mapRowToActivity);
+    }
 }
