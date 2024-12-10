@@ -82,7 +82,14 @@ public class JDBCActivityRepository {
     }
 
     public List<Activity> findById(int id){
-        String sql = "SELECT * FROM activities WHERE id = ?";
+        String sql = "SELECT * FROM activities WHERE id = " + id;
         return jdbcTemplate.query(sql, this::mapRowToActivity);
+    }
+
+    public void updateRun(int id, String title, String description){
+        String sql = "UPDATE activities SET title = ? SET description = ? WHERE id = ?";
+        
+        // update the data
+        jdbcTemplate.update(sql, title, description);
     }
 }
