@@ -159,7 +159,7 @@
     <div class="container">
       <h1>Manual Entry</h1>
 
-      <form method="POST" th:action="@{/activityEntry}" th:object="${activity}" id="manual-entry-form">
+      <form method="POST" th:action="@{/activityEntry}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
         <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
         <div>
           <label for="title">Title:</label>
@@ -198,9 +198,9 @@
         </div>
 
         <div>
-          <label for="imageSubmission">Image</label>
+          <label for="image_file">Image</label>
           <span style="color: red;"></span>
-          <input type="file" id="imageSubmission" name="imageSubmission">
+          <input type="file" id="image_file" name="image_file">
         </div>
         <br><br>
 
