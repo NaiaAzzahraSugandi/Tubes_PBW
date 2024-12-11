@@ -25,7 +25,6 @@ import com.PBW.RanTreker.RequiredRole;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
 @Controller
 @RequestMapping("/user")
 public class ActivityController {
@@ -194,6 +193,27 @@ public class ActivityController {
         // update run
         activityRepository.updateRun(activity.getId(), activity.getTitle(), activity.getDescription(), activity.getImage_location());
 
+        return "redirect:/user/activity";
+    }
+
+    @GetMapping("/delete")
+    @RequiredRole("user")
+    public String deleteActivity(@RequestParam int id) {
+        Activity activity = activityRepository.findById(id).get(0); 
+        
+        // delete image kalo misalnya ada
+        if (activity.getImage_location() != null && !activity.getImage_location().isEmpty()) {
+            try {
+                Path imagePath = Paths.get("public/images/" + activity.getImage_location());
+                Files.deleteIfExists(imagePath);
+            } catch (IOException e) {
+                System.out.println("Error deleting image: " + e.getMessage());
+            }
+        }
+    
+        // delete record
+        activityRepository.deleteRun(id);
+    
         return "redirect:/user/activity";
     }
 }

@@ -92,4 +92,9 @@ public class JDBCActivityRepository {
         // update the data
         jdbcTemplate.update(sql, title, description, image_location, id);
     }
+
+    public void deleteRun(int id){
+        String sql = "DELETE FROM activities WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
