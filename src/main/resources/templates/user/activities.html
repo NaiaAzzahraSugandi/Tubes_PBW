@@ -173,6 +173,7 @@
       color: #ff0000;
       border-radius: 3px;
       text-decoration: none;
+      cursor: pointer;
     }
 
     .delete-link:hover {
@@ -315,7 +316,7 @@
             <td th:text="${activity.distance} + ' km'"></td>
             <td style="text-align: center;">
               <a th:href="@{/user/editRun(id=${activity.id})}" class="action-link">Edit</a>
-              <a href="#" class="delete-link">Delete</a>
+              <a class="delete-link" th:onclick="confirmDelete([[${activity.id}]])">Delete</a>
             </td>
           </tr>
           <tr th:if="${activities.empty}">
@@ -345,6 +346,21 @@
 
       // Submit the form to apply the filters
       document.forms[0].submit();
+    }
+
+    let activityIDToDelete
+    function confirmDelete(activityID){
+      activityIDToDelete = activityID;
+      document.getElementById('confirmationModal').style.display = 'flex';
+      console.log(activityIDToDelete);
+    }
+    function closeModal(){
+      document.getElementById('confirmationModal').style.display = 'none';
+    }
+
+    document.getElementById('confirmDeleteButton').onclick = function() {
+      window.location.href = '/user/delete?id=' + activityIDToDelete;
+      return false;
     }
   </script>
 
