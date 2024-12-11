@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>RanTreker - My Activity</title>
   <!-- Google Fonts -->
@@ -7,7 +8,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      margin: 0; 
+      margin: 0;
       padding: 0;
       background-color: #f8f9fa;
       display: flex;
@@ -27,13 +28,13 @@
       top: 0;
     }
 
-    .sidebar .logo { 
-      margin-bottom: 20px; 
+    .sidebar .logo {
+      margin-bottom: 20px;
     }
 
     .sidebar .logo img {
-      width: 135px; 
-      height: 75px; 
+      width: 135px;
+      height: 75px;
     }
 
     .sidebar .menu {
@@ -57,8 +58,8 @@
 
     .content {
       margin: 20px;
-      margin-left: 270px; 
-      width: calc(100% - 270px); 
+      margin-left: 270px;
+      width: calc(100% - 270px);
     }
 
     .container {
@@ -78,13 +79,14 @@
       border-radius: 20px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
-      padding: 8px; 
+      padding: 8px;
     }
 
     th {
-      background-color: #fc4c02; 
+      background-color: #fc4c02;
       color: white;
       text-align: center;
     }
@@ -99,7 +101,7 @@
       position: absolute;
       background-color: #f9f9f9;
       min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
       z-index: 1;
     }
 
@@ -125,25 +127,25 @@
     }
 
     .search-box input[type="text"] {
-      flex-grow: 1; 
+      flex-grow: 1;
       padding: 8px;
       border: 1px solid #ccc;
-      border-radius: 5px; 
+      border-radius: 5px;
     }
 
-    .filter-box{
+    .filter-box {
       display: flex;
       flex-direction: row;
       gap: 20px;
-      border : 1px solid #ccc;
+      border: 1px solid #ccc;
       border-radius: 5px;
       padding: 15px;
     }
 
-    .filter-items{
+    .filter-items {
       display: flex;
       flex-direction: column;
-      gap : 5px;
+      gap: 5px;
       flex: 1;
     }
 
@@ -151,11 +153,11 @@
     .action-link {
       display: inline-block;
       padding: 5px 10px;
-      margin-right: 5px; 
-      border: 1px solid #007bff; 
-      color: #007bff; 
+      margin-right: 5px;
+      border: 1px solid #007bff;
+      color: #007bff;
       border-radius: 3px;
-      text-decoration: none; 
+      text-decoration: none;
     }
 
     .action-link:hover {
@@ -166,26 +168,55 @@
     .delete-link {
       display: inline-block;
       padding: 5px 10px;
-      margin-right: 5px; 
-      border: 1px solid #ff0000; 
-      color: #ff0000; 
+      margin-right: 5px;
+      border: 1px solid #ff0000;
+      color: #ff0000;
       border-radius: 3px;
-      text-decoration: none; 
+      text-decoration: none;
     }
 
     .delete-link:hover {
       background-color: #ff0000;
       color: white;
     }
+
+    #confirmationModal{
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background-color: rgba(0, 0, 0, 0.5); 
+      z-index: 1000; 
+      justify-content: center; 
+      align-items: center;
+    }
+
+    #confirmationContents{
+      background-color: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      width: 300px; 
+      text-align: center;
+    }
+
+    #confirmationButtons button{
+      border: none; 
+      padding: 10px 15px; 
+      border-radius: 5px; 
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="sidebar">
     <div class="logo">
-      <img src="/img/RanTreker Logo.png" alt="RANTREKER Logo"> 
+      <img src="/img/RanTreker Logo.png" alt="RANTREKER Logo">
     </div>
-    <br><br> 
+    <br><br>
     <div class="menu">
       <a th:href="@{/user/dashboard}">Dashboard</a>
       <a th:href="@{/user/activityEntry}">Entry</a>
@@ -195,7 +226,7 @@
   </div>
 
   <div class="content">
-    <div class="container"> 
+    <div class="container">
       <h1>My Activities</h1>
 
       <p style="font-weight: bold;">Search</p>
@@ -203,19 +234,19 @@
         <div class="search-box">
           <input type="text" id="title" name="title" th:value="${title}" placeholder="My Morning Workout">
         </div>
-        
+
         <p style="font-weight: bold;">Filters</p>
         <div class="filter-box">
           <div class="filter-items">
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" name="startDate" th:value="${startDate}">
           </div>
-      
+
           <div class="filter-items">
             <label for="endDate">End Date:</label>
             <input type="date" id="endDate" name="endDate" th:value="${endDate}" onchange="this.form.submit()">
           </div>
-          
+
           <div class="filter-items">
             <label for="time">Time:</label>
             <select id="time" name="time" onchange="resetOthers('time')">
@@ -224,7 +255,7 @@
               <option value="DESC" th:selected="${time == 'DESC'}">Descending</option>
             </select>
           </div>
-      
+
           <div class="filter-items">
             <label for="duration">Duration:</label>
             <select id="duration" name="duration" onchange="resetOthers('duration')">
@@ -233,7 +264,7 @@
               <option value="DESC" th:selected="${duration == 'DESC'}">Descending</option>
             </select>
           </div>
-      
+
           <div class="filter-items">
             <label for="distance">Distance:</label>
             <select id="distance" name="distance" onchange="resetOthers('distance')">
@@ -242,13 +273,25 @@
               <option value="DESC" th:selected="${distance == 'DESC'}">Descending</option>
             </select>
           </div>
-        </div>        
+        </div>
+
+        <div id="confirmationModal">
+          <div id="confirmationContents">
+            <h3 style="color: #fc4c02;">Are you sure you want to delete this activity?</h3>
+            <div id="confirmationButtons">
+              <button id="confirmDeleteButton"
+                style="background-color: #fc4c02; color: white; ">Yes</button>
+              <button onclick="closeModal()"
+                style="background-color: #ccc; color: black;">No</button>
+            </div>
+          </div>
+        </div>
       </form>
-      
+
       <br>
       <hr>
 
-      <h2 th:text="${totalActivity} + ' Activities'"></h2> 
+      <h2 th:text="${totalActivity} + ' Activities'"></h2>
 
       <table>
         <thead>
@@ -259,7 +302,7 @@
             <th>Time</th>
             <th>Duration</th>
             <th>Distance</th>
-            <th>Actions</th> 
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -280,30 +323,31 @@
           </tr>
         </tbody>
       </table>
-    </div> 
+    </div>
   </div>
 
   <script>
     function resetOthers(changed) {
-        const timeSelect = document.getElementById('time');
-        const durationSelect = document.getElementById('duration');
-        const distanceSelect = document.getElementById('distance');
-    
-        if (changed === 'time') {
-            durationSelect.value = 'None';
-            distanceSelect.value = 'None';
-        } else if (changed === 'duration') {
-            timeSelect.value = 'None';
-            distanceSelect.value = 'None';
-        } else if (changed === 'distance') {
-            timeSelect.value = 'None';
-            durationSelect.value = 'None';
-        }
-    
-        // Submit the form to apply the filters
-        document.forms[0].submit();
+      const timeSelect = document.getElementById('time');
+      const durationSelect = document.getElementById('duration');
+      const distanceSelect = document.getElementById('distance');
+
+      if (changed === 'time') {
+        durationSelect.value = 'None';
+        distanceSelect.value = 'None';
+      } else if (changed === 'duration') {
+        timeSelect.value = 'None';
+        distanceSelect.value = 'None';
+      } else if (changed === 'distance') {
+        timeSelect.value = 'None';
+        durationSelect.value = 'None';
+      }
+
+      // Submit the form to apply the filters
+      document.forms[0].submit();
     }
-    </script>
+  </script>
 
 </body>
+
 </html>
