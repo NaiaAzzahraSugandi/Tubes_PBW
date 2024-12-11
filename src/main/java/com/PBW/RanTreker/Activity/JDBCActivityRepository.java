@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -79,6 +81,18 @@ public class JDBCActivityRepository {
                 resultSet.getString("description"),
                 null,
                 resultSet.getString("image_location"));
+    }
+
+    public Map<String, Integer> getActivitySummaryByMonth(Integer userId) {
+        String sql = "SELECT TO_CHAR(date, 'Month') AS month, SUM(distance) AS total_distance " +
+                    "FROM activities WHERE id_user = ? GROUP BY month ORDER BY MIN(date)";
+        return jdbcTemplate.query(sql, rs -> {
+            Map<String, Integer> summary = new LinkedHashMap<>();
+            while (rs.next()) {
+                summary.put(rs.getString("month").trim(), rs.getInt("total_distance"));
+            }
+            return summary;
+        }, userId);
     }
 
 }
