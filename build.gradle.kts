@@ -40,6 +40,7 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-validation")
 }
 
+
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
