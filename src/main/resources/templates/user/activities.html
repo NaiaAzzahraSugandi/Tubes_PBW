@@ -187,9 +187,9 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/dashboard}">Dashboard</a>
-      <a th:href="@{/activityEntry}">Entry</a>
-      <a th:href="@{/activity}">Activities</a>
+      <a th:href="@{/user/dashboard}">Dashboard</a>
+      <a th:href="@{/user/activityEntry}">Entry</a>
+      <a th:href="@{/user/activity}">Activities</a>
       <a th:href="@{/logout}">Logout</a>
     </div>
   </div>
@@ -199,7 +199,7 @@
       <h1>My Activities</h1>
 
       <p style="font-weight: bold;">Search</p>
-      <form th:action="@{/activity}" method="GET">
+      <form th:action="@{/user/activity}" method="GET">
         <div class="search-box">
           <input type="text" id="title" name="title" th:value="${title}" placeholder="My Morning Workout">
         </div>
@@ -271,7 +271,7 @@
             <td th:text="${activity.duration}"></td>
             <td th:text="${activity.distance} + ' km'"></td>
             <td style="text-align: center;">
-              <a href="#" class="action-link">Edit</a>
+              <a th:href="@{/user/editRun(id=${activity.id})}" class="action-link">Edit</a>
               <a href="#" class="delete-link">Delete</a>
             </td>
           </tr>
