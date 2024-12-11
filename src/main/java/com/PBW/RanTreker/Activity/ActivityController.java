@@ -126,7 +126,7 @@ public class ActivityController {
         // Save activity ke database
         activityRepository.save(activity);
 
-        return "redirect:/activity";
+        return "redirect:/user/activity";
     }
 
     @GetMapping("/editRun")
@@ -200,7 +200,7 @@ public class ActivityController {
     @RequiredRole("user")
     public String deleteActivity(@RequestParam int id) {
         Activity activity = activityRepository.findById(id).get(0); 
-        
+
         // delete image kalo misalnya ada
         if (activity.getImage_location() != null && !activity.getImage_location().isEmpty()) {
             try {
