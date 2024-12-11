@@ -159,7 +159,7 @@
     <div class="container">
       <h1>Manual Entry</h1>
 
-      <form method="POST" th:action="@{/activityEntry}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
+      <form method="POST" th:action="@{/user/activityEntry}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
         <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
         <div>
           <label for="title">Title:</label>
