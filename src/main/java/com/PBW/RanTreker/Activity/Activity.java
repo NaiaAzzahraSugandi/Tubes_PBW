@@ -44,6 +44,7 @@ public class Activity {
     private String description;
     
     private MultipartFile image_file;
+
     private String image_location;
 
     public String toString(){

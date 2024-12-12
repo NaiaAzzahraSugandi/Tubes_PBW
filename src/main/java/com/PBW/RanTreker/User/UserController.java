@@ -29,7 +29,7 @@ public class UserController {
             bindingResult.rejectValue("retypepassword", "MismatchPassword","Password does not match!");
             return "register";
         }
-        System.out.println(user.getName() + user.getEmail() + user.getPassword() + user.getPeran());
+        System.out.println(user.getName() + " " + user.getEmail() + " " + user.getPassword() + " " + user.getPeran());
         boolean registerStatus = userService.register(user);
         if(!registerStatus){
             bindingResult.rejectValue("email", "EmailDuplicate", "This email has been registered!");
