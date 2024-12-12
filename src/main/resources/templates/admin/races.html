@@ -145,7 +145,6 @@
       cursor: pointer;
     }
 
-    /* Style for action links */
     .action-link {
       display: inline-block;
       padding: 5px 10px;
@@ -155,6 +154,20 @@
       border-radius: 3px;
       text-decoration: none; 
     }
+
+    button {
+            padding: 10px;
+            background-color: #fc5200;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+    }
+
+        button:hover {
+            background-color: #e04b00;
+        }
 
     .action-link:hover {
       background-color: #007bff;
@@ -205,46 +218,120 @@
         <button>Search</button>
       </div>
 
+      <button class="add-button" style="margin-bottom: 20px;" th:href="@{/raceadd}">Add Race</button>
+
+
       <h2>2 Races</h2> 
 
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Race Name<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Total Participants<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Filter 1</a><a href="#">Filter 2</a></div></div></th>
-            <th>Date<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Time<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Actions</th> 
+            <th>Race Name
+              <div class="dropdown">
+                <span>▼</span>
+                <div class="dropdown-content">
+                  <a href="#">Sort Asc</a>
+                  <a href="#">Sort Desc</a>
+                </div>
+              </div>
+            </th>
+            <th>Date & Time 
+              <div class="dropdown">
+                <span>▼</span>
+                <div class="dropdown-content">
+                  <a href="#">Sort Asc</a>
+                  <a href="#">Sort Desc</a>
+                </div>
+              </div>
+            </th>
+            <th>Race Length
+              <div class="dropdown">
+                <span>▼</span>
+                <div class="dropdown-content">
+                  <a href="#">Sort Asc</a>
+                  <a href="#">Sort Desc</a>
+                </div>
+              </div>
+            </th>
+            <!-- <th>Total Participants
+              <div class="dropdown">
+                <span>▼</span>
+                <div class="dropdown-content">
+                  <a href="#">Filter 1</a>
+                  <a href="#">Filter 2</a>
+                </div>
+              </div>
+            </th> -->
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1.</td>
-            <td>Pertamina Ecofest</td> 
-            <td>29</td>
-            <td>2 Januari 2024</td> 
-            <td>08:00</td>
-            <td>
-              <a href="#" class="action-link">Detail</a>
-              <a href="#" class="action-link">Edit</a>
+          <!-- Loop through the races list -->
+          <tr th:each="race, stat : ${races}">
+            <td th:text="${race.name}"></td>
+            <td th:text="${#temporals.format(race.dateTime, 'dd MMMM yyyy')}"></td>
+            <td th:text="${race.length} + ' km'"></td>
+            <!-- <td th:text="${race.totalParticipants}"></td> -->
+            <td style="text-align: center;">
+              <a href="#" th:href="@{'/race/' + ${race.id} + '/detail'}" class="action-link">Detail</a>
+              <a href="#" th:href="@{'/race/' + ${race.id} + '/edit'}" class="action-link">Edit</a>
             </td>
           </tr>
-          <tr>
-            <td>2.</td>
-            <td>Pocari Run</td> 
-            <td>45</td>
-            <td>19 Februari 2024</td> 
-            <td>10:00</td>
-            <td>
-              <a href="#" class="action-link">Detail</a>
-              <a href="#" class="action-link">Edit</a>
-            </td>
+          <!-- If no races are available -->
+          <tr th:if="${races.empty}">
+            <td colspan="6" style="text-align: center;">No races available.</td>
           </tr>
         </tbody>
       </table>
+      
+      
     </div> 
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Sorting functionality for Race Name
+    document.querySelectorAll('th:nth-child(1) .dropdown-content a').forEach(function(item) {
+        item.addEventListener('click', function() {
+            let isAscending = item.textContent.includes('Asc');
+            let rows = Array.from(document.querySelectorAll('tbody tr'));
+            rows.sort((a, b) => {
+                let nameA = a.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                let nameB = b.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                return isAscending ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+            });
+            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+        });
+    });
+
+    // Sorting functionality for Date & Time
+    document.querySelectorAll('th:nth-child(2) .dropdown-content a').forEach(function(item) {
+        item.addEventListener('click', function() {
+            let isAscending = item.textContent.includes('Asc');
+            let rows = Array.from(document.querySelectorAll('tbody tr'));
+            rows.sort((a, b) => {
+                let dateA = new Date(a.querySelector('td:nth-child(2)').textContent);
+                let dateB = new Date(b.querySelector('td:nth-child(2)').textContent);
+                return isAscending ? dateA - dateB : dateB - dateA;
+            });
+            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+        });
+    });
+
+    // Sorting functionality for Race Length
+    document.querySelectorAll('th:nth-child(3) .dropdown-content a').forEach(function(item) {
+        item.addEventListener('click', function() {
+            let isAscending = item.textContent.includes('Asc');
+            let rows = Array.from(document.querySelectorAll('tbody tr'));
+            rows.sort((a, b) => {
+                let lengthA = parseFloat(a.querySelector('td:nth-child(3)').textContent);
+                let lengthB = parseFloat(b.querySelector('td:nth-child(3)').textContent);
+                return isAscending ? lengthA - lengthB : lengthB - lengthA;
+            });
+            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+        });
+    });
+});
+</script>
 
 </body>
 </html>

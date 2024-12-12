@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Manual Entry</title>
+  <title>RanTreker - Edit Your Run</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -50,12 +50,8 @@
       border-radius: 5px;
       transition: background-color 0.3s;
     }
-    .sidebar .menu .active { 
-        background-color: #fc4c02; 
-        color: white; 
-    }
 
-    .sidebar .menu .inactive:hover {
+    .sidebar .menu a:hover {
       background-color: #f1f1f1;
     }
 
@@ -152,19 +148,21 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/dashboard}" class="inactive">Dashboard</a>
-      <a th:href="@{/activityEntry}" class="active">Entry</a>
-      <a th:href="@{/activity}" class="inactive">Activities</a>
-      <a th:href="@{/logout}" class="inactive">Logout</a>
+      <a th:href="@{/user/dashboard}">Dashboard</a>
+      <a th:href="@{/user/activityEntry}">Entry</a>
+      <a th:href="@{/user/activity}">Activities</a>
+      <a th:href="@{/logout}">Logout</a>
     </div>
   </div>
 
   <div class="content">
     <div class="container">
-      <h1>Manual Entry</h1>
+      <h1>Edit Run</h1>
 
-      <form method="POST" th:action="@{/user/activityEntry}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
-        <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
+      <form method="POST" th:action="@{/user/editRun}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id" th:value="${activity.id}">
+        <input type="hidden" id="id_user" name="id_user" th:value="${activity.id_user}">
+        <input type="hidden" id="image_location" name="image_location" th:value="${activity.image_location}">
         <div>
           <label for="title">Title:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
@@ -173,26 +171,22 @@
 
         <div>
           <label for="distance">Distance in kilometers:</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}"></span>
-          <input type="number" id="distance" name="distance" min="0" th:field="*{distance}">
+          <input type="text" readonly id="distance" name="distance"  th:value="${activity.distance}" style="color: gray;">
         </div>
 
         <div>
           <label for="duration">Duration (in minutes):</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
-          <input type="number" id="duration" name="duration" min="0" th:field="*{duration}">
+          <input type="text" readonly id="duration" name="duration"  th:value="${activity.duration}" style="color: gray;">
         </div>
 
         <div>
           <label for="date">Date:</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
-          <input type="date" id="date" name="date" th:field="*{date}">
+          <input type="date" readonly id="date" name="date" th:value="${activity.date}">
         </div>
 
         <div>
           <label for="time">Time:</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></span>
-          <input type="time" id="time" name="time" th:field="*{time}">
+          <input type="time" id="time" readonly name="time" th:value="${activity.time}">
         </div>
 
         <div>
@@ -201,14 +195,21 @@
           <textarea id="description" name="description" th:field="*{description}" placeholder="Describe your run!"></textarea>
         </div>
 
+        <div th:if="${activity.image_location}">
+          <label for="">Photo:</label>
+          <img th:src="@{'/images/' + ${activity.image_location}}" alt="" width="125px" height="125px">
+        </div>
+
+        <br>
+
         <div>
-          <label for="image_file">Image</label>
+          <label for="image_file">New Image:</label>
           <span style="color: red;"></span>
           <input type="file" id="image_file" name="image_file">
         </div>
         <br><br>
 
-        <button type="submit">Create</button>
+        <button type="submit">Save</button>
       </form>
     </div>
   </div>
