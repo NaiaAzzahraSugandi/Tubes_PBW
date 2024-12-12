@@ -8,19 +8,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.BasicStroke;
 import javax.imageio.ImageIO;
+
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +36,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import java.io.ByteArrayOutputStream;
+
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
 
 import com.PBW.RanTreker.RequiredRole;
+
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -51,31 +68,75 @@ public class ActivityController {
     public String dashboard(Model model) {
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
-
+    
         Integer userId = (Integer) session.getAttribute("id_user");
         Map<String, Integer> activitySummary = activityRepository.getActivitySummaryByMonth(userId);
+        
+        model.addAttribute("activitySummary", activitySummary);
+    
+        return "/user/dashboard";  
+    }
 
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        activitySummary.forEach((month, distance) -> dataset.addValue(distance, "Distance", month));
+    @GetMapping("/chart")
+    @RequiredRole("user")
+    public ResponseEntity<byte[]> getChartImage(@RequestParam String type) {
+        Integer userId = (Integer) session.getAttribute("id_user");
 
-        JFreeChart barChart = ChartFactory.createBarChart(
-            "Monthly Activity Summary",
-            "Month",
-            "Distance (km)",
-            dataset,
-            PlotOrientation.VERTICAL,
-            true, true, false);
-
-        File chartFile = new File("src/main/resources/static/img/chart.png");
-        try {
-            ImageIO.write(barChart.createBufferedImage(800, 600), "png", chartFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Map<String, Integer> activitySummary;
+        switch (type.toLowerCase()) {
+            case "monthly":
+                activitySummary = activityRepository.getActivitySummaryByMonth(userId);
+                break;
+            case "yearly":
+                activitySummary = activityRepository.getActivitySummaryByYear(userId);
+                break;
+            case "weekly":
+            default:
+                activitySummary = activityRepository.getActivitySummaryByWeek(userId);
+                break;
         }
 
-        model.addAttribute("chartImage", "/chart.png");
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        activitySummary.forEach((label, distance) -> dataset.addValue(distance, "Distance", label));
 
-        return "/user/dashboard";
+        JFreeChart barChart = ChartFactory.createBarChart(
+            type.substring(0, 1).toUpperCase() + type.substring(1) + " Activity Summary",
+            "Time", 
+            "Distance (km)", 
+            dataset,  // Dataset
+            PlotOrientation.VERTICAL,
+            true, true, false 
+        );
+
+        barChart.setBackgroundPaint(Color.WHITE); 
+
+        CategoryPlot plot = barChart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE); 
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new Color(0xFC4C02)); 
+        renderer.setSeriesOutlinePaint(0, Color.BLACK);  
+        renderer.setSeriesOutlineStroke(0, new BasicStroke(2.0f)); 
+
+        Font titleFont = new Font("Arial", Font.BOLD, 18); 
+        barChart.getTitle().setFont(titleFont);
+
+        Font axisFont = new Font("Arial", Font.PLAIN, 14);  
+        plot.getDomainAxis().setLabelFont(axisFont);
+        plot.getRangeAxis().setLabelFont(axisFont);
+        plot.getDomainAxis().setTickLabelFont(axisFont);
+        plot.getRangeAxis().setTickLabelFont(axisFont);
+
+        // Convert chart to byte array
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(barChart.createBufferedImage(800, 600), "png", baos);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(baos.toByteArray(), headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/activity")
@@ -248,5 +309,81 @@ public class ActivityController {
         activityRepository.deleteRun(id);
     
         return "redirect:/user/activity";
+    }
+
+    @GetMapping("/exportChart")
+    @RequiredRole("user")
+    public ResponseEntity<byte[]> exportChartsToPdf() {
+        Integer userId = (Integer) session.getAttribute("id_user");
+
+        byte[] weeklyChartImage = generateChartImage(activityRepository.getActivitySummaryByWeek(userId), "Weekly Activity Summary");
+        byte[] monthlyChartImage = generateChartImage(activityRepository.getActivitySummaryByMonth(userId), "Monthly Activity Summary");
+        byte[] yearlyChartImage = generateChartImage(activityRepository.getActivitySummaryByYear(userId), "Yearly Activity Summary");
+
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            PdfWriter writer = new PdfWriter(baos);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document document = new Document(pdfDoc);
+
+            document.add(new Paragraph("Activity Summary").setBold().setFontSize(18));
+
+            document.add(new Image(com.itextpdf.io.image.ImageDataFactory.create(weeklyChartImage)).scaleToFit(500, 500));
+
+            document.add(new Image(com.itextpdf.io.image.ImageDataFactory.create(monthlyChartImage)).scaleToFit(500, 500));
+
+            document.add(new Image(com.itextpdf.io.image.ImageDataFactory.create(yearlyChartImage)).scaleToFit(500, 500));
+
+            document.close();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "ActivitySummary.pdf");
+
+            return new ResponseEntity<>(baos.toByteArray(), headers, HttpStatus.OK);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private byte[] generateChartImage(Map<String, Integer> activitySummary, String chartTitle) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        activitySummary.forEach((label, distance) -> dataset.addValue(distance, "Distance", label));
+    
+        JFreeChart chart = ChartFactory.createBarChart(
+            chartTitle,            
+            "Time",                 
+            "Distance (km)",        
+            dataset,               
+            PlotOrientation.VERTICAL, 
+            true, true, false      
+        );
+    
+        chart.setBackgroundPaint(java.awt.Color.WHITE); 
+    
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(java.awt.Color.WHITE);  
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new java.awt.Color(0xFC4C02)); 
+        renderer.setSeriesOutlinePaint(0, java.awt.Color.BLACK);  
+        renderer.setSeriesOutlineStroke(0, new java.awt.BasicStroke(2.0f));  
+    
+        java.awt.Font titleFont = new java.awt.Font("Arial", java.awt.Font.BOLD, 18); 
+        chart.getTitle().setFont(titleFont);
+    
+        java.awt.Font axisFont = new java.awt.Font("Arial", java.awt.Font.PLAIN, 14); 
+        plot.getDomainAxis().setLabelFont(axisFont);
+        plot.getRangeAxis().setLabelFont(axisFont);
+        plot.getDomainAxis().setTickLabelFont(axisFont);
+        plot.getRangeAxis().setTickLabelFont(axisFont);
+    
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(chart.createBufferedImage(800, 600), "png", baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new byte[0]; 
+        }
     }
 }

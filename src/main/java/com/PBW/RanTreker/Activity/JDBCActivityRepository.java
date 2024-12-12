@@ -111,4 +111,49 @@ public class JDBCActivityRepository {
             return summary;
         }, userId);
     }
+    public Map<String, Integer> getActivitySummaryByWeek(Integer userId) {
+        String sql = """
+            SELECT TO_CHAR(date, 'Day') AS day, SUM(distance) AS total_distance
+            FROM activities
+            WHERE id_user = ?
+            GROUP BY day
+            ORDER BY 
+                CASE TRIM(TO_CHAR(date, 'Day'))
+                    WHEN 'Monday' THEN 1
+                    WHEN 'Tuesday' THEN 2
+                    WHEN 'Wednesday' THEN 3
+                    WHEN 'Thursday' THEN 4
+                    WHEN 'Friday' THEN 5
+                    WHEN 'Saturday' THEN 6
+                    WHEN 'Sunday' THEN 7
+                    ELSE 8  -- Handle any unexpected results
+                END;
+            """;
+    
+        return jdbcTemplate.query(sql, rs -> {
+            Map<String, Integer> summary = new LinkedHashMap<>();
+            while (rs.next()) {
+                summary.put(rs.getString("day").trim(), rs.getInt("total_distance"));
+            }
+            return summary;
+        }, userId);
+    }
+    
+    public Map<String, Integer> getActivitySummaryByYear(Integer userId) {
+        String sql = """
+            SELECT EXTRACT(YEAR FROM date) AS year, SUM(distance) AS total_distance
+            FROM activities
+            WHERE id_user = ?
+            GROUP BY year
+            ORDER BY year
+            """;
+        return jdbcTemplate.query(sql, rs -> {
+            Map<String, Integer> summary = new LinkedHashMap<>();
+            while (rs.next()) {
+                summary.put("Year " + rs.getInt("year"), rs.getInt("total_distance"));
+            }
+            return summary;
+        }, userId);
+    }
+
 }
