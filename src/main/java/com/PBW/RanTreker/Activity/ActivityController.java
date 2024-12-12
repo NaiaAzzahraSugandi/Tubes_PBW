@@ -1,5 +1,6 @@
 package com.PBW.RanTreker.Activity;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -7,10 +8,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +51,30 @@ public class ActivityController {
     public String dashboard(Model model) {
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
+
+        Integer userId = (Integer) session.getAttribute("id_user");
+        Map<String, Integer> activitySummary = activityRepository.getActivitySummaryByMonth(userId);
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        activitySummary.forEach((month, distance) -> dataset.addValue(distance, "Distance", month));
+
+        JFreeChart barChart = ChartFactory.createBarChart(
+            "Monthly Activity Summary",
+            "Month",
+            "Distance (km)",
+            dataset,
+            PlotOrientation.VERTICAL,
+            true, true, false);
+
+        File chartFile = new File("src/main/resources/static/img/chart.png");
+        try {
+            ImageIO.write(barChart.createBufferedImage(800, 600), "png", chartFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("chartImage", "/chart.png");
+
         return "/user/dashboard";
     }
 

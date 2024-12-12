@@ -38,6 +38,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation ("org.springframework.boot:spring-boot-starter-validation")
+	implementation ("org.jfree:jfreechart:1.5.3")
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 }
 
 
