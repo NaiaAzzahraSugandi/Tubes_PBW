@@ -200,9 +200,9 @@
             </div>
             <br><br>
             <div class="menu">
-                <a th:href="@{/dashboard}" class="active">Dashboard</a>
-                <a th:href="@{/activityEntry}" class="inactive">Entry</a>
-                <a th:href="@{/activity}" class="inactive">Activities</a>
+                <a th:href="@{/user/dashboard}" class="active">Dashboard</a>
+                <a th:href="@{/user/activityEntry}" class="inactive">Entry</a>
+                <a th:href="@{/user/activity}" class="inactive">Activities</a>
                 <a th:href="@{/logout}" class="inactive">Logout</a>
             </div>
         </div>
@@ -217,6 +217,16 @@
             <div class="main-content">
                 <h3>Activity Chart</h3>
                 <img th:src="@{/img/chart.png}" alt="Activity Chart" style="width:100%; height:auto;">
+                <h1>Your Statistics</h1>
+                <h2>Weekly</h2>
+                <canvas id="weeklyChart"></canvas>
+                <h2>Monthly</h2>
+                <canvas id="monthlyChart"></canvas>
+                <h2>Yearly</h2>
+                <canvas id="yearlyChart"></canvas>
+            </div>
+            <div class="right-panel">
+                <h1>Summary</h1>
             </div>
             <form action="/exportChart" method="get">
                 <button type="submit" class="export-pdf-button">Export PDF</button>

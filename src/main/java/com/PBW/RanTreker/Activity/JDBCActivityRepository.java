@@ -99,6 +99,7 @@ public class JDBCActivityRepository {
         String sql = "DELETE FROM activities WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+  
     public Map<String, Integer> getActivitySummaryByMonth(Integer userId) {
         String sql = "SELECT TO_CHAR(date, 'Month') AS month, SUM(distance) AS total_distance " +
                     "FROM activities WHERE id_user = ? GROUP BY month ORDER BY MIN(date)";
@@ -110,5 +111,4 @@ public class JDBCActivityRepository {
             return summary;
         }, userId);
     }
-
 }
