@@ -14,27 +14,27 @@ public class ChartController {
     @Autowired
     private ChartService chartService;
 
-    // @GetMapping("/chart/weekly")
-    // @ResponseBody
-    // public void getWeeklyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
-    //     var chart = chartService.createWeeklyChart(userId);
-    //     response.setContentType("image/png");
-    //     ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
-    // }
+    @GetMapping("/chart/weekly")
+    @ResponseBody
+    public void getWeeklyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
+        var chart = chartService.createWeeklyChart(userId);
+        response.setContentType("image/png");
+        ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
+    }
 
-    // @GetMapping("/chart/monthly")
-    // @ResponseBody
-    // public void getMonthlyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
-    //     var chart = chartService.createMonthlyChart(userId);
-    //     response.setContentType("image/png");
-    //     ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
-    // }
+    @GetMapping("/chart/monthly")
+    @ResponseBody
+    public void getMonthlyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
+        var chart = chartService.createMonthlyChart(userId);
+        response.setContentType("image/png");
+        ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
+    }
 
-    // @GetMapping("/chart/yearly")
-    // @ResponseBody
-    // public void getYearlyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
-    //     var chart = chartService.createYearlyChart(userId);
-    //     response.setContentType("image/png");
-    //     ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
-    // }
+    @GetMapping("/chart/yearly")
+    @ResponseBody
+    public void getYearlyChart(@RequestParam int userId, HttpServletResponse response) throws IOException {
+        var chart = chartService.createYearlyChart(userId);
+        response.setContentType("image/png");
+        ChartUtils.writeChartAsPNG(response.getOutputStream(), chart, 800, 600);
+    }
 }
