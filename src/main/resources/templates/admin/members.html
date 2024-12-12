@@ -51,8 +51,12 @@
       transition: background-color 0.3s;
     }
 
-    .sidebar .menu a:hover {
+    .sidebar .menu .inactive:hover {
       background-color: #f1f1f1;
+    }
+    .sidebar .menu .active { 
+        background-color: #fc4c02; 
+        color: white; 
     }
 
     .content {
@@ -171,9 +175,9 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/members}">Members</a>
-      <a th:href="@{/races}">Races</a>
-      <a th:href="@{/}">Logout</a>
+      <a th:href="@{/members}"class="active">Members</a>
+      <a th:href="@{/races}" class="inactive">Races</a>
+      <a th:href="@{/}" class="inactive">Logout</a>
     </div>
   </div>
 
