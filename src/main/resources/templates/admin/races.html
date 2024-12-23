@@ -269,7 +269,7 @@
           <!-- Loop through the races list -->
           <tr th:each="race, stat : ${races}">
             <td th:text="${race.name}"></td>
-            <td th:text="${#temporals.format(race.dateTime, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(race.dateTime, 'dd MMMM yyyy, HH:mm')}"></td>
             <td th:text="${race.length} + ' km'"></td>
             <!-- <td th:text="${race.totalParticipants}"></td> -->
             <td style="text-align: center;">
