@@ -65,7 +65,7 @@ public class LoginController {
         session.setAttribute("peran", user.getPeran());
 
         if(user.getPeran().equals("admin")){
-            return "redirect:/admin/index";
+            return "redirect:/admin/members";
         }
 
         return "redirect:/user/dashboard";
