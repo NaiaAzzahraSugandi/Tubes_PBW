@@ -34,7 +34,14 @@ public class LoginController {
         if(email == null || email.length() == 0){
             return "login";
         }
-        return "redirect:/user/dashboard";
+
+        String peran = (String) session.getAttribute("peran");
+        if(peran.equals("admin")){
+            return "redirect:/admin/members";
+        }
+        else{
+            return "redirect:/user/dashboard";
+        }
     }
 
     @PostMapping("/login")
