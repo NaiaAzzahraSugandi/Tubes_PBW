@@ -36,4 +36,10 @@ public class JDBCUserRepository {
         List<User> results = jdbcTemplate.query(sql, this::mapRowToUser, email);
         return results.size() == 0 ? Optional.empty() : Optional.of(results.get(0));
     }
+
+
+    public List<User> findAll(){
+        String sql = "SELECT * FROM users";
+        return jdbcTemplate.query(sql, this::mapRowToUser);
+    }
 }
