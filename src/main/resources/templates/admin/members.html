@@ -180,6 +180,34 @@
         text-align: center; 
         vertical-align: middle; 
     }
+
+    #confirmationModal{
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background-color: rgba(0, 0, 0, 0.5); 
+      z-index: 1000; 
+      justify-content: center; 
+      align-items: center;
+    }
+
+    #confirmationContents{
+      background-color: white; 
+      padding: 20px; 
+      border-radius: 8px; 
+      width: 300px; 
+      text-align: center;
+    }
+
+    #confirmationButtons button{
+      border: none; 
+      padding: 10px 15px; 
+      border-radius: 5px; 
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -206,6 +234,18 @@
         </div>
       </form>
 
+      <div id="confirmationModal">
+        <div id="confirmationContents">
+          <h3 style="color: #fc4c02;">Are you sure you want to delete this user?</h3>
+          <div id="confirmationButtons">
+            <button id="confirmDeleteButton"
+              style="background-color: #fc4c02; color: white; ">Yes</button>
+            <button onclick="closeModal()"
+              style="background-color: #ccc; color: black;">No</button>
+          </div>
+        </div>
+      </div>
+
       <h2 th:text="${totalUser} +  ' Members'"></h2> 
 
       <table>
@@ -226,13 +266,34 @@
             <td th:text="${user.peran}"></td>
             <td>
               <a th:href="@{/admin/editMember(id=${user.id_user})}" class="action-link">Edit</a>
-              <a href="#" class="delete-link">Delete</a>
+              <a class="delete-link" th:onclick="confirmDelete([[${user.id_user}]])">Delete</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div> 
   </div>
+
+  <script>
+    let userIDToDelete
+    function confirmDelete(userID){
+      userIDToDelete = userID;
+      document.getElementById('confirmationModal').style.display = 'flex';
+      document.body.style.overflow = "hidden";
+      console.log(userIDToDelete);
+    }
+    function closeModal(event){
+      document.getElementById('confirmationModal').style.display = 'none';
+      document.body.style.overflow = "auto";
+      event.preventDefault();
+    }
+
+    document.getElementById('confirmDeleteButton').onclick = function() {
+      event.preventDefault();
+      window.location.href = '/admin/delete?id=' + userIDToDelete;
+      return false;
+    }
+  </script>
 
 </body>
 </html>

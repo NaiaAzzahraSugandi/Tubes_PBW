@@ -1,5 +1,9 @@
 package com.PBW.RanTreker.Admin;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.PBW.RanTreker.RequiredRole;
+import com.PBW.RanTreker.Activity.Activity;
+import com.PBW.RanTreker.Activity.JDBCActivityRepository;
 import com.PBW.RanTreker.User.JDBCUserRepository;
 import com.PBW.RanTreker.User.User;
 
@@ -23,6 +29,9 @@ import jakarta.validation.Valid;
 public class AdminController {
     @Autowired
     JDBCUserRepository userRepository;
+
+    @Autowired
+    JDBCActivityRepository activityRepository;
 
     private final HttpSession session;
 
@@ -63,6 +72,35 @@ public class AdminController {
 
         userRepository.updateMember(user.getId_user(), user.getName(), user.getEmail(), user.getPeran());
 
+        return "redirect:/admin/members";
+    }
+
+    @GetMapping("delete")
+    @RequiredRole("admin")
+    public String deleteMember(@RequestParam(value = "id", required = true) int id) {
+        // delete activities milik member
+        List<Activity> activitiesToDelete = activityRepository.findByUserID(id);
+        System.out.println(activitiesToDelete.size());
+        // buang setiap activity yang ditemukan
+        for (Activity activity : activitiesToDelete) {
+            // delete image kalo misalnya ada
+            if (activity.getImage_location() != null && !activity.getImage_location().isEmpty()) {
+                try {
+                    Path imagePath = Paths.get("public/images/" + activity.getImage_location());
+                    Files.deleteIfExists(imagePath);
+                } catch (IOException e) {
+                    System.out.println("Error deleting image: " + e.getMessage());
+                }
+            }
+
+            // delete record
+            activityRepository.deleteRun(activity.getId());
+
+            System.out.println(activity.toString());
+        }
+
+        // delete member
+        userRepository.deleteMember(id);
         return "redirect:/admin/members";
     }
 

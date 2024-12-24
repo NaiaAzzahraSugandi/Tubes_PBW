@@ -53,6 +53,10 @@ public class JDBCUserRepository {
         jdbcTemplate.update(sql, name, email, peran, id);
     }
 
+    public void deleteMember(int id){
+        String sql = "DELETE FROM users WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 
 
 }
