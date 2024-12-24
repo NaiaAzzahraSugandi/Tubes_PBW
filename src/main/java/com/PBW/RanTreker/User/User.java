@@ -12,7 +12,7 @@ public class User {
     private Integer id_user;
      
     @NotBlank(message = "Name is required!")
-    @Size(min = 4, max = 60,  message = "Name should be 4 or more characters long!")
+    @Size(min = 4, max = 60,  message = "Name should be 4-60 characters long!")
     private String name;
 
     @NotBlank(message = "Email is required!")
@@ -21,7 +21,7 @@ public class User {
     private String email;
     
     @NotBlank(message = "Password is required!")
-    @Size(min = 4, max = 60,  message = "Password should be 4 or more characters long!")
+    @Size(min = 4, max = 60,  message = "Password should be 4-60 characters long!")
     private String password;
 
     @NotBlank(message = "Please re-type your password!")

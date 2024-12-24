@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RanTreker - My Activity</title>
+  <title>RanTreker Admin - List of Members</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -192,7 +192,7 @@
     <div class="menu">
       <a th:href="@{/admin/members}"class="active">Members</a>
       <a th:href="@{/admin/races}" class="inactive">Races</a>
-      <a th:href="@{/}" class="inactive">Logout</a>
+      <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
 
@@ -220,12 +220,12 @@
         </thead>
         <tbody>
           <tr th:each="user, stat : ${users}">
-            <td th:text="${stat.index + 1} + '.'">1.</td>
-            <td th:text="${user.name}">Jason Kelvin Agung</td> 
-            <td th:text="${user.email}">jason@gmail.com</td>
-            <td th:text="${user.peran}">Admin</td>
+            <td th:text="${stat.index + 1} + '.'"></td>
+            <td th:text="${user.name}"></td> 
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.peran}"></td>
             <td>
-              <a href="#" class="action-link">Edit</a>
+              <a th:href="@{/admin/editMember(id=${user.id_user})}" class="action-link">Edit</a>
               <a href="#" class="delete-link">Delete</a>
             </td>
           </tr>
