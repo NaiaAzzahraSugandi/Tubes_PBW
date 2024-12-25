@@ -6,10 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("admin")
 public class RaceController {
 
     private final JDBCRaceRepository jdbcRace;
@@ -21,8 +24,8 @@ public class RaceController {
 
     // Display all races
     @GetMapping("/races")
-    public String getAllRaces(Model model) throws SQLException {
-        List<Race> races = jdbcRace.getAllRaces();
+    public String getAllRaces(Model model){
+        List<Race> races = new ArrayList<>();
         model.addAttribute("races", races);
         return "/admin/races"; // The name of your HTML template
     }
@@ -39,7 +42,7 @@ public class RaceController {
                           @RequestParam double race_length,
                           @RequestParam String race_date_time,
                           Model model) throws SQLException {
-        Race race = new Race();
+        Race race = new Race(1, race_name, race_length, null);
         race.setName(race_name);
         race.setLength(race_length);
         race.setDateTime(LocalDateTime.parse(race_date_time));

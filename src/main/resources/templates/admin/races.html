@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>RanTreker - My Activity</title>
   <!-- Google Fonts -->
@@ -7,7 +8,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      margin: 0; 
+      margin: 0;
       padding: 0;
       background-color: #f8f9fa;
       display: flex;
@@ -27,13 +28,13 @@
       top: 0;
     }
 
-    .sidebar .logo { 
-      margin-bottom: 20px; 
+    .sidebar .logo {
+      margin-bottom: 20px;
     }
 
     .sidebar .logo img {
-      width: 135px; 
-      height: 75px; 
+      width: 135px;
+      height: 75px;
     }
 
     .sidebar .menu {
@@ -55,15 +56,15 @@
       background-color: #f1f1f1;
     }
 
-    .sidebar .menu .active { 
-        background-color: #fc4c02; 
-        color: white; 
+    .sidebar .menu .active {
+      background-color: #fc4c02;
+      color: white;
     }
 
     .content {
       margin: 20px;
-      margin-left: 270px; 
-      width: calc(100% - 270px); 
+      margin-left: 270px;
+      width: calc(100% - 270px);
     }
 
     .container {
@@ -83,13 +84,14 @@
       border-radius: 20px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
-      padding: 8px; 
+      padding: 8px;
     }
 
     th {
-      background-color: #fc4c02; 
+      background-color: #fc4c02;
       color: white;
       text-align: center;
     }
@@ -104,7 +106,7 @@
       position: absolute;
       background-color: #f9f9f9;
       min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
       z-index: 1;
     }
 
@@ -130,44 +132,44 @@
     }
 
     .search-box input[type="text"] {
-      flex-grow: 1; 
+      flex-grow: 1;
       padding: 8px;
       border: 1px solid #ccc;
-      border-radius: 5px 0 0 5px; 
+      border-radius: 5px 0 0 5px;
     }
 
     .search-box button {
       padding: 8px 12px;
-      background-color: #fc4c02; 
+      background-color: #fc4c02;
       color: white;
       border: none;
-      border-radius: 0 5px 5px 0; 
+      border-radius: 0 5px 5px 0;
       cursor: pointer;
     }
 
     .action-link {
       display: inline-block;
       padding: 5px 10px;
-      margin-right: 5px; 
-      border: 1px solid #007bff; 
-      color: #007bff; 
+      margin-right: 5px;
+      border: 1px solid #007bff;
+      color: #007bff;
       border-radius: 3px;
-      text-decoration: none; 
+      text-decoration: none;
     }
 
     button {
-            padding: 10px;
-            background-color: #fc5200;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
+      padding: 10px;
+      background-color: #fc5200;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
     }
 
-        button:hover {
-            background-color: #e04b00;
-        }
+    button:hover {
+      background-color: #e04b00;
+    }
 
     .action-link:hover {
       background-color: #007bff;
@@ -177,11 +179,11 @@
     .delete-link {
       display: inline-block;
       padding: 5px 10px;
-      margin-right: 5px; 
-      border: 1px solid #ff0000; 
-      color: #ff0000; 
+      margin-right: 5px;
+      border: 1px solid #ff0000;
+      color: #ff0000;
       border-radius: 3px;
-      text-decoration: none; 
+      text-decoration: none;
     }
 
     .delete-link:hover {
@@ -190,78 +192,46 @@
     }
 
     td {
-        text-align: center; 
-        vertical-align: middle; 
+      text-align: center;
+      vertical-align: middle;
     }
   </style>
 </head>
+
 <body>
 
   <div class="sidebar">
     <div class="logo">
-      <img src="/img/RanTreker Logo.png" alt="RANTREKER Logo"> 
+      <img src="/img/RanTreker Logo.png" alt="RANTREKER Logo">
     </div>
-    <br><br> 
+    <br><br>
     <div class="menu">
-      <a th:href="@{/admin/members}"class="inactive">Members</a>
-      <a th:href="@{/admin/races}"class="active">Races</a>
-      <a th:href="@{/}"class="inactive">Logout</a>
+      <a th:href="@{/admin/members}" class="inactive">Members</a>
+      <a th:href="@{/admin/races}" class="active">Races</a>
+      <a th:href="@{/}" class="inactive">Logout</a>
     </div>
   </div>
 
   <div class="content">
-    <div class="container"> 
-      <h1>Races</h1> 
+    <div class="container">
+      <h1>Races</h1>
 
       <div class="search-box">
-        <input type="text" placeholder="Input name here">
-        <button>Search</button>
+        <input type="text" placeholder="Enter race name..">
       </div>
 
-      <button class="add-button" style="margin-bottom: 20px;" th:href="@{/raceadd}">Add Race</button>
+      <a class="add-button" style="margin-bottom: 20px;" th:href="@{/admin/races/add}">Add Race</a>
 
 
-      <h2>2 Races</h2> 
+      <h2>2 Races</h2>
 
       <table>
         <thead>
           <tr>
-            <th>Race Name
-              <div class="dropdown">
-                <span>▼</span>
-                <div class="dropdown-content">
-                  <a href="#">Sort Asc</a>
-                  <a href="#">Sort Desc</a>
-                </div>
-              </div>
-            </th>
-            <th>Date & Time 
-              <div class="dropdown">
-                <span>▼</span>
-                <div class="dropdown-content">
-                  <a href="#">Sort Asc</a>
-                  <a href="#">Sort Desc</a>
-                </div>
-              </div>
-            </th>
-            <th>Race Length
-              <div class="dropdown">
-                <span>▼</span>
-                <div class="dropdown-content">
-                  <a href="#">Sort Asc</a>
-                  <a href="#">Sort Desc</a>
-                </div>
-              </div>
-            </th>
-            <!-- <th>Total Participants
-              <div class="dropdown">
-                <span>▼</span>
-                <div class="dropdown-content">
-                  <a href="#">Filter 1</a>
-                  <a href="#">Filter 2</a>
-                </div>
-              </div>
-            </th> -->
+            <th>Name</th>
+            <th>Date & Time</th>
+            <th>Distance</th>
+            <th>Participants</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -283,55 +253,56 @@
           </tr>
         </tbody>
       </table>
-      
-      
-    </div> 
+
+
+    </div>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Sorting functionality for Race Name
-    document.querySelectorAll('th:nth-child(1) .dropdown-content a').forEach(function(item) {
-        item.addEventListener('click', function() {
-            let isAscending = item.textContent.includes('Asc');
-            let rows = Array.from(document.querySelectorAll('tbody tr'));
-            rows.sort((a, b) => {
-                let nameA = a.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                let nameB = b.querySelector('td:nth-child(1)').textContent.toLowerCase();
-                return isAscending ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-            });
-            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+    document.addEventListener('DOMContentLoaded', function () {
+      // Sorting functionality for Race Name
+      document.querySelectorAll('th:nth-child(1) .dropdown-content a').forEach(function (item) {
+        item.addEventListener('click', function () {
+          let isAscending = item.textContent.includes('Asc');
+          let rows = Array.from(document.querySelectorAll('tbody tr'));
+          rows.sort((a, b) => {
+            let nameA = a.querySelector('td:nth-child(1)').textContent.toLowerCase();
+            let nameB = b.querySelector('td:nth-child(1)').textContent.toLowerCase();
+            return isAscending ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+          });
+          rows.forEach(row => document.querySelector('tbody').appendChild(row));
         });
-    });
+      });
 
-    // Sorting functionality for Date & Time
-    document.querySelectorAll('th:nth-child(2) .dropdown-content a').forEach(function(item) {
-        item.addEventListener('click', function() {
-            let isAscending = item.textContent.includes('Asc');
-            let rows = Array.from(document.querySelectorAll('tbody tr'));
-            rows.sort((a, b) => {
-                let dateA = new Date(a.querySelector('td:nth-child(2)').textContent);
-                let dateB = new Date(b.querySelector('td:nth-child(2)').textContent);
-                return isAscending ? dateA - dateB : dateB - dateA;
-            });
-            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+      // Sorting functionality for Date & Time
+      document.querySelectorAll('th:nth-child(2) .dropdown-content a').forEach(function (item) {
+        item.addEventListener('click', function () {
+          let isAscending = item.textContent.includes('Asc');
+          let rows = Array.from(document.querySelectorAll('tbody tr'));
+          rows.sort((a, b) => {
+            let dateA = new Date(a.querySelector('td:nth-child(2)').textContent);
+            let dateB = new Date(b.querySelector('td:nth-child(2)').textContent);
+            return isAscending ? dateA - dateB : dateB - dateA;
+          });
+          rows.forEach(row => document.querySelector('tbody').appendChild(row));
         });
-    });
+      });
 
-    // Sorting functionality for Race Length
-    document.querySelectorAll('th:nth-child(3) .dropdown-content a').forEach(function(item) {
-        item.addEventListener('click', function() {
-            let isAscending = item.textContent.includes('Asc');
-            let rows = Array.from(document.querySelectorAll('tbody tr'));
-            rows.sort((a, b) => {
-                let lengthA = parseFloat(a.querySelector('td:nth-child(3)').textContent);
-                let lengthB = parseFloat(b.querySelector('td:nth-child(3)').textContent);
-                return isAscending ? lengthA - lengthB : lengthB - lengthA;
-            });
-            rows.forEach(row => document.querySelector('tbody').appendChild(row));
+      // Sorting functionality for Race Length
+      document.querySelectorAll('th:nth-child(3) .dropdown-content a').forEach(function (item) {
+        item.addEventListener('click', function () {
+          let isAscending = item.textContent.includes('Asc');
+          let rows = Array.from(document.querySelectorAll('tbody tr'));
+          rows.sort((a, b) => {
+            let lengthA = parseFloat(a.querySelector('td:nth-child(3)').textContent);
+            let lengthB = parseFloat(b.querySelector('td:nth-child(3)').textContent);
+            return isAscending ? lengthA - lengthB : lengthB - lengthA;
+          });
+          rows.forEach(row => document.querySelector('tbody').appendChild(row));
         });
+      });
     });
-});
-</script>
+  </script>
 
 </body>
+
 </html>

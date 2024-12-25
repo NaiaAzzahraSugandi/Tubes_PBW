@@ -31,12 +31,7 @@ public class JDBCRaceRepository {
     private static class RaceRowMapper implements RowMapper<Race> {
         @Override
         public Race mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Race race = new Race();
-            race.setId(rs.getInt("id"));
-            race.setName(rs.getString("name"));
-            race.setLength(rs.getInt("length"));  // Pastikan panjangnya menggunakan tipe data yang sesuai
-            // Mengambil nilai date_time sebagai LocalDateTime
-            race.setDateTime(rs.getTimestamp("date_time").toLocalDateTime());
+            Race race = new Race(rs.getInt("id"), rs.getString("name"), rs.getInt("length"), rs.getTimestamp("date_time").toLocalDateTime());
             return race;
         }
     }
