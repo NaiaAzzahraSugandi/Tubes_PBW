@@ -88,6 +88,11 @@ public class JDBCActivityRepository {
         return jdbcTemplate.query(sql, this::mapRowToActivity);
     }
 
+    public List<Activity> findByUserID(int id){
+        String sql = "SELECT * FROM activities WHERE id_user = " + id;
+        return jdbcTemplate.query(sql, this::mapRowToActivity);
+    }
+
     public void updateRun(int id, String title, String description, String image_location){
         String sql = "UPDATE activities SET title = ?, description = ?, image_location = ?  WHERE id = ?";
 

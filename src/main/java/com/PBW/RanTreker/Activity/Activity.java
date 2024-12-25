@@ -48,12 +48,13 @@ public class Activity {
     private String image_location;
 
     public String toString(){
-        return id_user + " \n"
-               + title + " \n"
-               + distance + " \n"
-               + duration + " \n"
-               + date.toString() + " \n"
-               + time.toString() + " \n"
-               + description +" \n";
+        return "User ID: "+ id_user + " \n"
+               + "Title: " + title + " \n"
+               + "Distance: " + distance + " \n"
+               + "Duration: " + duration + " \n"
+               + "Date: " + date.toString() + " \n"
+               + "Time: " + time.toString() + " \n"
+               + "Description: " + description + " \n"
+               + "Image location: " + image_location;
     }
 }

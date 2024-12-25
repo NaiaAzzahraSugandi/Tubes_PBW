@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>RanTreker - My Activity</title>
+  <title>RanTreker Admin - Edit Member</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -105,13 +105,34 @@
       height: 100px;
     }
 
-    button[type="submit"] {
-      background-color: #007bff; 
+    .edit-button{
+      background-color: #fc4c02; 
       color: white;
       padding: 10px 20px;
-      border: none;
+      border: 1px solid #fc4c02;
       border-radius: 3px;
+      font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .edit-button:hover{
+      background-color: #ea510f;
+    }
+
+    .cancel-button {
+        padding: 10px 20px;
+        color: #fc4c02;
+        background-color: white;
+        border: 1px solid #fc4c02;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s; /* Smooth transition */
+    }
+
+    .cancel-button:hover {
+        background-color: #ea510f; /* Darker shade on hover */
+        color: white;
     }
 
     .new-shoes-button {
@@ -152,8 +173,8 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/members}"class="active">Members</a>
-      <a th:href="@{/races}" class="inactive">Races</a>
+      <a th:href="@{/admin/members}"class="active">Members</a>
+      <a th:href="@{/admin/races}" class="inactive">Races</a>
       <a th:href="@{/}" class="inactive">Logout</a>
     </div>
   </div>
@@ -162,12 +183,13 @@
     <div class="container">
       <h1>Edit Member</h1>
 
-      <form method="POST" th:action="@{/editMember}" th:object="${activity}" id="manual-entry-form">
-        <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
+      <form method="POST" th:action="@{/admin/editMember}" th:object="${user}" id="manual-entry-form" enctype="multipart/form-data">
+        <input type="hidden" id="id_user" name="id_user" th:field="*{id_user}">
+
         <div>
-          <label for="title">Name:</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-          <input type="text" id="title" name="title" th:field="*{title}">
+          <label for="name">Name:</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+          <input type="text" id="name" name="name" th:field="*{name}">
         </div>
 
         <div>
@@ -177,17 +199,19 @@
         </div>
 
         <div>
-          <label for="role">Role:</label>
-          <span style="color: red;" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
-          <select id="role" name="role" th:field="*{role}">
-            <option value="">-- Select Role --</option>
-            <option value="member">Member</option>
+          <label for="peran">Role:</label>
+          <select id="peran" name="peran" th:field="*{peran}">
+            <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
         </div>
+
+        <input type="hidden" id="password" name="password" th:field="*{password}">
+        <input type="hidden" id="retypepassword" name="retypepassword" th:field="*{retypepassword}">
         <br><br>
 
-        <button type="submit">Edit</button>
+        <button type="submit" class="edit-button">Edit</button>
+        <button onclick="window.history.back()" class="cancel-button">Cancel</button>
       </form>
     </div>
   </div>
