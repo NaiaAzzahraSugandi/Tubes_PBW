@@ -105,13 +105,34 @@
       height: 100px;
     }
 
-    button{
+    .edit-button{
       background-color: #fc4c02; 
       color: white;
       padding: 10px 20px;
-      border: none;
+      border: 1px solid #fc4c02;
       border-radius: 3px;
+      font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .edit-button:hover{
+      background-color: #ea510f;
+    }
+
+    .cancel-button {
+        padding: 10px 20px;
+        color: #fc4c02;
+        background-color: white;
+        border: 1px solid #fc4c02;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s; /* Smooth transition */
+    }
+
+    .cancel-button:hover {
+        background-color: #ea510f; /* Darker shade on hover */
+        color: white;
     }
 
     .new-shoes-button {
@@ -189,7 +210,8 @@
         <input type="hidden" id="retypepassword" name="retypepassword" th:field="*{retypepassword}">
         <br><br>
 
-        <button type="submit">Edit</button>
+        <button type="submit" class="edit-button">Edit</button>
+        <button onclick="window.history.back()" class="cancel-button">Cancel</button>
       </form>
     </div>
   </div>
