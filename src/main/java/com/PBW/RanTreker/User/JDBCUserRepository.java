@@ -2,6 +2,7 @@ package com.PBW.RanTreker.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,35 @@ public class JDBCUserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<User> findAll(){
+    public List<User> findAll(String name, String nameSort, String peran) {
         String sql = "SELECT * FROM users";
-        return jdbcTemplate.query(sql, this::mapRowToUser);
-    }
+        List<Object> params = new ArrayList<>();
+    
+        if (name.length() > 0) {
+            sql += " WHERE name ILIKE ?";
+            params.add("%"+name+"%");
+        }
+    
+        if (peran.length() > 0 && !peran.equals("None")) {
+            // buat periksa search box name diisi atau ngga
+            // kalau ga diisi, tambahin WHERE ke syntax
+            // kalau diisi, where udah ada, tambahin AND
+            if(params.isEmpty()){
+                sql += " WHERE peran = ?";
+            }
+            else{
+                sql += " AND peran = ?";
+            }
 
+            params.add(peran);
+        }
+    
+        if (nameSort != null && !nameSort.equals("None")) {
+            sql += " ORDER BY name " + nameSort;
+        }
+
+        return jdbcTemplate.query(sql, this::mapRowToUser , params.toArray());
+    }
     private User mapRowToUser(ResultSet resultSet, int rowNum) throws SQLException {
         return new User(
             resultSet.getInt("id"),
@@ -57,6 +82,4 @@ public class JDBCUserRepository {
         String sql = "DELETE FROM users WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
-
-
 }

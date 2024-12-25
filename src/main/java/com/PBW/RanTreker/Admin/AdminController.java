@@ -42,12 +42,16 @@ public class AdminController {
     @GetMapping("/members")
     @RequiredRole("admin")
     public String memberView(Model model,
-            @RequestParam(value = "name", required = false, defaultValue = "") String name) {
+            @RequestParam(value = "name", required = false, defaultValue = "") String name,
+            @RequestParam(value = "nameSort", required = false, defaultValue = "ASC") String nameSort,
+            @RequestParam(value = "peran", required = false, defaultValue = "") String peran) {
 
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll(name, nameSort, peran);
 
         model.addAttribute("users", users);
         model.addAttribute("name", name);
+        model.addAttribute("nameSort", nameSort);
+        model.addAttribute("peran", peran);
         model.addAttribute("totalUser", users.size());
         return "/admin/members";
     }

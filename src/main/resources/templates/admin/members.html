@@ -144,6 +144,22 @@
       cursor: pointer;
     }
 
+    .filter-box {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+    }
+
+    .filter-items {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
     /* Style for action links */
     .action-link {
       display: inline-block;
@@ -228,9 +244,30 @@
     <div class="container"> 
       <h1>Members</h1> 
 
-      <form th:action="@{/admin/members}" metod="GET">
+      <form th:action="@{/admin/members}" method="GET">
         <div class="search-box">
           <input type="text" name="name" id="name" placeholder="Input name here" th:value="${name}">
+        </div>
+
+        <p style="font-weight: bold;">Filters</p>
+        <div class="filter-box">
+
+          <div class="filter-items">
+            <label for="nameSort">Name:</label>
+            <select id="nameSort" name="nameSort" onchange="this.form.submit()">
+              <option value="ASC" th:selected="${nameSort == 'ASC'}">Ascending</option>
+              <option value="DESC" th:selected="${nameSort == 'DESC'}">Descending</option>
+            </select>
+          </div>
+
+          <div class="filter-items">
+            <label for="peran">Role:</label>
+            <select id="peran" name="peran" onchange="this.form.submit()">
+              <option value="None" th:selected="${peran == 'None'}">-- Select role --</option>
+              <option value="user" th:selected="${peran == 'user'}">User</option>
+              <option value="admin" th:selected="${peran == 'admin'}">Admin</option>
+            </select>
+          </div>
         </div>
       </form>
 
