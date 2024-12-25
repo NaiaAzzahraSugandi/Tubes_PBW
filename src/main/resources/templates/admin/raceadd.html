@@ -117,9 +117,10 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/members}">Members</a>
-      <a th:href="@{/races}">Races</a>
-      <a th:href="@{/}">Logout</a>
+      <a th:href="@{/admin/members}" class="inactive">Members</a>
+      <a th:href="@{/admin/races}" class="active">Races</a>
+      <a th:href="@{/admin/races/add}" class="inactive">Add Race</a>
+      <a th:href="@{/}" class="inactive">Logout</a>
     </div>
   </div>
 

@@ -10,6 +10,8 @@ import lombok.Data;
 public class Race {
     private int id;
     private String name;
-    private double length;
-    private LocalDateTime dateTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private double distance;
+    private String status;
 }

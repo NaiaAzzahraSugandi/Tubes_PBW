@@ -15,19 +15,32 @@ import java.util.List;
 @RequestMapping("admin")
 public class RaceController {
 
-    private final JDBCRaceRepository jdbcRace;
-
     @Autowired
-    public RaceController(JDBCRaceRepository jdbcRace) {
-        this.jdbcRace = jdbcRace;
-    }
+    private JDBCRaceRepository raceRepository;
 
-    // Display all races
     @GetMapping("/races")
-    public String getAllRaces(Model model){
-        List<Race> races = new ArrayList<>();
+    public String getAllRaces(Model model,
+                              @RequestParam(value = "raceName", required = false, defaultValue = "") String raceName,
+                              @RequestParam(value = "startDate", required =  false, defaultValue = "") LocalDate startDate,
+                              @RequestParam(value = "endDate", required = false, defaultValue = "") LocalDate endDate,
+                              @RequestParam(value = "distance", required = false, defaultValue = "None") String distance,
+                              @RequestParam(value = "participants", required = false, defaultValue = "None") String participants,
+                              @RequestParam(value = "status", required = false, defaultValue = "All")String status) {
+        
+        
+        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status);
+    
+        model.addAttribute("size", races.size());
         model.addAttribute("races", races);
-        return "/admin/races"; // The name of your HTML template
+
+        // add filter model
+        model.addAttribute("raceName", raceName);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("distance", distance);
+        model.addAttribute("participants", participants);
+        model.addAttribute("status", status);
+        return "/admin/races";
     }
 
     // Add a new race
@@ -36,18 +49,18 @@ public class RaceController {
         return "/admin/raceadd"; // The name of your Add Race HTML template
     }
 
-    // Save a new race to the database
-    @PostMapping("/races/add")
-    public String addRace(@RequestParam String race_name,
-                          @RequestParam double race_length,
-                          @RequestParam String race_date_time,
-                          Model model) throws SQLException {
-        Race race = new Race(1, race_name, race_length, null);
-        race.setName(race_name);
-        race.setLength(race_length);
-        race.setDateTime(LocalDateTime.parse(race_date_time));
+    // // Save a new race to the database
+    // @PostMapping("/races/add")
+    // public String addRace(@RequestParam String race_name,
+    //                       @RequestParam double race_length,
+    //                       @RequestParam String race_date_time,
+    //                       Model model) throws SQLException {
+    //     Race race = new Race(1, race_name, race_length, null);
+    //     race.setName(race_name);
+    //     race.setDistance(race_length);
+    //     race.setDateTime(LocalDateTime.parse(race_date_time));
 
-        jdbcRace.addRace(race);
-        return "redirect:/races";
-    }
+    //     raceRepository.addRace(race);
+    //     return "redirect:/races";
+    // }
 }
