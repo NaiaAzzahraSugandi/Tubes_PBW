@@ -34,6 +34,11 @@ public class RaceController {
 
         List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status);
 
+        // update status dari race, set open/closed
+        for(Race race : races){
+            updateRaceStatus(race);
+        }
+
         model.addAttribute("size", races.size());
         model.addAttribute("races", races);
 
@@ -63,13 +68,7 @@ public class RaceController {
             return "/admin/raceadd";
         }
 
-        LocalDateTime today = LocalDateTime.now();
-        if(race.getStartTime().isBefore(today)){
-            race.setStatus("Closed");
-        }
-        else{
-            race.setStatus("Open");
-        }
+        updateRaceStatus(race);
 
         raceRepository.addRace(race);
 
@@ -95,10 +94,27 @@ public class RaceController {
             return "/admin/racedit";
         }
 
+        updateRaceStatus(race);
+
         raceRepository.editRace(race);
 
         redirectAttributes.addFlashAttribute("successMessage", "Race edited successfully!");
         return "redirect:/admin/races";
+    }
+
+    /**
+     * Method untuk update status race
+     * Ubah status dari race menjadi open/closed berdasarkan tanggal sekarang
+     * @param race
+     */
+    private void updateRaceStatus(Race race){
+        LocalDateTime today = LocalDateTime.now();
+        if(race.getStartTime().isBefore(today) && race.getEndTime().isAfter(today)){
+            race.setStatus("Open");
+        }
+        else{
+            race.setStatus("Closed");
+        }
     }
 
     @GetMapping("/races/delete")
@@ -108,5 +124,15 @@ public class RaceController {
         
         redirectAttributes.addFlashAttribute("successMessage", "Race deleted successfully!");
         return "redirect:/admin/races";
+    }
+
+    @GetMapping("/races/detail")
+    @RequiredRole("admin")
+    public String raceDetails(@RequestParam int id,
+                                Model model){
+
+        Race race = raceRepository.findByRaceID(id).get(0);
+        model.addAttribute("race", race);
+        return "/admin/racedetails";
     }
 }

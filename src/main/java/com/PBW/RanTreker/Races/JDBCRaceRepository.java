@@ -87,8 +87,8 @@ public class JDBCRaceRepository {
     }
 
     public void editRace(Race race){
-        String sql = "UPDATE races SET name = ?, start_date_time = ?, end_date_time = ?, distance = ? WHERE id = ?";
-        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getRaceID());
+        String sql = "UPDATE races SET name = ?, start_date_time = ?, end_date_time = ?, distance = ?, status = ? WHERE id = ?";
+        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getRaceID());
     }
 
     public void deleteRace(int raceID){
