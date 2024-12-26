@@ -35,7 +35,7 @@ public class RaceController {
         List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status);
 
         // update status dari race, set open/closed
-        for(Race race : races){
+        for (Race race : races) {
             updateRaceStatus(race);
         }
 
@@ -62,8 +62,9 @@ public class RaceController {
 
     @PostMapping("/addRace")
     @RequiredRole("admin")
-    public String addRace(@Valid Race race, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-        if(bindingResult.hasErrors()){
+    public String addRace(@Valid Race race, BindingResult bindingResult, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("race", race);
             return "/admin/raceadd";
         }
@@ -79,7 +80,7 @@ public class RaceController {
 
     @GetMapping("/races/edit")
     @RequiredRole("admin")
-    public String editRaceView(Model model, @RequestParam int id){
+    public String editRaceView(Model model, @RequestParam int id) {
         Race race = raceRepository.findByRaceID(id).get(0);
         model.addAttribute("race", race);
 
@@ -88,8 +89,9 @@ public class RaceController {
 
     @PostMapping("/races/edit")
     @RequiredRole("admin")
-    public String editRace(@Valid Race race, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
+    public String editRace(@Valid Race race, BindingResult bindingResult, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("race", race);
             return "/admin/racedit";
         }
@@ -105,14 +107,15 @@ public class RaceController {
     /**
      * Method untuk update status race
      * Ubah status dari race menjadi open/closed berdasarkan tanggal sekarang
+     * 
      * @param race
      */
-    private void updateRaceStatus(Race race){
+    private void updateRaceStatus(Race race) {
         LocalDateTime today = LocalDateTime.now();
-        if(race.getStartTime().isBefore(today) && race.getEndTime().isAfter(today)){
+        if (race.getStartTime().isBefore(today) && race.getEndTime().isAfter(today)) {
             race.setStatus("Open");
-        }
-        else{
+        } 
+        else {
             race.setStatus("Closed");
         }
     }
@@ -121,7 +124,6 @@ public class RaceController {
     @RequiredRole("admin")
     public String deleteRace(@RequestParam int id, RedirectAttributes redirectAttributes){
         raceRepository.deleteRace(id);
-        
         redirectAttributes.addFlashAttribute("successMessage", "Race deleted successfully!");
         return "redirect:/admin/races";
     }
@@ -129,7 +131,7 @@ public class RaceController {
     @GetMapping("/races/detail")
     @RequiredRole("admin")
     public String raceDetails(@RequestParam int id,
-                                Model model){
+                            Model model){
 
         Race race = raceRepository.findByRaceID(id).get(0);
         model.addAttribute("race", race);
