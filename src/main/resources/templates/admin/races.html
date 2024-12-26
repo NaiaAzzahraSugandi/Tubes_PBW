@@ -74,6 +74,19 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    .alert {
+      padding: 10px 10px 10px 25px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+
     h1 {
       margin-bottom: 20px;
     }
@@ -224,7 +237,7 @@
     <div class="menu">
       <a th:href="@{/admin/members}" class="inactive">Members</a>
       <a th:href="@{/admin/races}" class="active">Races</a>
-      <a th:href="@{/admin/races/add}" class="inactive">Add Race</a>
+      <a th:href="@{/admin/addRace}" class="inactive">Add Race</a>
       <a th:href="@{/}" class="inactive">Logout</a>
     </div>
   </div>
@@ -233,7 +246,12 @@
     <div class="container">
       <h1>Manage Races</h1>
 
+      <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+      </div>
+
       <form th:action="@{/admin/races}" method="GET">
+        <p style="font-weight: bold;">Search</p>
         <div class="search-box">
           <input type="text" id="raceName" name="raceName" th:value="${raceName}" placeholder="Enter race name">
         </div>
@@ -299,15 +317,15 @@
         <tbody>
           <tr th:each="race, stat : ${races}">
             <td th:text="${stat.index + 1}"></td>
-            <td th:text="${race.name}"></td>
+            <td th:text="${race.title}"></td>
             <td th:text="${#temporals.format(race.startTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${#temporals.format(race.endTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${race.distance} + ' km'"></td>
             <td>0</td>
             <td th:text="${race.status}"></td>
             <td style="text-align: center;">
-              <a href="#" th:href="@{/admin/races/detail(id=${race.id})}" class="action-link">Detail</a>
-              <a href="#" th:href="@{/admin/races/edit(id=${race.id})}" class="action-link">Edit</a>
+              <a href="#" th:href="@{/admin/races/detail(id=${race.raceID})}" class="action-link">Detail</a>
+              <a href="#" th:href="@{/admin/races/edit(id=${race.raceID})}" class="action-link">Edit</a>
             </td>
           </tr>
           <tr th:if="${races.empty}">

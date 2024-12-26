@@ -17,13 +17,13 @@ public class JDBCRaceRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // // Method to add a new race to the database
-    // public void addRace(Race race) {
-    //     String sql = "INSERT INTO race (name, length, date_time) VALUES (?, ?, ?)";
-    //     jdbcTemplate.update(sql, race.getName(), race.getDistance(), race.getDateTime());
-    // }
+    public List<Race> getAllRaces(String name,
+                                LocalDate startDate,
+                                LocalDate endDate,
+                                String distanceOrder,
+                                String participantOrder,
+                                String status) {
 
-    public List<Race> getAllRaces(String name, LocalDate startDate, LocalDate endDate, String distanceOrder, String participantOrder, String status) {
         StringBuilder sql = new StringBuilder("SELECT * FROM races WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
@@ -64,12 +64,17 @@ public class JDBCRaceRepository {
 
     private Race mapRowToRace(ResultSet resultSet, int rowNum) throws SQLException {
         return new Race(
-            resultSet.getInt("id"),
-            resultSet.getString("name"),
-            resultSet.getTimestamp("start_date_time").toLocalDateTime(),
-            resultSet.getTimestamp("end_date_time").toLocalDateTime(),
-            resultSet.getDouble("distance"),
-            resultSet.getString("status")
-        );
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getTimestamp("start_date_time").toLocalDateTime(),
+                resultSet.getTimestamp("end_date_time").toLocalDateTime(),
+                resultSet.getDouble("distance"),
+                resultSet.getString("status"),
+                resultSet.getInt("participants"));
+    }
+
+    public void addRace(Race race) {
+        String sql = "INSERT INTO races (name, start_date_time, end_date_time, distance, status, participants) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getParticipants());
     }
 }

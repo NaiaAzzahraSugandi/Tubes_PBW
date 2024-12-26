@@ -236,7 +236,7 @@
     <div class="menu">
       <a th:href="@{/admin/members}"class="active">Members</a>
       <a th:href="@{/admin/races}" class="inactive">Races</a>
-      <a th:href="@{/admin/races/add}" class="inactive">Add Race</a>
+      <a th:href="@{/admin/addRace}" class="inactive">Add Race</a>
       <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
@@ -246,6 +246,7 @@
       <h1>Members</h1> 
 
       <form th:action="@{/admin/members}" method="GET">
+        <p style="font-weight: bold;">Search</p>
         <div class="search-box">
           <input type="text" name="name" id="name" placeholder="Input name here" th:value="${name}">
         </div>
