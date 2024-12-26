@@ -53,13 +53,21 @@ public class JDBCRaceRepository {
             sql.append(" ORDER BY distance ");
             sql.append(distanceOrder);
         }
-
-        if (participantOrder != null && !participantOrder.equals("None")) {
+        else if (participantOrder != null && !participantOrder.equals("None")) {
             sql.append(" ORDER BY participants ");
             sql.append(participantOrder);
         }
+        // kalau filter order by ga ada yang diisi, default berdasarkan name
+        else{
+            sql.append(" ORDER BY name ASC");
+        }
 
         return jdbcTemplate.query(sql.toString(), this::mapRowToRace, params.toArray());
+    }
+
+    public List<Race> findByRaceID(int raceID){
+        String sql = "SELECT * FROM races WHERE id = ?";
+        return jdbcTemplate.query(sql, this::mapRowToRace, raceID);
     }
 
     private Race mapRowToRace(ResultSet resultSet, int rowNum) throws SQLException {
@@ -76,5 +84,15 @@ public class JDBCRaceRepository {
     public void addRace(Race race) {
         String sql = "INSERT INTO races (name, start_date_time, end_date_time, distance, status, participants) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getParticipants());
+    }
+
+    public void editRace(Race race){
+        String sql = "UPDATE races SET name = ?, start_date_time = ?, end_date_time = ?, distance = ? WHERE id = ?";
+        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getRaceID());
+    }
+
+    public void deleteRace(int raceID){
+        String sql = "DELETE FROM races WHERE id = ?";
+        jdbcTemplate.update(sql, raceID);
     }
 }

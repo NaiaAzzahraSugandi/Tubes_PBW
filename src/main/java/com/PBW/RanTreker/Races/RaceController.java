@@ -1,7 +1,6 @@
 package com.PBW.RanTreker.Races;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,10 +11,8 @@ import com.PBW.RanTreker.RequiredRole;
 
 import jakarta.validation.Valid;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -78,6 +75,38 @@ public class RaceController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Race added successfully!");
 
+        return "redirect:/admin/races";
+    }
+
+    @GetMapping("/races/edit")
+    @RequiredRole("admin")
+    public String editRaceView(Model model, @RequestParam int id){
+        Race race = raceRepository.findByRaceID(id).get(0);
+        model.addAttribute("race", race);
+
+        return "/admin/racedit";
+    }
+
+    @PostMapping("/races/edit")
+    @RequiredRole("admin")
+    public String editRace(@Valid Race race, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("race", race);
+            return "/admin/racedit";
+        }
+
+        raceRepository.editRace(race);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Race edited successfully!");
+        return "redirect:/admin/races";
+    }
+
+    @GetMapping("/races/delete")
+    @RequiredRole("admin")
+    public String deleteRace(@RequestParam int id, RedirectAttributes redirectAttributes){
+        raceRepository.deleteRace(id);
+        
+        redirectAttributes.addFlashAttribute("successMessage", "Race deleted successfully!");
         return "redirect:/admin/races";
     }
 }
