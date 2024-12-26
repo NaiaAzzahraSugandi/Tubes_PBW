@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RanTreker - My Activity</title>
+  <title>RanTreker Admin - Race Details</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -152,9 +152,10 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/members}"class="inactive">Members</a>
-      <a th:href="@{/races}"class="active">Races</a>
-      <a th:href="@{/}"class="inactive">Logout</a>
+      <a th:href="@{/admin/members}" class="inactive">Members</a>
+      <a th:href="@{/admin/races}" class="active">Races</a>
+      <a th:href="@{/admin/addRace}" class="inactive">Add Race</a>
+      <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
 
@@ -162,7 +163,7 @@
     <div class="container"> 
       <h1>Participating Members</h1> 
 
-      <h2>Pertamina Ecofest</h2> 
+      <h2 th:text="${race.title}"></h2> 
       <h2>2 Participants</h2> 
 
       <table>

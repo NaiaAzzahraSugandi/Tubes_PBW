@@ -51,7 +51,12 @@
       transition: background-color 0.3s;
     }
 
-    .sidebar .menu a:hover {
+    .sidebar .menu .active { 
+        background-color: #fc4c02; 
+        color: white; 
+    }
+
+    .sidebar .menu .inactive:hover {
       background-color: #f1f1f1;
     }
 
@@ -71,41 +76,35 @@
     h1 {
       margin-bottom: 20px;
     }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
+    label {
       display: block;
       margin-bottom: 5px;
-      font-weight: 600;
+      font-weight: bold;
     }
 
-    .form-group input {
+    form{
+      font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    input[type="number"],
+    select {
       width: 100%;
       padding: 10px;
+      margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 3px;
+      box-sizing: border-box; 
     }
 
-    .form-group input[type="datetime-local"] {
-      padding: 8px;
-    }
-
-    .btn-submit {
+    button[type="submit"] {
       background-color: #fc4c02; 
       color: white;
-      border: none;
       padding: 10px 20px;
-      border-radius: 5px;
+      border: none;
+      border-radius: 3px;
       cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .btn-submit:hover {
-      background-color: #e03d01;
     }
   </style>
 </head>
@@ -117,9 +116,10 @@
     </div>
     <br><br> 
     <div class="menu">
-      <a th:href="@{/members}">Members</a>
-      <a th:href="@{/races}">Races</a>
-      <a th:href="@{/}">Logout</a>
+      <a th:href="@{/admin/members}" class="inactive">Members</a>
+      <a th:href="@{/admin/races}" class="inactive">Races</a>
+      <a th:href="@{/admin/addRace}" class="active">Add Race</a>
+      <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
 
@@ -127,21 +127,37 @@
     <div class="container">
       <h1>Add Race</h1>
 
-      <form action="/races/add" method="POST">
+      <form method="POST" th:action="@{/admin/addRace}" th:object="${race}" id="manual-entry-form">
+        <input type="hidden" id="raceID" name="raceID" value="0">
+
         <div>
-            <label for="race-name">Race Name</label>
-            <input type="text" id="race-name" name="race_name" placeholder="Enter race name" required>
+          <label for="title">Title:</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+          <input type="text" id="title" name="title" th:field="*{title}">
         </div>
+
         <div>
-            <label for="race-length">Race Length (in km)</label>
-            <input type="number" id="race-length" name="race_length" placeholder="Enter race length" required>
+          <label for="startTime">Start Date:</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></span>
+          <input type="datetime-local" id="startTime" name="startTime" th:field="*{startTime}">
         </div>
+
         <div>
-            <label for="race-date-time">Date & Time</label>
-            <input type="datetime-local" id="race-date-time" name="race_date_time" required>
+          <label for="endTime">End Date:</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}"></span>
+          <input type="datetime-local" id="endTime" name="endTime" th:field="*{endTime}">
         </div>
-        <button type="submit">Add Race</button>
-    </form>
+
+        <div>
+          <label for="distance">Distance (in kilometers):</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}"></span>
+          <input type="number" id="distance" name="distance" min="0" step="0.01" th:field="*{distance}">
+        </div>
+
+        <input type="hidden" name="participants" id="participants" value="0">
+
+        <button type="submit">Create Race</button>
+      </form>
     </div>
   </div>
 

@@ -2,42 +2,33 @@ package com.PBW.RanTreker.Races;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class Race {
-    private int id;
-    private String name;
-    private double length;
-    private LocalDateTime dateTime;
+    private int raceID;
 
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
+    @NotBlank(message = "Please enter a name for the race!")
+    private String title;
+    
+    @NotNull(message = "Please enter a start time for the race!")
+    private LocalDateTime startTime;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @NotNull(message = "Please enter an end time for the race!")
+    private LocalDateTime endTime;
 
-    public String getName() {
-        return name;
-    }
+    @NotNull(message = "Please enter the distance for the race!")
+    @Min(value = 0, message = "Please enter a valid distance")
+    @Max(value = 999, message = "Please enter a valid distance")
+    private double distance;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String status;
 
-    public double getLength() {
-        return length;
-    }
-
-    public void setLength(double length) {
-        this.length = length;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
+    private int participants = 0;
 }

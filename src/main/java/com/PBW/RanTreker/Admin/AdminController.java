@@ -108,13 +108,6 @@ public class AdminController {
         return "redirect:/admin/members";
     }
 
-    @GetMapping("/races")
-    @RequiredRole("admin")
-    public String racesView() {
-
-        return "/admin/races";
-    }
-
     @GetMapping("/logout")
     @RequiredRole("admin")
     public String logout() {
