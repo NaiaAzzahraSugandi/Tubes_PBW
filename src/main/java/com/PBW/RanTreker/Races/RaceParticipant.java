@@ -19,6 +19,7 @@ public class RaceParticipant {
     private int id;
     private int race_id;
     private int user_id;
+    private String name;
     private LocalDateTime registration_date;
 
     @NotNull(message = "Distance cannot be empty. Please enter the distance you ran!")

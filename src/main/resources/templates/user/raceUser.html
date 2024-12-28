@@ -285,15 +285,6 @@
           </div>
 
           <div class="filter-items">
-            <label for="joinStatus">Join Status:</label>
-            <select id="joinStatus" name="joinStatus" onchange="this.form.submit()">
-              <option value="None" th:selected="${joinStatus == 'None'}">All</option>
-              <option value="Joined" th:selected="${joinStatus == 'Joined'}">Joined</option>
-              <option value="Not Joined" th:selected="${joinStatus == 'Not Joined'}">Not Joined</option>
-            </select>
-          </div>
-
-          <div class="filter-items">
             <label for="status">Race Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
               <option value="All" th:selected="${status == 'All'}">All</option>
@@ -303,18 +294,6 @@
           </div>
         </div>
       </form>
-
-      <div id="confirmationModal">
-        <div id="confirmationContents">
-          <h3 style="color: #fc4c02;">Are you sure you want to delete this activity?</h3>
-          <div id="confirmationButtons">
-            <button id="confirmDeleteButton"
-              style="background-color: #fc4c02; color: white; ">Yes</button>
-            <button onclick="closeModal()"
-              style="background-color: #ccc; color: black;">No</button>
-          </div>
-        </div>
-      </div>
 
       <br>
       <hr>
@@ -336,7 +315,7 @@
         </thead>
         <tbody>
           <tr th:each="race, stat : ${races}">
-            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${stat.index + 1} + '.'"></td>
             <td th:text="${race.title}"></td>
             <td th:text="${#temporals.format(race.startTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${#temporals.format(race.endTime, 'dd-MM-yyyy, HH:mm')}"></td>
@@ -349,7 +328,7 @@
             </td>
           </tr>
           <tr th:if="${races.empty}">
-            <td colspan="6" style="text-align: center;">No races available.</td>
+            <td colspan="8" style="text-align: center;">No races available.</td>
           </tr>
         </tbody>
       </table>

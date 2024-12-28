@@ -15,12 +15,12 @@ public class JDBCRaceParticipantRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<RaceParticipant> getAllParticipantsFromRace(int raceID){
-        String sql = "SELECT * FROM race_participants WHERE race_id = ?";
+        String sql = "SELECT * FROM race_participants_view WHERE race_id = ? ORDER BY speed_km_min DESC";
         return jdbcTemplate.query(sql, this::mapRowToRaceParticipant, raceID);
     }
 
     public Optional<RaceParticipant> findByParticipantID(int raceID, int id_user){
-        String sql = "SELECT * FROM race_participants WHERE race_id = ? AND user_id = ?";
+        String sql = "SELECT * FROM race_participants_view WHERE race_id = ? AND user_id = ?";
         List<RaceParticipant> raceParticipant = jdbcTemplate.query(sql, this::mapRowToRaceParticipant, raceID, id_user);
         
         return raceParticipant.size() == 0 ? Optional.empty() : Optional.of(raceParticipant.get(0));
@@ -31,6 +31,7 @@ public class JDBCRaceParticipantRepository {
             resultSet.getInt("id"),
             resultSet.getInt("race_id"),
             resultSet.getInt("user_id"),
+            resultSet.getString("name"),
             resultSet.getTimestamp("registration_date").toLocalDateTime(),
             resultSet.getDouble("distance"),
             resultSet.getString("duration"),

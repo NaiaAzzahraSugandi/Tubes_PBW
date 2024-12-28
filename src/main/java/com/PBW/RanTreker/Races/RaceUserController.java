@@ -115,7 +115,7 @@ public class RaceUserController {
     @RequiredRole("user")
     public String raceParticipationView(@RequestParam int raceID, Model model) {
         Race race = raceRepository.findByRaceID(raceID).get(0);
-        RaceParticipant raceParticipant = new RaceParticipant(0, 0, 0, null, 0, null, raceID, null, null);
+        RaceParticipant raceParticipant = new RaceParticipant(0, 0, 0, null, null, 0, null, raceID, null, null);
 
         model.addAttribute("race", race);
         model.addAttribute("raceParticipant", raceParticipant);
@@ -201,5 +201,27 @@ public class RaceUserController {
         redirectAttributes.addFlashAttribute("successMessage", "You have successfully registered for the race!");
 
         return "redirect:/user/races";
+    }
+
+    @GetMapping("races/leaderboard")
+    @RequiredRole("user")
+    public String viewLeaderboard(@RequestParam int raceID, Model model){
+        List<RaceParticipant> raceParticipants = raceParticipantRepository.getAllParticipantsFromRace(raceID);
+        Race race = raceRepository.findByRaceID(raceID).get(0);
+
+        // cari posisi user
+        int userPosition = -1; // -1 kalau ga ketemu
+        for (int i = 0; i < raceParticipants.size(); i++) {
+            if (raceParticipants.get(i).getUser_id() == (int)session.getAttribute("id_user")) {
+                userPosition = i + 1;
+                break;
+            }
+        }
+
+        model.addAttribute("raceParticipants", raceParticipants);
+        model.addAttribute("raceTitle", race.getTitle());
+        model.addAttribute("size", raceParticipants.size());
+        model.addAttribute("userPosition", userPosition);
+        return "/user/raceLeaderboard";
     }
 }
