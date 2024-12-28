@@ -2,6 +2,8 @@ package com.PBW.RanTreker.Races;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +18,11 @@ public class Race {
 
     @NotBlank(message = "Please enter a name for the race!")
     private String title;
+
+    @NotNull(message = "Please enter the distance for the race!")
+    @Min(value = 0, message = "Please enter a valid distance")
+    @Max(value = 999, message = "Please enter a valid distance")
+    private double distance;
     
     @NotNull(message = "Please enter a start time for the race!")
     private LocalDateTime startTime;
@@ -23,12 +30,11 @@ public class Race {
     @NotNull(message = "Please enter an end time for the race!")
     private LocalDateTime endTime;
 
-    @NotNull(message = "Please enter the distance for the race!")
-    @Min(value = 0, message = "Please enter a valid distance")
-    @Max(value = 999, message = "Please enter a valid distance")
-    private double distance;
-
+    private int participants = 0;
     private String status;
 
-    private int participants = 0;
+    @NotBlank(message = "Please provide a description for the race.")
+    private String description;
+    private String image_location;
+    private MultipartFile image_file;
 }

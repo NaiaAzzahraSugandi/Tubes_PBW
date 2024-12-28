@@ -55,7 +55,7 @@ public class RaceController {
     @GetMapping("/addRace")
     @RequiredRole("admin")
     public String showAddRaceForm(Model model) {
-        Race race = new Race(0, null, null, null, 0, null, 0);
+        Race race = new Race(0, null, 0, null, null, 0, null, null, null, null);
         model.addAttribute("race", race);
         return "/admin/raceadd";
     }

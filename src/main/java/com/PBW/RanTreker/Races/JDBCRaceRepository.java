@@ -70,15 +70,23 @@ public class JDBCRaceRepository {
         return jdbcTemplate.query(sql, this::mapRowToRace, raceID);
     }
 
+    public void findByParticipantID(int id_user){
+        String sql = "SELECT * FROM race_participants WHERE id_user = ?";
+    }
+
     private Race mapRowToRace(ResultSet resultSet, int rowNum) throws SQLException {
         return new Race(
                 resultSet.getInt("id"),
                 resultSet.getString("name"),
+                resultSet.getDouble("distance"),
                 resultSet.getTimestamp("start_date_time").toLocalDateTime(),
                 resultSet.getTimestamp("end_date_time").toLocalDateTime(),
-                resultSet.getDouble("distance"),
+                resultSet.getInt("participants"),
                 resultSet.getString("status"),
-                resultSet.getInt("participants"));
+                resultSet.getString("description"),
+                resultSet.getString("image_location"),
+                null
+        );
     }
 
     public void addRace(Race race) {
