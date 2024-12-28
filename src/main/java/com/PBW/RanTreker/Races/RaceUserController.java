@@ -54,7 +54,7 @@ public class RaceUserController {
             @RequestParam(value = "distance", required = false, defaultValue = "None") String distance,
             @RequestParam(value = "status", required = false, defaultValue = "All") String status) {
 
-        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance,status);
+        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, null, status);
         
         // menyimpan race yang sudah diikuti
         // berfungsi untuk mengatur isi kolom "Join Status" dan tombol "Participate"
@@ -113,6 +113,8 @@ public class RaceUserController {
         else {
             race.setStatus("Closed");
         }
+
+        raceRepository.updateStatus(race);
     }
 
     @GetMapping("/races/participate")

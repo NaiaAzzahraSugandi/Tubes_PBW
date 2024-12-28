@@ -52,4 +52,9 @@ public class JDBCRaceParticipantRepository {
                             raceParticipant.getSpeed_km_min(),
                             raceParticipant.getImage_location());
     }
+
+    public void deleteParticipant(int raceID, int user_id){
+        String sql = "DELETE FROM race_participants WHERE race_id = ? AND user_id = ?";
+        jdbcTemplate.update(sql, raceID, user_id);
+    }
 }

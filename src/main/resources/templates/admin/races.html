@@ -85,6 +85,7 @@
       color: #155724;
       background-color: #d4edda;
       border-color: #c3e6cb;
+      font-weight: bold;
     }
 
     h1 {
@@ -269,7 +270,7 @@
           </div>
 
           <div class="filter-items">
-            <label for="distance">Distance:</label>
+            <label for="distance">Sort by Distance:</label>
             <select id="distance" name="distance" onchange="resetOthers('distance')">
               <option value="None" th:selected="${distance == 'None'}">None</option>
               <option value="ASC" th:selected="${distance == 'ASC'}">Ascending</option>
@@ -278,7 +279,7 @@
           </div>
 
           <div class="filter-items">
-            <label for="participants">Participants:</label>
+            <label for="participants">Sort by Participants:</label>
             <select id="participants" name="participants" onchange="resetOthers('participants')">
               <option value="None" th:selected="${participants == 'None'}">None</option>
               <option value="ASC" th:selected="${participants == 'ASC'}">Ascending</option>
@@ -321,7 +322,7 @@
             <td th:text="${#temporals.format(race.startTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${#temporals.format(race.endTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${race.distance} + ' km'"></td>
-            <td>0</td>
+            <td th:text="${race.participants}"></td>
             <td th:text="${race.status}"></td>
             <td style="text-align: center;">
               <a href="#" th:href="@{/admin/races/detail(id=${race.raceID})}" class="action-link">Detail</a>
