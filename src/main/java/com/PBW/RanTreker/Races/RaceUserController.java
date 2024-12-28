@@ -72,7 +72,7 @@ public class RaceUserController {
                 joinStatuses.add("Joined");
                 participationList.add(true);
             }
-            else if (race.getStatus().equals("Closed")){
+            else if (race.getStatus().equals("Scheduled") || race.getStatus().equals("Closed")){
                 joinStatuses.add("Not Joined");
                 participationList.add(true);
             }
@@ -105,8 +105,12 @@ public class RaceUserController {
     private void updateRaceStatus(Race race) {
         LocalDateTime today = LocalDateTime.now();
         if (race.getStartTime().isBefore(today) && race.getEndTime().isAfter(today)) {
-            race.setStatus("Open");
-        } else {
+            race.setStatus("Ongoing");
+        } 
+        else if(race.getStartTime().isAfter(today)){
+            race.setStatus("Scheduled");
+        }
+        else {
             race.setStatus("Closed");
         }
     }
