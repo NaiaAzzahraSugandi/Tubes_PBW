@@ -87,6 +87,7 @@
     td {
       border: 1px solid #ddd;
       padding: 8px;
+      text-align: center;
     }
 
     th {
@@ -169,6 +170,10 @@
       color: white;
     }
 
+    .action-link:nth-child(2){
+      margin-top: 5px;
+    }
+
     .delete-link {
       display: inline-block;
       padding: 5px 10px;
@@ -225,8 +230,8 @@
     <div class="menu">
       <a th:href="@{/user/dashboard}" class="inactive">Dashboard</a>
       <a th:href="@{/user/activityEntry}" class="inactive">Entry</a>
-      <a th:href="@{/user/activity}" class="active">Activities</a>
-      <a href="@{/user/races}" class="active">Races</a>
+      <a th:href="@{/user/activity}" class="inactive">Activities</a>
+      <a th:href="@{/user/races}" class="active">Races</a>
       <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
@@ -235,7 +240,6 @@
     <div class="container">
       <h1>Races</h1>
 
-      <p style="font-weight: bold;">Search</p>
       <form th:action="@{/user/races}" method="GET">
         <p style="font-weight: bold;">Search</p>
         <div class="search-box">
@@ -264,16 +268,16 @@
           </div>
 
           <div class="filter-items">
-            <label for="participants">Participants:</label>
-            <select id="participants" name="participants" onchange="resetOthers('participants')">
-              <option value="None" th:selected="${participants == 'None'}">None</option>
-              <option value="ASC" th:selected="${participants == 'ASC'}">Ascending</option>
-              <option value="DESC" th:selected="${participants == 'DESC'}">Descending</option>
+            <label for="joinStatus">Join Status:</label>
+            <select id="joinStatus" name="joinStatus" onchange="this.form.submit()">
+              <option value="None" th:selected="${joinStatus == 'None'}">All</option>
+              <option value="ASC" th:selected="${joinStatus == 'Joined'}">Joined</option>
+              <option value="DESC" th:selected="${joinStatus == 'Not Joined'}">Not Joined</option>
             </select>
           </div>
 
           <div class="filter-items">
-            <label for="status">Status:</label>
+            <label for="status">Race Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
               <option value="All" th:selected="${status == 'All'}">All</option>
               <option value="Open" th:selected="${status == 'Open'}">Open</option>
@@ -298,35 +302,37 @@
       <br>
       <hr>
 
-      <h2 th:text="${totalActivity} + ' Activities'"></h2>
+      <h2 th:text="${size} + ' Races'"></h2>
 
       <table>
         <thead>
           <tr>
             <th>Num.</th>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Duration</th>
+            <th>Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
             <th>Distance</th>
+            <th>Join Status</th>
+            <th>Race Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr th:each="activity, stat : ${activities}">
-            <td th:text="${stat.index + 1} + '.'" style="text-align: center;"></td>
-            <td th:text="${activity.title}"></td>
-            <td th:text="${#temporals.format(activity.date, 'dd-MM-yyyy')}"></td>
-            <td th:text="${activity.time}"></td>
-            <td th:text="${activity.duration}"></td>
-            <td th:text="${activity.distance} + ' km'"></td>
-            <td style="text-align: center;">
-              <a th:href="@{/user/editRun(id=${activity.id})}" class="action-link">Edit</a>
-              <a class="delete-link" th:onclick="confirmDelete([[${activity.id}]])">Delete</a>
+          <tr th:each="race, stat : ${races}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${race.title}"></td>
+            <td th:text="${#temporals.format(race.startTime, 'dd-MM-yyyy, HH:mm')}"></td>
+            <td th:text="${#temporals.format(race.endTime, 'dd-MM-yyyy, HH:mm')}"></td>
+            <td th:text="${race.distance} + ' km'"></td>
+            <td>Not Joined</td>
+            <td th:text="${race.status}"></td>
+            <td style="text-align: center; gap: 10px;">
+              <a th:href="@{/user/races/participate(raceID=${race.raceID})}" class="action-link">Participate</a>
+              <a th:href="@{/user/races/leaderboard(raceID=${race.raceID})}" class="action-link">Leaderboard</a>
             </td>
           </tr>
-          <tr th:if="${activities.empty}">
-            <td colspan="7" style="text-align: center;">No activities yet.</td>
+          <tr th:if="${races.empty}">
+            <td colspan="6" style="text-align: center;">No races available.</td>
           </tr>
         </tbody>
       </table>
@@ -345,23 +351,6 @@
       }
       // Submit the form to apply the filters
       document.forms[0].submit();
-    }
-
-    let activityIDToDelete
-    function confirmDelete(activityID){
-      activityIDToDelete = activityID;
-      document.getElementById('confirmationModal').style.display = 'flex';
-      console.log(activityIDToDelete);
-    }
-    function closeModal(event){
-      document.getElementById('confirmationModal').style.display = 'none';
-      event.preventDefault();
-    }
-
-    document.getElementById('confirmDeleteButton').onclick = function() {
-      event.preventDefault();
-      window.location.href = '/user/delete?id=' + activityIDToDelete;
-      return false;
     }
   </script>
 
