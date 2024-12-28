@@ -140,7 +140,7 @@
         <div>
           <label for="title">Title:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-          <input type="text" id="title" name="title" th:field="*{title}">
+          <input type="text" id="title" name="title" th:field="*{title}" placeholder="Enter race title (e.g., Spring Marathon 2025)">
         </div>
 
         <div>
@@ -164,7 +164,7 @@
         <div>
           <label for="description">Description:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('description')}" th:errors="*{distance}"></span>
-          <textarea name="description" id="description" th:field="*{description}"></textarea>
+          <textarea name="description" id="description" th:field="*{description}" placeholder="Describe the race (e.g., A scenic 10K run through the city park)"></textarea>
         </div>
 
         <div>
