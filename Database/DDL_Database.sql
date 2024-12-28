@@ -1,3 +1,27 @@
+CREATE OR REPLACE FUNCTION update_participant_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- update isi kolom participants di kolom race
+    UPDATE races
+    SET participants = (SELECT COUNT(*) FROM race_participants WHERE race_id = NEW.race_id)
+    WHERE id = NEW.race_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- trigger untuk insert
+CREATE TRIGGER participant_insert
+AFTER INSERT ON race_participants
+FOR EACH ROW
+EXECUTE FUNCTION update_participant_count();
+
+-- trigger untuk delete
+CREATE TRIGGER participant_delete
+AFTER DELETE ON race_participants
+FOR EACH ROW
+EXECUTE FUNCTION update_participant_count();
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
@@ -44,3 +68,22 @@ CREATE TABLE race_participants (
     FOREIGN KEY (user_id) REFERENCES users(id),
     UNIQUE (race_id, user_id)
 );
+
+
+-- CREATE VIEW
+CREATE VIEW race_participants_view AS
+	SELECT
+		race_participants.id,
+		race_participants.race_id,
+		race_participants.user_id,
+		users.name,
+		race_participants.registration_date,
+		race_participants.distance,
+		race_participants.duration,
+		race_participants.speed_km_min,
+		race_participants.image_location
+	FROM
+		users
+		JOIN race_participants ON users.id = race_participants.user_id
+	ORDER BY
+		speed_km_min DESC
