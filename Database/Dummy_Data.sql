@@ -1,8 +1,3 @@
-INSERT INTO race_participants (race_id, user_id, registration_date, duration, image_location) VALUES
-(2, 2, '2023-11-02 09:15:00', 5400, ''),  -- 1 hour 30 minutes
-(3, 7, '2023-09-16 10:00:00', 7200, ''),  -- 2 hours
-(4, 8, '2023-12-02 11:45:00', 4500, ''),  -- 1 hour 15 minutes
-
 INSERT INTO races (name, distance, start_date_time, end_date_time, participants, status, description, image_location)
 VALUES
 ('Lakefront Half Marathon', 21.10, '2025-07-12 06:00:00', '2025-07-12 09:30:00', 0, 'Closed', 'Half marathon along the lake', '/images/lakefront_half.jpg'),
