@@ -21,7 +21,6 @@ public class JDBCRaceRepository {
                                 LocalDate startDate,
                                 LocalDate endDate,
                                 String distanceOrder,
-                                String participantOrder,
                                 String status) {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM races WHERE 1=1");
@@ -53,10 +52,6 @@ public class JDBCRaceRepository {
             sql.append(" ORDER BY distance ");
             sql.append(distanceOrder);
         }
-        else if (participantOrder != null && !participantOrder.equals("None")) {
-            sql.append(" ORDER BY participants ");
-            sql.append(participantOrder);
-        }
         // kalau filter order by ga ada yang diisi, default berdasarkan name
         else{
             sql.append(" ORDER BY name ASC");
@@ -68,10 +63,6 @@ public class JDBCRaceRepository {
     public List<Race> findByRaceID(int raceID){
         String sql = "SELECT * FROM races WHERE id = ?";
         return jdbcTemplate.query(sql, this::mapRowToRace, raceID);
-    }
-
-    public void findByParticipantID(int id_user){
-        String sql = "SELECT * FROM race_participants WHERE id_user = ?";
     }
 
     private Race mapRowToRace(ResultSet resultSet, int rowNum) throws SQLException {

@@ -32,7 +32,7 @@ public class RaceController {
             @RequestParam(value = "participants", required = false, defaultValue = "None") String participants,
             @RequestParam(value = "status", required = false, defaultValue = "All") String status) {
 
-        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status);
+        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, status);
 
         // update status dari race, set open/closed
         for (Race race : races) {

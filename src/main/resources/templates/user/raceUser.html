@@ -73,6 +73,19 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    .alert {
+      padding: 10px 10px 10px 25px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+
     h1 {
       margin-bottom: 20px;
     }
@@ -240,6 +253,10 @@
     <div class="container">
       <h1>Races</h1>
 
+      <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+      </div>
+
       <form th:action="@{/user/races}" method="GET">
         <p style="font-weight: bold;">Search</p>
         <div class="search-box">
@@ -260,7 +277,7 @@
 
           <div class="filter-items">
             <label for="distance">Distance:</label>
-            <select id="distance" name="distance" onchange="resetOthers('distance')">
+            <select id="distance" name="distance" onchange="this.form.submit()">
               <option value="None" th:selected="${distance == 'None'}">None</option>
               <option value="ASC" th:selected="${distance == 'ASC'}">Ascending</option>
               <option value="DESC" th:selected="${distance == 'DESC'}">Descending</option>
@@ -271,8 +288,8 @@
             <label for="joinStatus">Join Status:</label>
             <select id="joinStatus" name="joinStatus" onchange="this.form.submit()">
               <option value="None" th:selected="${joinStatus == 'None'}">All</option>
-              <option value="ASC" th:selected="${joinStatus == 'Joined'}">Joined</option>
-              <option value="DESC" th:selected="${joinStatus == 'Not Joined'}">Not Joined</option>
+              <option value="Joined" th:selected="${joinStatus == 'Joined'}">Joined</option>
+              <option value="Not Joined" th:selected="${joinStatus == 'Not Joined'}">Not Joined</option>
             </select>
           </div>
 
@@ -324,10 +341,10 @@
             <td th:text="${#temporals.format(race.startTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${#temporals.format(race.endTime, 'dd-MM-yyyy, HH:mm')}"></td>
             <td th:text="${race.distance} + ' km'"></td>
-            <td>Not Joined</td>
+            <td th:text="${joinStatuses[stat.index]}">Not Joined</td>
             <td th:text="${race.status}"></td>
             <td style="text-align: center; gap: 10px;">
-              <a th:href="@{/user/races/participate(raceID=${race.raceID})}" class="action-link">Participate</a>
+              <a th:if="${!participationList[stat.index]}" th:href="@{/user/races/participate(raceID=${race.raceID})}" class="action-link">Participate</a>
               <a th:href="@{/user/races/leaderboard(raceID=${race.raceID})}" class="action-link">Leaderboard</a>
             </td>
           </tr>
