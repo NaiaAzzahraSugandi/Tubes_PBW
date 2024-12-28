@@ -105,13 +105,18 @@
       height: 100px;
     }
 
-    button[type="submit"] {
-      background-color: #007bff; 
+    button {
+      background-color: #fc4c02; 
       color: white;
       padding: 10px 20px;
       border: none;
       border-radius: 3px;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover{
+      background-color: #e43a01;
     }
 
     .new-shoes-button {
@@ -155,6 +160,7 @@
       <a th:href="@{/user/dashboard}" class="inactive">Dashboard</a>
       <a th:href="@{/user/activityEntry}" class="active">Entry</a>
       <a th:href="@{/user/activity}" class="inactive">Activities</a>
+      <a th:href="@{/user/races}" class="inactive">Races</a>
       <a th:href="@{/logout}" class="inactive">Logout</a>
     </div>
   </div>
@@ -174,7 +180,7 @@
         <div>
           <label for="distance">Distance in kilometers:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}"></span>
-          <input type="number" id="distance" name="distance" min="0" th:field="*{distance}">
+          <input type="number" id="distance" name="distance" min="0.0" max="999" th:field="*{distance}">
         </div>
 
         <div>

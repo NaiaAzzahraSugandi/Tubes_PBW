@@ -89,13 +89,20 @@
     input[type="text"],
     input[type="datetime-local"],
     input[type="number"],
-    select {
+    input[type="file"],
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 3px;
       box-sizing: border-box; 
+    }
+
+    textarea {
+      height: 100px;
+      max-width: 100%;
     }
 
     button[type="submit"] {
@@ -127,13 +134,13 @@
     <div class="container">
       <h1>Add Race</h1>
 
-      <form method="POST" th:action="@{/admin/addRace}" th:object="${race}" id="manual-entry-form">
+      <form method="POST" th:action="@{/admin/addRace}" th:object="${race}" id="manual-entry-form" enctype="multipart/form-data">
         <input type="hidden" id="raceID" name="raceID" value="0">
 
         <div>
           <label for="title">Title:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-          <input type="text" id="title" name="title" th:field="*{title}">
+          <input type="text" id="title" name="title" th:field="*{title}" placeholder="Enter race title (e.g., Spring Marathon 2025)">
         </div>
 
         <div>
@@ -152,6 +159,17 @@
           <label for="distance">Distance (in kilometers):</label>
           <span style="color: red;" th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}"></span>
           <input type="number" id="distance" name="distance" min="0" step="0.01" th:field="*{distance}">
+        </div>
+
+        <div>
+          <label for="description">Description:</label>
+          <span style="color: red;" th:if="${#fields.hasErrors('description')}" th:errors="*{distance}"></span>
+          <textarea name="description" id="description" th:field="*{description}" placeholder="Describe the race (e.g., A scenic 10K run through the city park)"></textarea>
+        </div>
+
+        <div>
+          <label for="bannerImage">Banner Image:</label>
+          <input type="file" id="image_file" name="image_file" accept="images/*">
         </div>
 
         <input type="hidden" name="participants" id="participants" value="0">

@@ -21,7 +21,7 @@ public class JDBCRaceRepository {
                                 LocalDate startDate,
                                 LocalDate endDate,
                                 String distanceOrder,
-                                String participantOrder,
+                                String participantsOrder,
                                 String status) {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM races WHERE 1=1");
@@ -53,9 +53,9 @@ public class JDBCRaceRepository {
             sql.append(" ORDER BY distance ");
             sql.append(distanceOrder);
         }
-        else if (participantOrder != null && !participantOrder.equals("None")) {
+        else if (participantsOrder != null && !participantsOrder.equals("None")) {
             sql.append(" ORDER BY participants ");
-            sql.append(participantOrder);
+            sql.append(participantsOrder);
         }
         // kalau filter order by ga ada yang diisi, default berdasarkan name
         else{
@@ -74,21 +74,30 @@ public class JDBCRaceRepository {
         return new Race(
                 resultSet.getInt("id"),
                 resultSet.getString("name"),
+                resultSet.getDouble("distance"),
                 resultSet.getTimestamp("start_date_time").toLocalDateTime(),
                 resultSet.getTimestamp("end_date_time").toLocalDateTime(),
-                resultSet.getDouble("distance"),
+                resultSet.getInt("participants"),
                 resultSet.getString("status"),
-                resultSet.getInt("participants"));
+                resultSet.getString("description"),
+                resultSet.getString("image_location"),
+                null
+        );
     }
 
     public void addRace(Race race) {
-        String sql = "INSERT INTO races (name, start_date_time, end_date_time, distance, status, participants) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getParticipants());
+        String sql = "INSERT INTO races (name, start_date_time, end_date_time, distance, status, participants, description, image_location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getParticipants(), race.getDescription(), race.getImage_location());
     }
 
     public void editRace(Race race){
-        String sql = "UPDATE races SET name = ?, start_date_time = ?, end_date_time = ?, distance = ?, status = ? WHERE id = ?";
-        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getRaceID());
+        String sql = "UPDATE races SET name = ?, start_date_time = ?, end_date_time = ?, distance = ?, status = ?, description = ?, image_location = ? WHERE id = ?";
+        jdbcTemplate.update(sql, race.getTitle(), race.getStartTime(), race.getEndTime(), race.getDistance(), race.getStatus(), race.getDescription(), race.getImage_location(), race.getRaceID());
+    }
+
+    public void updateStatus(Race race){
+        String sql = "UPDATE races SET status = ? WHERE id = ?";
+        jdbcTemplate.update(sql, race.getStatus(), race.getRaceID());
     }
 
     public void deleteRace(int raceID){
