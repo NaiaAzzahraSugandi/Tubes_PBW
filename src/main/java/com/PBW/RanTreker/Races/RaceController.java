@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.PBW.RanTreker.RequiredRole;
+import com.PBW.RanTreker.Notification.JDBCNotificationRepository;
+import com.PBW.RanTreker.Notification.Notification;
 
 import jakarta.validation.Valid;
 
@@ -33,6 +35,9 @@ public class RaceController {
 
     @Autowired
     private JDBCRaceParticipantRepository raceParticipantRepository;
+
+    @Autowired
+    private JDBCNotificationRepository notificationRepository;
 
     @GetMapping("/races")
     @RequiredRole("admin")
@@ -265,7 +270,7 @@ public class RaceController {
 
     @GetMapping("/races/detail/delete")
     @RequiredRole("admin")
-    public String deleteParticipant(int raceID, int userID, RedirectAttributes redirectAttributes){
+    public String deleteParticipant(int raceID, int userID, String message, String raceTitle, RedirectAttributes redirectAttributes){
         RaceParticipant raceParticipant = raceParticipantRepository.findByParticipantID(raceID, userID).get();
 
         // delete image kalo misalnya ada
@@ -279,6 +284,18 @@ public class RaceController {
         }
 
         raceParticipantRepository.deleteParticipant(raceID, userID);
+
+        // format created date, jangan include fractional seconds
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String todayString = today.format(formatter);
+        LocalDateTime todayFormatted = LocalDateTime.parse(todayString, formatter);
+
+        // format message
+        String newMessage = "You have been removed from " + raceTitle + "!<br>" + "Reason :<br>" + message; 
+        // buat notification dan submit
+        Notification notification = new Notification(0, userID, todayFormatted, newMessage);
+        notificationRepository.save(notification);
 
         redirectAttributes.addFlashAttribute("successMessage", "Participant deleted successfully!");
 
