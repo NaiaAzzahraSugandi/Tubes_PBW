@@ -292,10 +292,11 @@
           </div>
 
           <div class="filter-items">
-            <label for="status">Race Status:</label>
+            <label for="status">Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
-              <option value="All" th:selected="${status == 'All'}">All</option>
-              <option value="Open" th:selected="${status == 'Open'}">Open</option>
+              <option value="None" th:selected="${status == 'All'}">All</option>
+              <option value="Scheduled" th:selected="${status == 'Scheduled'}">Scheduled</option>
+              <option value="Ongoing" th:selected="${status == 'Ongoing'}">Ongoing</option>
               <option value="Closed" th:selected="${status == 'Closed'}">Closed</option>
             </select>
           </div>
