@@ -45,6 +45,13 @@ CREATE TABLE race_participants (
     UNIQUE (race_id, user_id)
 );
 
+CREATE TABLE notifications(
+	id SERIAL PRIMARY KEY,
+	user_id INTEGER NOT NULL,
+	created_date TIMESTAMP NOT NULL,
+	message VARCHAR (255) NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id)
+)
 
 -- CREATE VIEW
 CREATE VIEW race_participants_view AS
@@ -65,25 +72,26 @@ CREATE VIEW race_participants_view AS
 		speed_km_min DESC
 
 -- FUNCTIONS
+-- FUNCTION: update participant count
 CREATE OR REPLACE FUNCTION update_participant_count()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- update isi kolom participants di kolom race
+    -- Update participant count for INSERT and DELETE
     UPDATE races
-    SET participants = (SELECT COUNT(*) FROM race_participants WHERE race_id = NEW.race_id)
-    WHERE id = NEW.race_id;
+    SET participants = (SELECT COUNT(*) FROM race_participants WHERE race_id = COALESCE(NEW.race_id, OLD.race_id))
+    WHERE id = COALESCE(NEW.race_id, OLD.race_id);
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- trigger untuk insert
+-- TRIGGER FOR INSERT
 CREATE TRIGGER participant_insert
 AFTER INSERT ON race_participants
 FOR EACH ROW
 EXECUTE FUNCTION update_participant_count();
 
--- trigger untuk delete
+-- TRIGGER FOR DELETE
 CREATE TRIGGER participant_delete
 AFTER DELETE ON race_participants
 FOR EACH ROW
