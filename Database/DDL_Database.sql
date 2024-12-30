@@ -51,7 +51,7 @@ CREATE TABLE notifications(
 	created_date TIMESTAMP NOT NULL,
 	message VARCHAR (255) NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
 
 -- CREATE VIEW
 CREATE VIEW race_participants_view AS
@@ -69,7 +69,7 @@ CREATE VIEW race_participants_view AS
 		users
 		JOIN race_participants ON users.id = race_participants.user_id
 	ORDER BY
-		speed_km_min DESC
+		speed_km_min DESC;
 
 -- FUNCTIONS
 -- FUNCTION: update participant count
