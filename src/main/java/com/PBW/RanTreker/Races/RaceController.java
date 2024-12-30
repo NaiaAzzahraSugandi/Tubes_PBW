@@ -159,13 +159,15 @@ public class RaceController {
             if(!race.getImage_file().isEmpty()){
                 // buang image yang lama
                 String directory = "public/banner_images/";
-                Path oldImagePath = Paths.get(directory + race.getImage_location());
-    
-                try{
-                    Files.delete(oldImagePath);
-                }
-                catch(IOException e){
-                    System.out.println(e.getMessage());
+
+                if(!race.getImage_location().equals("")){
+                    Path oldImagePath = Paths.get(directory + race.getImage_location());
+                    try{
+                        Files.delete(oldImagePath);
+                    }
+                    catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
                 }
     
                 // save image yang baru
