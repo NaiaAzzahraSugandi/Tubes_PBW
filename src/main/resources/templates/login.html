@@ -177,13 +177,13 @@
             <h1>Login</h1>
             <hr>
             <form method="POST" th:action="@{/login}">
+                <span style="color: red; text-align: center;" th:if="${error} == 'EmailFault'">Email is not registered!</span>
+                <span style="color: red; text-align: center;" th:if="${error} == 'PasswordFault'">Incorrect email or password!</span>
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                <p style="color: red;" th:if="${error} == 'EmailFault'">Email belum terdaftar</p>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                <p style="color: red;" th:if="${error} == 'PasswordFault'">Password salah!</p>
 
                 <button type="submit">Log In</button>
                 <p>New Here? <a th:href="@{/register}" style="color: #fc5200;">Sign up</a></p>
