@@ -50,6 +50,11 @@
       border-radius: 5px;
       transition: background-color 0.3s;
     }
+
+    .sidebar .menu a:last-child{
+      margin-top: 100%;
+    }
+
     .sidebar .menu .active { 
         background-color: #fc4c02; 
         color: white; 
@@ -171,35 +176,35 @@
       <h1>Manual Entry</h1>
 
       <form method="POST" th:action="@{/user/activityEntry}" th:object="${activity}" id="manual-entry-form" enctype="multipart/form-data">
-        <input type="hidden" id="id_user" name="id_user" th:value="${id_user}">
+        <input type="hidden" id="id_user" name="id_user" th:field="*{id_user}">
         <div>
           <label for="title">Title:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-          <input type="text" id="title" name="title" th:field="*{title}">
+          <input type="text" id="title" name="title" th:field="*{title}" required>
         </div>
 
         <div>
           <label for="distance">Distance in kilometers:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('distance')}" th:errors="*{distance}"></span>
-          <input type="number" id="distance" name="distance" min="0.0" max="999" th:field="*{distance}">
+          <input type="number" id="distance" name="distance" min="0" step="0.01" max="999" th:field="*{distance}" required>
         </div>
 
         <div>
-          <label for="duration">Duration (in minutes):</label>
+          <label for="duration">Duration:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
-          <input type="number" id="duration" name="duration" min="0" th:field="*{duration}">
+          <input type="text" id="duration" name="duration" th:field="*{duration}" placeholder="HH:MM:SS" pattern="^([0-9]{1,2}):([0-5][0-9]):([0-5][0-9])$" required>
         </div>
 
         <div>
           <label for="date">Date:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
-          <input type="date" id="date" name="date" th:field="*{date}">
+          <input type="date" id="date" name="date" th:value="${activity.date}" required>
         </div>
 
         <div>
           <label for="time">Time:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('time')}" th:errors="*{time}"></span>
-          <input type="time" id="time" name="time" th:field="*{time}">
+          <input type="time" id="time" name="time" th:value="${activity.time}" required>
         </div>
 
         <div>

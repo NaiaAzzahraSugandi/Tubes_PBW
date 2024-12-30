@@ -51,6 +51,11 @@
       border-radius: 5px;
       transition: background-color 0.3s;
     }
+
+    .sidebar .menu a:last-child{
+      margin-top: 100%;
+    }
+
     .sidebar .menu .active { 
         background-color: #fc4c02; 
         color: white; 
@@ -262,7 +267,7 @@
       <form th:action="@{/user/races}" method="GET">
         <p style="font-weight: bold;">Search</p>
         <div class="search-box">
-          <input type="text" id="raceName" name="raceName" th:value="${raceName}" placeholder="Enter race name">
+          <input type="text" id="raceName" name="raceName" th:value="${raceName}" placeholder="Search race by title">
         </div>
 
         <p style="font-weight: bold;">Filters</p>
@@ -287,10 +292,11 @@
           </div>
 
           <div class="filter-items">
-            <label for="status">Race Status:</label>
+            <label for="status">Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
-              <option value="All" th:selected="${status == 'All'}">All</option>
-              <option value="Open" th:selected="${status == 'Open'}">Open</option>
+              <option value="None" th:selected="${status == 'All'}">All</option>
+              <option value="Scheduled" th:selected="${status == 'Scheduled'}">Scheduled</option>
+              <option value="Ongoing" th:selected="${status == 'Ongoing'}">Ongoing</option>
               <option value="Closed" th:selected="${status == 'Closed'}">Closed</option>
             </select>
           </div>

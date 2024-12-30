@@ -78,6 +78,11 @@ public class LoginController {
         return "redirect:/user/dashboard";
     }
 
+    @GetMapping("/wrongRole")
+    public String wrongRole(){
+        return "wrongRole";
+    }
+
     @GetMapping("/logout")
     public String logout(){
         session.invalidate();

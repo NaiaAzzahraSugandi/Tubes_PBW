@@ -18,7 +18,7 @@ public class JDBCActivityRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void save(Activity activity) {
-        String sql = "INSERT INTO activities (id_user, title, distance, duration, date, time, description, image_location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO activities (id_user, title, distance, duration, date, time, description, image_location) VALUES (?, ?, ?, ?::INTERVAL, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 activity.getId_user(),
@@ -74,8 +74,8 @@ public class JDBCActivityRepository {
                 resultSet.getInt("id"),
                 resultSet.getInt("id_user"),
                 resultSet.getString("title"),
-                resultSet.getInt("distance"),
-                resultSet.getInt("duration"),
+                resultSet.getDouble("distance"),
+                resultSet.getString("duration"),
                 resultSet.getDate("date").toLocalDate(),
                 resultSet.getTime("time").toLocalTime(),
                 resultSet.getString("description"),

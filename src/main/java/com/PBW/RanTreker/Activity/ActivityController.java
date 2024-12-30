@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import java.io.ByteArrayOutputStream;
@@ -171,14 +172,20 @@ public class ActivityController {
     @RequiredRole("user")
     public String activityEntryView(Activity activity, Model model) {
         int id_user = (int) session.getAttribute("id_user");
+        activity.setId_user(id_user);
         model.addAttribute("id_user", id_user);
         return "/user/entryRun";
     }
 
     @PostMapping("/activityEntry")
     @RequiredRole("user")
-    public String activityEntry(@Valid Activity activity, BindingResult bindingResult) {
+    public String activityEntry(@Valid Activity activity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            // log errors
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getDefaultMessage());
+            });
+            model.addAttribute("activity", activity);
             return "/user/entryRun";
         }
 
@@ -220,6 +227,8 @@ public class ActivityController {
         // Save activity ke database
         activityRepository.save(activity);
 
+        redirectAttributes.addFlashAttribute("successMessage", "Activity has been added successfully!");
+
         return "redirect:/user/activity";
     }
 
@@ -235,7 +244,7 @@ public class ActivityController {
 
     @PostMapping("/editRun")
     @RequiredRole("user")
-    public String editRun(@Valid Activity activity, BindingResult bindingResult, Model model){
+    public String editRun(@Valid Activity activity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
             // log errors
             bindingResult.getAllErrors().forEach(error -> {
@@ -251,13 +260,15 @@ public class ActivityController {
             if(!activity.getImage_file().isEmpty()){
                 // buang image yang lama
                 String directory = "public/images/";
-                Path oldImagePath = Paths.get(directory + activity.getImage_location());
-    
-                try{
-                    Files.delete(oldImagePath);
-                }
-                catch(IOException e){
-                    System.out.println(e.getMessage());
+                
+                if(!activity.getImage_location().equals("")){
+                    Path oldImagePath = Paths.get(directory + activity.getImage_location());
+                    try{
+                        Files.delete(oldImagePath);
+                    }
+                    catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
                 }
     
                 // save image yang baru
@@ -287,12 +298,14 @@ public class ActivityController {
         // update run
         activityRepository.updateRun(activity.getId(), activity.getTitle(), activity.getDescription(), activity.getImage_location());
 
+        redirectAttributes.addFlashAttribute("successMessage", "Activity has been edited successfully!");
+
         return "redirect:/user/activity";
     }
 
     @GetMapping("/delete")
     @RequiredRole("user")
-    public String deleteActivity(@RequestParam int id) {
+    public String deleteActivity(@RequestParam int id, RedirectAttributes redirectAttributes) {
         Activity activity = activityRepository.findById(id).get(0); 
 
         // delete image kalo misalnya ada
@@ -307,6 +320,8 @@ public class ActivityController {
     
         // delete record
         activityRepository.deleteRun(id);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Activity has been deleted successfully!");
     
         return "redirect:/user/activity";
     }

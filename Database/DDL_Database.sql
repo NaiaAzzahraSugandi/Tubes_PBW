@@ -10,8 +10,8 @@ CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
     id_user INTEGER NOT NULL,
     title VARCHAR(60) NOT NULL,
-    distance INTEGER NOT NULL,
-    duration INTEGER NOT NULL,
+    distance DECIMAL(5,2) NOT NULL,
+    duration INTERVAL NOT NULL,
     date DATE NOT NULL,
     time TIME NOT NULL,
     description VARCHAR(150),
@@ -51,7 +51,7 @@ CREATE TABLE notifications(
 	created_date TIMESTAMP NOT NULL,
 	message VARCHAR (255) NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
 
 -- CREATE VIEW
 CREATE VIEW race_participants_view AS
@@ -69,7 +69,7 @@ CREATE VIEW race_participants_view AS
 		users
 		JOIN race_participants ON users.id = race_participants.user_id
 	ORDER BY
-		speed_km_min DESC
+		speed_km_min DESC;
 
 -- FUNCTIONS
 -- FUNCTION: update participant count
