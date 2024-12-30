@@ -225,7 +225,7 @@ public class RaceUserController {
         }
 
         model.addAttribute("raceParticipants", raceParticipants);
-        model.addAttribute("raceTitle", race.getTitle());
+        model.addAttribute("race", race);
         model.addAttribute("size", raceParticipants.size());
         model.addAttribute("userPosition", userPosition);
         return "/user/raceLeaderboard";

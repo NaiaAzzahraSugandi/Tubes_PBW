@@ -73,14 +73,27 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    #bannerImage{
+      max-width: 1032px;
+      max-height: 200px;
+    }
+
+    .description-box{
+      text-align: justify;
+    }
+
+    .image-box{
+      text-align: center;
+    }
+
     .position-box {
-            background-color: #d4edda; /* Light green background */
-            color: #155724; /* Dark green text */
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
+      background-color: #d4edda; /* Light green background */
+      color: #155724; /* Dark green text */
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
 
     h1 {
       margin-bottom: 20px;
@@ -155,7 +168,15 @@
   <div class="content">
     <div class="container">
       <h1>Leaderboard</h1>
-      <h2 th:text="${raceTitle}"></h2>
+      <h2 th:text="${race.title}"></h2>
+
+      <div class="image-box" th:if="${race.image_location}" style="text-align: center;">
+        <img th:src="@{'/banner_images/' + ${race.image_location}}" alt="" id="bannerImage">
+      </div>
+      
+      <div class="description-box">
+        <p th:text="${race.description}"></p>
+      </div>
 
       <h2 th:text="${size} + ' Participants'"></h2>
 
