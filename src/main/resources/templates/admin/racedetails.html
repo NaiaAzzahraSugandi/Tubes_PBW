@@ -94,40 +94,17 @@
       text-align: center;
     }
 
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
-
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #f1f1f1
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-
     td {
         text-align: center; 
         vertical-align: middle; 
     }
+
+    .race-image{
+      width: 30%;
+      height: 30%;
+
+    }
+
     .delete-link {
       display: inline-block;
       padding: 5px 10px;
@@ -135,11 +112,27 @@
       border: 1px solid #ff0000; 
       color: #ff0000; 
       border-radius: 3px;
-      text-decoration: none; 
+      text-decoration: none;
+      cursor: pointer;
     }
 
     .delete-link:hover {
       background-color: #ff0000;
+      color: white;
+    }
+
+    .back-button{
+      background-color: #fc4c02; 
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover{
+      background-color: #c94100;
       color: white;
     }
   </style>
@@ -164,36 +157,37 @@
       <h1>Participating Members</h1> 
 
       <h2 th:text="${race.title}"></h2> 
-      <h2>2 Participants</h2> 
+      <h2 th:text="${size} + ' Participants'">2 Participants</h2> 
 
       <table>
         <thead>
           <tr>
-            <th>Participant Number</th>
-            <th>Name<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Sort Asc</a><a href="#">Sort Desc</a></div></div></th>
-            <th>Email<div class="dropdown"><span>▼</span><div class="dropdown-content"><a href="#">Filter 1</a><a href="#">Filter 2</a></div></div></th>
-            <th>Actions</th> 
+            <th>Position</th>
+            <th>Name</th>
+            <th>Distance</th>
+            <th>Duration</th>
+            <th>Speed</th>
+            <th>Image</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1.</td>
-            <td>Jason Kelvin Agung</td> 
-            <td>jason@gmail.com</td>
-            <td>
-                <a href="#" class="delete-link">Hapus</a>
-            </td>
+          <tr th:each="raceParticipant, stat : ${raceParticipants}">
+            <td th:text="${stat.index + 1} + '.'"></td>
+            <td th:text="${raceParticipant.name}"></td>
+            <td th:text="${raceParticipant.distance} + ' km'"></td>
+            <td th:text="${raceParticipant.duration}"></td>
+            <td th:text="${raceParticipant.speed_km_min} + ' km/min'"></td>
+            <td><img class="race-image" th:src="@{'/race_images/' + ${raceParticipant.image_location}}" alt=""></td>
+            <td><a class="delete-link">Remove Participant</a></td>
           </tr>
-          <tr>
-            <td>2.</td>
-            <td>Axel Darmaputra</td> 
-            <td>axel@gmail.com</td>
-            <td>
-                <a href="#" class="delete-link">Hapus</a>
-            </td>
+          <tr th:if="${raceParticipants.empty}">
+            <td colspan="7" style="text-align: center;">No participants have registered for this race.</td>
           </tr>
         </tbody>
       </table>
+      <br>
+      <button class="back-button" onclick="window.location.href='/admin/races'">Back</button>
     </div> 
   </div>
 

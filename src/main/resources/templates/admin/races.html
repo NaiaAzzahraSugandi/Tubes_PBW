@@ -254,7 +254,7 @@
       <form th:action="@{/admin/races}" method="GET">
         <p style="font-weight: bold;">Search</p>
         <div class="search-box">
-          <input type="text" id="raceName" name="raceName" th:value="${raceName}" placeholder="Enter race name">
+          <input type="text" id="raceName" name="raceName" th:value="${raceName}" placeholder="Search race by title">
         </div>
 
         <p style="font-weight: bold;">Filters</p>
@@ -291,7 +291,8 @@
             <label for="status">Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
               <option value="All" th:selected="${status == 'All'}">All</option>
-              <option value="Open" th:selected="${status == 'Open'}">Open</option>
+              <option value="Scheduled" th:selected="${status == 'Scheduled'}">Scheduled</option>
+              <option value="Ongoing" th:selected="${status == 'Ongoing'}">Ongoing</option>
               <option value="Closed" th:selected="${status == 'Closed'}">Closed</option>
             </select>
           </div>
@@ -306,7 +307,7 @@
         <thead>
           <tr>
             <th>Num.</th>
-            <th>Name</th>
+            <th>Title</th>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Distance</th>
@@ -330,7 +331,7 @@
             </td>
           </tr>
           <tr th:if="${races.empty}">
-            <td colspan="6" style="text-align: center;">No races available.</td>
+            <td colspan="8" style="text-align: center;">No races available.</td>
           </tr>
         </tbody>
       </table>

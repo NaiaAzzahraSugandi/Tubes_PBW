@@ -256,6 +256,10 @@ public class RaceController {
 
         Race race = raceRepository.findByRaceID(id).get(0);
         model.addAttribute("race", race);
+
+        List<RaceParticipant> raceParticipants = raceParticipantRepository.getAllParticipantsFromRace(id);
+        model.addAttribute("raceParticipants", raceParticipants);
+        model.addAttribute("size", raceParticipants.size());
         return "/admin/racedetails";
     }
 }
