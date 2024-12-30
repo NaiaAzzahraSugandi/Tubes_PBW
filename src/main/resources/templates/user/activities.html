@@ -101,6 +101,7 @@
     td {
       border: 1px solid #ddd;
       padding: 8px;
+      text-align: center;
     }
 
     th {
@@ -228,7 +229,7 @@
       <p style="font-weight: bold;">Search</p>
       <form th:action="@{/user/activity}" method="GET">
         <div class="search-box">
-          <input type="text" id="title" name="title" th:value="${title}" placeholder="My Morning Workout">
+          <input type="text" id="title" name="title" th:value="${title}" placeholder="Search activity by title (e.g. My Morning Workout)">
         </div>
 
         <p style="font-weight: bold;">Filters</p>
