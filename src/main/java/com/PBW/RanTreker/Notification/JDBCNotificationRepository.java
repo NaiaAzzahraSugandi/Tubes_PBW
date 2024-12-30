@@ -20,13 +20,23 @@ public class JDBCNotificationRepository {
 
     public List<Notification> getAllNotifications(int userId){
         String sql = "SELECT * FROM notifications WHERE user_id = ?";
-        return jdbcTemplate.query(sql, this::mapRowToNotification);
+        return jdbcTemplate.query(sql, this::mapRowToNotification, userId);
     }
 
     public Notification mapRowToNotification(ResultSet resultSet, int rowNum) throws SQLException{
         return new Notification(resultSet.getInt("id"), 
                                 resultSet.getInt("user_id"), 
-                                resultSet.getTimestamp("message").toLocalDateTime(), 
+                                resultSet.getTimestamp("created_date").toLocalDateTime(), 
                                 resultSet.getString("message"));
+    }
+
+    public void deleteNotification(int id){
+        String sql = "DELETE FROM notifications WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public void deleteAllNotifications(int userID){
+        String sql = "DELETE FROM notifications WHERE user_id = ?";
+        jdbcTemplate.update(sql, userID);
     }
 }
