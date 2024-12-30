@@ -256,6 +256,32 @@ public class RaceController {
 
         Race race = raceRepository.findByRaceID(id).get(0);
         model.addAttribute("race", race);
+
+        List<RaceParticipant> raceParticipants = raceParticipantRepository.getAllParticipantsFromRace(id);
+        model.addAttribute("raceParticipants", raceParticipants);
+        model.addAttribute("size", raceParticipants.size());
         return "/admin/racedetails";
+    }
+
+    @GetMapping("/races/detail/delete")
+    @RequiredRole("admin")
+    public String deleteParticipant(int raceID, int userID, RedirectAttributes redirectAttributes){
+        RaceParticipant raceParticipant = raceParticipantRepository.findByParticipantID(raceID, userID).get();
+
+        // delete image kalo misalnya ada
+        if (raceParticipant.getImage_location() != null && !raceParticipant.getImage_location().isEmpty()) {
+            try {
+                Path imagePath = Paths.get("public/race_images/" +raceParticipant.getImage_location());
+                Files.deleteIfExists(imagePath);
+            } catch (IOException e) {
+                System.out.println("Error deleting image: " + e.getMessage());
+            }
+        }
+
+        raceParticipantRepository.deleteParticipant(raceID, userID);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Participant deleted successfully!");
+
+        return "redirect:/admin/races/detail?id=" + raceID;
     }
 }
