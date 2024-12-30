@@ -171,14 +171,20 @@ public class ActivityController {
     @RequiredRole("user")
     public String activityEntryView(Activity activity, Model model) {
         int id_user = (int) session.getAttribute("id_user");
+        activity.setId_user(id_user);
         model.addAttribute("id_user", id_user);
         return "/user/entryRun";
     }
 
     @PostMapping("/activityEntry")
     @RequiredRole("user")
-    public String activityEntry(@Valid Activity activity, BindingResult bindingResult) {
+    public String activityEntry(@Valid Activity activity, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            // log errors
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getDefaultMessage());
+            });
+            model.addAttribute("activity", activity);
             return "/user/entryRun";
         }
 
@@ -251,13 +257,15 @@ public class ActivityController {
             if(!activity.getImage_file().isEmpty()){
                 // buang image yang lama
                 String directory = "public/images/";
-                Path oldImagePath = Paths.get(directory + activity.getImage_location());
-    
-                try{
-                    Files.delete(oldImagePath);
-                }
-                catch(IOException e){
-                    System.out.println(e.getMessage());
+                
+                if(!activity.getImage_location().equals("")){
+                    Path oldImagePath = Paths.get(directory + activity.getImage_location());
+                    try{
+                        Files.delete(oldImagePath);
+                    }
+                    catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
                 }
     
                 // save image yang baru

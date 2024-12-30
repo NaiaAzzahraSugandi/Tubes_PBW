@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,12 +28,14 @@ public class Activity {
     @NotNull(message = "Distance is required!")
     @Min(value = 1, message = "Distance must be at least 1!")
     @Max(value = 999, message = "Distance must not exceed 999!")
-    private Integer distance;
+    private Double distance;
 
-    @NotNull(message = "Duration is required!")
-    @Min(value = 1, message = "Duration must be at least 1 minute!")
-    @Max(value = 1440, message = "Duration must not exceed 1440 minutes (24 hours)!")
-    private Integer duration;
+    @NotBlank(message = "Duration is required. Please enter the time in HH:MM:SS format!")
+    @Pattern(
+        regexp = "^([0-9]{1,2}):([0-5][0-9]):([0-5][0-9])$",
+        message = "Time must be in HH:MM:SS format (e.g., 01:23:45)."
+    )
+    private String duration;
     
     @NotNull(message = "Please input a date!")
     private LocalDate date;
