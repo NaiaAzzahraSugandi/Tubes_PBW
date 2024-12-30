@@ -3,7 +3,10 @@ package com.PBW.RanTreker;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Arrays;
@@ -21,9 +24,16 @@ public class AuthorizationAspect {
 
     @Before("@annotation(requiredRole)")
     public void checkAuthorization(JoinPoint joinPoint, RequiredRole requiredRole) throws Throwable{
+        // Mendapatkan HttpServletResponse dari konteks request
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        if (response == null) {
+            throw new IllegalStateException("Response object is null");
+        }
+
         String email = (String)session.getAttribute("email");
         if(email == null || email.length() == 0){
-            throw new Exception("Login Required!");
+            response.sendRedirect("/login");
+            return;
         }
 
         String peran = (String) session.getAttribute("peran");
@@ -37,7 +47,8 @@ public class AuthorizationAspect {
             return;
         }
         else{
-            throw new Exception("Wrong role!");
+            response.sendRedirect("/wrongRole");
+            return;
         }
     }    
 }
