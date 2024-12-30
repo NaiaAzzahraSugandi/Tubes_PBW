@@ -73,6 +73,20 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    .alert {
+      padding: 10px 10px 10px 25px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+      font-weight: bold;
+    }
+
     h1 {
       margin-bottom: 20px;
     }
@@ -135,6 +149,60 @@
       background-color: #c94100;
       color: white;
     }
+
+    #reasonModal {
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000;
+    }
+
+    #reasonModal > div {
+        background-color: white; 
+        padding: 20px; 
+        border-radius: 8px; 
+        width: 500px; 
+        text-align: center;
+    }
+
+    #reasonModal textarea {
+        width: 500px;
+        height: 200px;
+        margin-bottom: 10px;
+    }
+
+    #reasonModal button {
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 3px; 
+        cursor: pointer;
+    }
+
+    #reasonModal button[type="submit"] {
+        background-color: #fc4c02; 
+        color: white;
+        transition: background-color 0.3s;
+    }
+
+    #reasonModal button[type="submit"]:hover {
+        background-color: #e04b00; 
+    }
+
+    #reasonModal button[type="button"] {
+        background-color: #ccc; 
+        color: black;
+        transition: background-color 0.3s;
+    }
+
+    #reasonModal button[type="button"]:hover {
+        background-color: #a2a2a2; 
+    }
   </style>
 </head>
 <body>
@@ -157,7 +225,11 @@
       <h1>Participating Members</h1> 
 
       <h2 th:text="${race.title}"></h2> 
-      <h2 th:text="${size} + ' Participants'">2 Participants</h2> 
+      <h2 th:text="${size} + ' Participants'">2 Participants</h2>
+
+      <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+      </div>
 
       <table>
         <thead>
@@ -179,17 +251,54 @@
             <td th:text="${raceParticipant.duration}"></td>
             <td th:text="${raceParticipant.speed_km_min} + ' km/min'"></td>
             <td><img class="race-image" th:src="@{'/race_images/' + ${raceParticipant.image_location}}" alt=""></td>
-            <td><a class="delete-link">Remove Participant</a></td>
+            <td><a class="delete-link" th:onclick="confirmDelete([[${raceParticipant.race_id}]], [[${raceParticipant.user_id}]])">Remove Participant</a></td>
           </tr>
           <tr th:if="${raceParticipants.empty}">
             <td colspan="7" style="text-align: center;">No participants have registered for this race.</td>
           </tr>
         </tbody>
       </table>
+
+      <div id="reasonModal">
+        <div>
+            <h3>Reason for Deletion</h3>
+            <form id="deletionReasonForm">
+                <textarea id="deletionReason" placeholder="Enter reason for deletion" required></textarea>
+                <br><br>
+                <button type="submit">Delete</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+      </div>
+
       <br>
       <button class="back-button" onclick="window.location.href='/admin/races'">Back</button>
     </div> 
   </div>
+
+  <script>
+    let userIDToDelete
+    let raceIDToDelete
+    function confirmDelete(raceID, userID){
+      userIDToDelete = userID;
+      raceIDToDelete = raceID;
+      document.getElementById('reasonModal').style.display = 'flex';
+      document.body.style.overflow = "hidden";
+      console.log(userIDToDelete);
+      console.log(raceIDToDelete);
+    }
+    function closeModal(event){
+      document.getElementById('reasonModal').style.display = 'none';
+      document.body.style.overflow = "auto";
+      event.preventDefault();
+    }
+
+    document.querySelector("button[type=submit]").onclick = function() {
+      event.preventDefault();
+      window.location.href = '/admin/races/detail/delete?raceID=' + raceIDToDelete + '&userID=' + userIDToDelete;
+      return false;
+    }
+  </script>
 
 </body>
 </html>
