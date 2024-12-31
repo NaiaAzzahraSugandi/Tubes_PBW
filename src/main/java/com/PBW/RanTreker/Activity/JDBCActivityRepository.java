@@ -106,8 +106,55 @@ public class JDBCActivityRepository {
     }
   
     public Map<String, Integer> getActivitySummaryByMonth(Integer userId) {
-        String sql = "SELECT TO_CHAR(date, 'Month') AS month, SUM(distance) AS total_distance " +
-                    "FROM activities WHERE id_user = ? GROUP BY month ORDER BY MIN(date)";
+        String sql = """
+            SELECT month, COALESCE(SUM(distance), 0) AS total_distance
+            FROM (
+                SELECT TO_CHAR(date, 'Month') AS month, distance
+                FROM activities
+                WHERE id_user = ?
+                UNION ALL
+                SELECT 'January', 0
+                UNION ALL
+                SELECT 'February', 0
+                UNION ALL
+                SELECT 'March', 0
+                UNION ALL
+                SELECT 'April', 0
+                UNION ALL
+                SELECT 'May', 0
+                UNION ALL
+                SELECT 'June', 0
+                UNION ALL
+                SELECT 'July', 0
+                UNION ALL
+                SELECT 'August', 0
+                UNION ALL
+                SELECT 'September', 0
+                UNION ALL
+                SELECT 'October', 0
+                UNION ALL
+                SELECT 'November', 0
+                UNION ALL
+                SELECT 'December', 0
+            ) AS all_months
+            GROUP BY month
+            ORDER BY
+                CASE month
+                    WHEN 'January' THEN 1
+                    WHEN 'February' THEN 2
+                    WHEN 'March' THEN 3
+                    WHEN 'April' THEN 4
+                    WHEN 'May' THEN 5
+                    WHEN 'June' THEN 6
+                    WHEN 'July' THEN 7
+                    WHEN 'August' THEN 8
+                    WHEN 'September' THEN 9
+                    WHEN 'October' THEN 10
+                    WHEN 'November' THEN 11
+                    WHEN 'December' THEN 12
+                END;
+        """;
+    
         return jdbcTemplate.query(sql, rs -> {
             Map<String, Integer> summary = new LinkedHashMap<>();
             while (rs.next()) {
@@ -116,24 +163,33 @@ public class JDBCActivityRepository {
             return summary;
         }, userId);
     }
+    
+    
+
     public Map<String, Integer> getActivitySummaryByWeek(Integer userId) {
         String sql = """
-            SELECT TO_CHAR(date, 'Day') AS day, SUM(distance) AS total_distance
-            FROM activities
-            WHERE id_user = ?
-            GROUP BY day
+            SELECT 
+                day_of_week.day AS day,
+                COALESCE(SUM(a.distance), 0) AS total_distance
+            FROM 
+                (VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednesday'), 
+                        ('Thursday'), ('Friday'), ('Saturday')) AS day_of_week(day)
+            LEFT JOIN activities a 
+                ON TRIM(TO_CHAR(a.date, 'Day')) = day_of_week.day
+                AND a.id_user = ?
+            GROUP BY day_of_week.day
             ORDER BY 
-                CASE TRIM(TO_CHAR(date, 'Day'))
-                    WHEN 'Monday' THEN 1
-                    WHEN 'Tuesday' THEN 2
-                    WHEN 'Wednesday' THEN 3
-                    WHEN 'Thursday' THEN 4
-                    WHEN 'Friday' THEN 5
-                    WHEN 'Saturday' THEN 6
-                    WHEN 'Sunday' THEN 7
-                    ELSE 8  -- Handle any unexpected results
+                CASE day_of_week.day
+                    WHEN 'Sunday' THEN 1
+                    WHEN 'Monday' THEN 2
+                    WHEN 'Tuesday' THEN 3
+                    WHEN 'Wednesday' THEN 4
+                    WHEN 'Thursday' THEN 5
+                    WHEN 'Friday' THEN 6
+                    WHEN 'Saturday' THEN 7
+                    ELSE 8
                 END;
-            """;
+        """;
     
         return jdbcTemplate.query(sql, rs -> {
             Map<String, Integer> summary = new LinkedHashMap<>();
@@ -143,6 +199,7 @@ public class JDBCActivityRepository {
             return summary;
         }, userId);
     }
+    
     
     public Map<String, Integer> getActivitySummaryByYear(Integer userId) {
         String sql = """
