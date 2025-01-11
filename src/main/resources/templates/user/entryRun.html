@@ -110,6 +110,10 @@
       height: 100px;
     }
 
+    #duration{
+      display: none;
+    }
+
     button {
       background-color: #fc4c02; 
       color: white;
@@ -122,35 +126,6 @@
 
     button:hover{
       background-color: #e43a01;
-    }
-
-    .new-shoes-button {
-      background-color: #28a745; 
-      color: white;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      float: right; 
-    }
-
-    .section-heading {
-      font-weight: bold;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-
-    .perceived-exertion {
-      display: flex;
-      align-items: center; 
-    }
-
-    .perceived-exertion label {
-      margin-right: 10px;
-    }
-
-    .perceived-exertion input[type="radio"] {
-      margin-right: 5px;
     }
   </style>
 </head>
@@ -192,8 +167,33 @@
         <div>
           <label for="duration">Duration:</label>
           <span style="color: red;" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
-          <input type="text" id="duration" name="duration" th:field="*{duration}" placeholder="HH:MM:SS" pattern="^([0-9]{1,2}):([0-5][0-9]):([0-5][0-9])$" required>
+          <div style="display: flex; gap: 5px;">
+            <input type="number" id="hours" min="0" placeholder="HH" style="width: 60px;" required>
+            <span style="margin-top: 9px;">:</span>
+            <input type="number" id="minutes" min="0" max="59" placeholder="MM" style="width: 60px;" required>
+            <span style="margin-top: 9px;">:</span>
+            <input type="number" id="seconds" min="0" max="59" placeholder="SS" style="width: 60px;" required>
+          </div>
+          <input type="text" id="duration" name="duration" th:field="*{duration}" placeholder="HH:MM:SS" readonly style="margin-top: 10px; width: 180px;">
         </div>
+        
+        <script>
+          const hoursInput = document.getElementById('hours');
+          const minutesInput = document.getElementById('minutes');
+          const secondsInput = document.getElementById('seconds');
+          const durationInput = document.getElementById('duration');
+        
+          function updateDuration() {
+            const hours = hoursInput.value.padStart(2, '0') || '00';
+            const minutes = minutesInput.value.padStart(2, '0') || '00';
+            const seconds = secondsInput.value.padStart(2, '0') || '00';
+            durationInput.value = `${hours}:${minutes}:${seconds}`;
+          }
+        
+          hoursInput.addEventListener('input', updateDuration);
+          minutesInput.addEventListener('input', updateDuration);
+          secondsInput.addEventListener('input', updateDuration);
+        </script>
 
         <div>
           <label for="date">Date:</label>

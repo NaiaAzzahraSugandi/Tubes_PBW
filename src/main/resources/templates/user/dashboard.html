@@ -202,6 +202,75 @@
         .export-pdf-button:hover {
             background-color: #e43a01;
         }
+
+        #each-box {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #each-box li {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 0;
+            margin-bottom: 15px;
+        }
+
+        #each-box li:last-child {
+            border-bottom: none;
+        }
+
+        #each-box strong {
+            font-weight: 600;
+            font-size: 18px; /* Judul lebih besar */
+            color: #333;
+        }
+
+        #each-box .activity-date {
+            font-size: 14px; /* Tanggal lebih kecil */
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        #each-box .activity-info {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Memberi jarak antar elemen */
+        }
+
+        #each-box .activity-info span {
+            font-size: 15px;
+            color: #666;
+        }
+
+        #each-box .activity-info strong {
+            color: #333;
+        }
+
+        #each-box li:hover {
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #each-box li .activity-duration, #each-box li .activity-distance {
+            font-style: italic;
+            color: #777;
+        }                                                                  
+
+
+
     </style>
 </head>
 
@@ -252,6 +321,21 @@
         </script>
         <div class="right-panel">
             <h1>Summary</h1>
+            <div id="each-box">
+                <ul>
+                    <li th:each="activity : ${recentActivities}">
+                        <strong th:text="${activity.title}"></strong> <!-- Judul langsung di bold -->
+                        <br>
+                        <span th:text="${activity.date}" class="activity-date"></span> <!-- Tanggal di bawah judul -->
+                        <br>
+                        <div class="activity-info">
+                            <span><strong>Time:</strong> <span th:text="${activity.time}"></span></span>
+                            <span><strong>Duration:</strong> <span th:text="${activity.duration}"></span></span>
+                            <span><strong>Distance:</strong> <span th:text="${activity.distance}"></span> km</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         <form action="/user/exportChart" method="get">
             <button type="submit" class="export-pdf-button">Export PDF</button>

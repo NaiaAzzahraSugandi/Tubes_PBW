@@ -1,256 +1,289 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>
-            RanTreker - People's Favorite Running Tracker
-        </title>
-        <script src="https://cdn.tailwindcss.com">
-        </script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
-        <style>
-            body {
-                font-family: 'Roboto', sans-serif;
-            }
 
-            * {
-                font-size: 20px;
-            }
-        </style>
-    </head>
-    <body class="bg-gray-100">
-        <header class="bg-white shadow-lg mb-2 sticky top-0 z-50">
-            <div class="container mx-auto px-4 flex justify-between items-center">
-               <div class="text-2xl font-bold text-orange-600 mr-4">
-                  <img src="/img/RanTreker Logo.png" alt="" style="width: 135px; height: 75px;">
-               </div>
-               <nav class="space-x-4 ml-auto">
-                  <a class="bg-orange-500 text-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md" th:href="@{/login}">
-                     Login
-                  </a>
-                  <a class="bg-orange-500 text-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md" th:href="@{/register}">
-                     Register
-                  </a>
-               </nav>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        RanTreker - People's Favorite Running Tracker
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        * {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-white shadow-lg mb-2 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-orange-600 mr-4">
+                <img src="/img/RanTreker Logo.png" alt="" style="width: 135px; height: 75px;">
             </div>
-         </header>
-        <section class="relative bg-cover bg-center h-screen" style="background-image: url('/img/R2R_1_webp.png');">
-            <div class="absolute inset-0 bg-black opacity-50">
-            </div>
-            <div class="container mx-auto px-4 text-center relative z-10 flex items-center justify-center h-full">
-                <div>
-                    <h1 class="text-5xl font-bold text-white mb-4">
-                        Track Your Runs with Ease
-                    </h1>
-                    <p class="text-white mb-8">
-                        Join thousands of runners who use RanTreker to log their runs, track their progress, and achieve
-                        their fitness goals.
-                    </p>
-                    <a class="bg-orange-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md"
-                        th:href="@{/register}">
-                        Get Started
-                    </a>
-                </div>
-            </div>
-        </section>
-        <section class="bg-gray-100 py-10">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="flex flex-col justify-center">
-                        <h2 class="text-3xl font-bold text-gray-800 mb-4">
-                            Why Choose RanTreker?
-                        </h2>
-                        <p class="text-gray-600 mb-4">
-                            RanTreker offers a comprehensive suite of features to help you stay on top of your running
-                            game. From detailed run logs to progress tracking and community support, we have everything you
-                            need to succeed.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-600">
-                            <li>
-                                Log your runs with ease
-                            </li>
-                            <li>
-                                Track your progress over time
-                            </li>
-                            <li>
-                                Participate in races
-                            </li>
-                            <li>
-                                Set and achieve your fitness goals
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <img alt="A detailed dashboard showing various statistics and graphs related to running activities"
-                            height="400"
-                            src="https://storage.googleapis.com/a1aa/image/Ivedgki8JnzAOKpsMIsNGD72bnB1Jg5NfI2J5NfqSJNwf2eeE.jpg"
-                            width="600" />
-                    </div>
-                </div>
-            </div>
-        </section>
-<section class="bg-white py-10">
-   <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold text-gray-800 mb-8">
-         Features
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-         <div class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-            <img alt="Icon representing run logging" class="mx-auto mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/Jv5ruPzVe3XMIiNy8IHT0XgSitCpBvnftlsWG64t00t6vt3TA.jpg" width="100"/>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">
-               Run Logging
-            </h3>
-            <p class="text-gray-600">
-               Easily log your runs with detailed information including distance, time, and route.
-            </p>
-         </div>
-         <div class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-            <img alt="Icon representing progress tracking" class="mx-auto mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/rRoqXUyq8aqFAR2Ac51eILmS0IfheIcLqutR3c5Dd6jjf2eeE.jpg" width="100"/>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">
-               Progress Tracking
-            </h3>
-            <p class="text-gray-600">
-               Track your progress over time with detailed statistics and graphs.
-            </p>
-         </div>
-         <div class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-            <img alt="Icon representing community support" class="mx-auto mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/05zsqmr9uQrdA1k5mmjOfrNUleiu9eUNllqPAdSnbAQtf2eeE.jpg" width="100"/>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">
-               Community Support
-            </h3>
-            <p class="text-gray-600">
-               Join a community of runners to share your progress, get tips, and stay motivated.
-            </p>
-         </div>
-      </div>
-   </div>
-</section>
-        <section class="bg-gray-100 py-10">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8">
+            <div class="space-x-4 ml-auto">
+                <a class="text-gray-600 hover:text-gray-800" href="#about">
+                    About
+                </a>
+                <a class="text-gray-600 hover:text-gray-800" href="#features">
+                    Features
+                </a>
+                <a class="text-gray-600 hover:text-gray-800" href="#testimonials">
                     Testimonials
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-                        <img alt="Portrait of a happy user" class="mx-auto mb-4 rounded-full" height="100"
-                            src="https://storage.googleapis.com/a1aa/image/9avfwy6SILRVYaS1BSyLZMhKmeCSl2wxwiy0R6L97ZGyvt3TA.jpg"
-                            width="100" />
-                        <p class="text-gray-600 mb-4">
-                            "RanTreker has completely transformed my running routine. The progress tracking features are
-                            incredibly motivating!"
-                        </p>
-                        <h3 class="text-xl font-bold text-gray-800">
-                            John Doe
-                        </h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-                        <img alt="Portrait of a satisfied user" class="mx-auto mb-4 rounded-full" height="100"
-                            src="https://storage.googleapis.com/a1aa/image/KyFOhUFn67qKE5q7jAsK4WqeB8xpDWYnmroGsEfUjja1vt3TA.jpg"
-                            width="100" />
-                        <p class="text-gray-600 mb-4">
-                            "I love the race events provided by RanTreker. It's a great way to test and
-                            compare yourself with other runners!"
-                        </p>
-                        <h3 class="text-xl font-bold text-gray-800">
-                            Bob Smith
-                        </h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
-                        <img alt="Portrait of a delighted user" class="mx-auto mb-4 rounded-full" height="100"
-                            src="https://storage.googleapis.com/a1aa/image/DnrjIeU1l5UYRCfCFpJ83FcK591AGIiGY59sq5V5RcV0vt3TA.jpg"
-                            width="100" />
-                        <p class="text-gray-600 mb-4">
-                            "The run logging feature is so easy to use. I can log my runs in just a few seconds and get
-                            detailed stats instantly."
-                        </p>
-                        <h3 class="text-xl font-bold text-gray-800">
-                            Emily Johnson
-                        </h3>
-                    </div>
-                </div>
+                </a>
+                <a class="text-gray-600 hover:text-gray-800" href="#news">
+                    News
+                </a>
+                <a class="text-gray-600 hover:text-gray-800" href="#">
+                    Creators
+                </a>
             </div>
-        </section>
-        <section class="bg-white py-10">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8">
-                    Running News
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-                        <img alt="Image of a marathon event with runners on the track" class="mx-auto mb-4" height="400"
-                            src="https://storage.googleapis.com/a1aa/image/CGHpMR6TFpZOGplI3kSJfwHQElgkSzfBIeqFZIV27IGyrbvnA.jpg"
-                            width="600" />
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">
-                            Upcoming Marathon Events
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            Stay updated with the latest marathon events happening around the world. Don't miss out on the
-                            opportunity to participate.
-                        </p>
-                        <a class="text-orange-500 hover:underline" href="#">
-                            Read More
-                        </a>
-                    </div>
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-                        <img alt="Image of a runner with a smartwatch tracking their performance" class="mx-auto mb-4"
-                            height="400"
-                            src="https://storage.googleapis.com/a1aa/image/8CniuFxIewVoF6RzS4tf562V9JTZ4fpf96PNiKPLClStX3eeE.jpg"
-                            width="600" />
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">
-                            The Best Running Gadgets of 2023
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            Discover the top gadgets that can enhance your running experience. From smartwatches to fitness
-                            trackers, we've got you covered.
-                        </p>
-                        <a class="text-orange-500 hover:underline" href="#">
-                            Read More
-                        </a>
-                    </div>
-                    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-                        <img alt="Image of a group of runners training together in a park" class="mx-auto mb-4" height="400"
-                            src="https://storage.googleapis.com/a1aa/image/vopttohvRwLBCxlFl6mjHxZEZ6vx986nXAeqoQw4yRNe1t3TA.jpg"
-                            width="600" />
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">
-                            Tips for Running in Groups
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            Running in groups can be fun and motivating. Learn the best practices for group running to make
-                            the most out of your sessions.
-                        </p>
-                        <a class="text-orange-500 hover:underline" href="#">
-                            Read More
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer class="bg-gray-800 py-8 mt-2">
-            <div class="container mx-auto px-4 text-center">
-                <p class="text-gray-300">
-                    © 2023 RanTreker. All rights reserved.
+            <nav class="space-x-4 ml-auto">
+                <a class="bg-orange-500 text-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md"
+                    th:href="@{/login}">
+                    Login
+                </a>
+                <a class="bg-orange-500 text-white px-4 py-2 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md"
+                    th:href="@{/register}">
+                    Register
+                </a>
+            </nav>
+        </div>
+    </header>
+    <section class="relative bg-cover bg-center h-screen" style="background-image: url('/img/R2R_1_webp.png');">
+        <div class="absolute inset-0 bg-black opacity-50">
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10 flex items-center justify-center h-full">
+            <div>
+                <h1 class="text-5xl font-bold text-white mb-4">
+                    Track Your Runs with Ease
+                </h1>
+                <p class="text-white mb-8">
+                    Join thousands of runners who use RanTreker to log their runs, track their progress, and achieve
+                    their fitness goals.
                 </p>
-                <div class="mt-4 space-x-4">
-                    <a class="text-gray-300 hover:text-white" href="#">
-                        <i class="fab fa-facebook-f">
-                        </i>
+                <a class="bg-orange-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 shadow-md"
+                    th:href="@{/register}">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </section>
+    <section class="bg-gray-100 py-10" id="about">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col justify-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">
+                        Why Choose RanTreker?
+                    </h2>
+                    <p class="text-gray-600 mb-4">
+                        RanTreker offers a comprehensive suite of features to help you stay on top of your running
+                        game. From detailed run logs to progress tracking and community support, we have everything you
+                        need to succeed.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-600">
+                        <li>
+                            Log your runs with ease
+                        </li>
+                        <li>
+                            Track your progress over time
+                        </li>
+                        <li>
+                            Participate in races
+                        </li>
+                        <li>
+                            Set and achieve your fitness goals
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <img alt="A detailed dashboard showing various statistics and graphs related to running activities"
+                        height="400"
+                        src="https://storage.googleapis.com/a1aa/image/Ivedgki8JnzAOKpsMIsNGD72bnB1Jg5NfI2J5NfqSJNwf2eeE.jpg"
+                        width="600" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-white py-10" id="features">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+                Features
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Icon representing run logging" class="mx-auto mb-4" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/Jv5ruPzVe3XMIiNy8IHT0XgSitCpBvnftlsWG64t00t6vt3TA.jpg"
+                        width="100" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Run Logging
+                    </h3>
+                    <p class="text-gray-600">
+                        Easily log your runs with detailed information including distance, time, and route.
+                    </p>
+                </div>
+                <div
+                    class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Icon representing progress tracking" class="mx-auto mb-4" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/rRoqXUyq8aqFAR2Ac51eILmS0IfheIcLqutR3c5Dd6jjf2eeE.jpg"
+                        width="100" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Progress Tracking
+                    </h3>
+                    <p class="text-gray-600">
+                        Track your progress over time with detailed statistics and graphs.
+                    </p>
+                </div>
+                <div
+                    class="bg-gray-100 p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Icon representing community support" class="mx-auto mb-4" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/05zsqmr9uQrdA1k5mmjOfrNUleiu9eUNllqPAdSnbAQtf2eeE.jpg"
+                        width="100" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Community Support
+                    </h3>
+                    <p class="text-gray-600">
+                        Join a community of runners to share your progress, get tips, and stay motivated.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-gray-100 py-10" id="testimonials">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+                Testimonials
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Portrait of a happy user" class="mx-auto mb-4 rounded-full" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/9avfwy6SILRVYaS1BSyLZMhKmeCSl2wxwiy0R6L97ZGyvt3TA.jpg"
+                        width="100" />
+                    <p class="text-gray-600 mb-4">
+                        "RanTreker has completely transformed my running routine. The progress tracking features are
+                        incredibly motivating!"
+                    </p>
+                    <h3 class="text-xl font-bold text-gray-800">
+                        John Doe
+                    </h3>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Portrait of a satisfied user" class="mx-auto mb-4 rounded-full" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/KyFOhUFn67qKE5q7jAsK4WqeB8xpDWYnmroGsEfUjja1vt3TA.jpg"
+                        width="100" />
+                    <p class="text-gray-600 mb-4">
+                        "I love the race events provided by RanTreker. It's a great way to test and
+                        compare yourself with other runners!"
+                    </p>
+                    <h3 class="text-xl font-bold text-gray-800">
+                        Bob Smith
+                    </h3>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:-translate-y-2">
+                    <img alt="Portrait of a delighted user" class="mx-auto mb-4 rounded-full" height="100"
+                        src="https://storage.googleapis.com/a1aa/image/DnrjIeU1l5UYRCfCFpJ83FcK591AGIiGY59sq5V5RcV0vt3TA.jpg"
+                        width="100" />
+                    <p class="text-gray-600 mb-4">
+                        "The run logging feature is so easy to use. I can log my runs in just a few seconds and get
+                        detailed stats instantly."
+                    </p>
+                    <h3 class="text-xl font-bold text-gray-800">
+                        Emily Johnson
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-white py-10" id="news">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+                Running News
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <img alt="Image of a marathon event with runners on the track" class="mx-auto mb-4" height="400"
+                        src="https://storage.googleapis.com/a1aa/image/CGHpMR6TFpZOGplI3kSJfwHQElgkSzfBIeqFZIV27IGyrbvnA.jpg"
+                        width="600" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Upcoming Marathon Events
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Stay updated with the latest marathon events happening around the world. Don't miss out on the
+                        opportunity to participate.
+                    </p>
+                    <a class="text-orange-500 hover:underline" href="#">
+                        Read More
                     </a>
-                    <a class="text-gray-300 hover:text-white" href="#">
-                        <i class="fab fa-twitter">
-                        </i>
+                </div>
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <img alt="Image of a runner with a smartwatch tracking their performance" class="mx-auto mb-4"
+                        height="400"
+                        src="https://storage.googleapis.com/a1aa/image/8CniuFxIewVoF6RzS4tf562V9JTZ4fpf96PNiKPLClStX3eeE.jpg"
+                        width="600" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        The Best Running Gadgets of 2023
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Discover the top gadgets that can enhance your running experience. From smartwatches to fitness
+                        trackers, we've got you covered.
+                    </p>
+                    <a class="text-orange-500 hover:underline" href="#">
+                        Read More
                     </a>
-                    <a class="text-gray-300 hover:text-white" href="#">
-                        <i class="fab fa-instagram">
-                        </i>
-                    </a>
-                    <a class="text-gray-300 hover:text-white" href="#">
-                        <i class="fab fa-linkedin-in">
-                        </i>
+                </div>
+                <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <img alt="Image of a group of runners training together in a park" class="mx-auto mb-4" height="400"
+                        src="https://storage.googleapis.com/a1aa/image/vopttohvRwLBCxlFl6mjHxZEZ6vx986nXAeqoQw4yRNe1t3TA.jpg"
+                        width="600" />
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        Tips for Running in Groups
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Running in groups can be fun and motivating. Learn the best practices for group running to make
+                        the most out of your sessions.
+                    </p>
+                    <a class="text-orange-500 hover:underline" href="#">
+                        Read More
                     </a>
                 </div>
             </div>
-        </footer>
-    </body>
+        </div>
+    </section>
+    <footer class="bg-gray-800 py-8 mt-2">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-300">
+                © 2023 RanTreker. All rights reserved.
+            </p>
+            <div class="mt-4 space-x-4">
+                <a class="text-gray-300 hover:text-white" href="#">
+                    <i class="fab fa-facebook-f">
+                    </i>
+                </a>
+                <a class="text-gray-300 hover:text-white" href="#">
+                    <i class="fab fa-twitter">
+                    </i>
+                </a>
+                <a class="text-gray-300 hover:text-white" href="#">
+                    <i class="fab fa-instagram">
+                    </i>
+                </a>
+                <a class="text-gray-300 hover:text-white" href="#">
+                    <i class="fab fa-linkedin-in">
+                    </i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</body>
 
 </html>

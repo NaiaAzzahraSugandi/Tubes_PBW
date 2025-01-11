@@ -229,6 +229,46 @@
       border-radius: 5px; 
       cursor: pointer;
     }
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        list-style-type: none;
+        padding: 0;
+        margin: 20px 0;
+      }
+
+      .pagination-container li {
+        margin: 0 5px;
+      }
+
+      .pagination-container a {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .pagination-container a:hover {
+        background-color: #fc4c02;
+        color: white;
+        border-color: #fc4c02;
+      }
+
+      .pagination-container a.active {
+        background-color: #fc4c02;
+        color: white;
+        border-color: #fc4c02;
+        pointer-events: none;
+      }
+
+      .pagination-container a.disabled {
+        color: #aaa;
+        border-color: #ddd;
+        pointer-events: none;
+      }
   </style>
 </head>
 <body>
@@ -315,7 +355,37 @@
           </tr>
         </tbody>
       </table>
-    </div> 
+    </div>
+      <div th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination-container">
+                <li>
+                    <a th:href="@{/admin/members(page=${currentPage > 1 ? currentPage - 1 : 1}, name=${name}, nameSort=${nameSort}, peran=${peran})}" 
+                      aria-label="Previous" 
+                      th:class="${currentPage == 1} ? 'disabled' : null">
+                        &laquo;
+                    </a>
+                </li>
+    
+                <!-- Tombol Halaman -->
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a th:href="@{/admin/members(page=${i}, name=${name}, nameSort=${nameSort}, peran=${peran})}" 
+                      th:text="${i}" 
+                      th:class="${currentPage == i} ? 'active' : null"></a>
+                </li>
+    
+                <!-- Tombol Next -->
+                <li>
+                    <a th:href="@{/admin/members(page=${currentPage < totalPages ? currentPage + 1 : totalPages}, name=${name}, nameSort=${nameSort}, peran=${peran})}" 
+                      aria-label="Next" 
+                      th:class="${currentPage == totalPages} ? 'disabled' : null">
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
   </div>
 
   <script>

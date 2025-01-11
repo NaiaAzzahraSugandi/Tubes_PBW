@@ -2,6 +2,8 @@ package com.PBW.RanTreker.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +18,7 @@ public class JDBCUserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<User> findAll(String name, String nameSort, String peran) {
+    public List<User> findAll(String name, String nameSort, String peran, int pageSize, int offset) {
         String sql = "SELECT * FROM users";
         List<Object> params = new ArrayList<>();
     
@@ -43,6 +45,10 @@ public class JDBCUserRepository {
             sql += " ORDER BY name " + nameSort;
         }
 
+        // Pagination
+        sql += " LIMIT " + pageSize;
+        sql += " OFFSET " + offset;
+
         return jdbcTemplate.query(sql, this::mapRowToUser , params.toArray());
     }
     private User mapRowToUser(ResultSet resultSet, int rowNum) throws SQLException {
@@ -54,6 +60,32 @@ public class JDBCUserRepository {
             resultSet.getString("password"),
             resultSet.getString("peran")
         );
+    }
+
+    public int countUsers(String name, String nameSort, String peran) {
+        String sql = "SELECT COUNT(*) FROM users";
+        List<Object> params = new ArrayList<>();
+    
+        if (name.length() > 0) {
+            sql += " WHERE name ILIKE ?";
+            params.add("%"+name+"%");
+        }
+    
+        if (peran.length() > 0 && !peran.equals("None")) {
+            // buat periksa search box name diisi atau ngga
+            // kalau ga diisi, tambahin WHERE ke syntax
+            // kalau diisi, where udah ada, tambahin AND
+            if(params.isEmpty()){
+                sql += " WHERE peran = ?";
+            }
+            else{
+                sql += " AND peran = ?";
+            }
+
+            params.add(peran);
+        }
+    
+        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Integer.class);
     }
 
     public void save(User user) throws Exception{

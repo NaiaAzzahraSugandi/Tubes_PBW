@@ -1,6 +1,7 @@
 package com.PBW.RanTreker.Races;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import com.PBW.RanTreker.RequiredRole;
 import com.PBW.RanTreker.Notification.JDBCNotificationRepository;
 import com.PBW.RanTreker.Notification.Notification;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import java.io.IOException;
@@ -24,7 +26,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+// import java.util.ArrayList;
 import java.util.List;
+// import java.util.Optional;
 
 @Controller
 @RequestMapping("admin")
@@ -42,32 +46,44 @@ public class RaceController {
     @GetMapping("/races")
     @RequiredRole("admin")
     public String getAllRaces(Model model,
-            @RequestParam(value = "raceName", required = false, defaultValue = "") String raceName,
-            @RequestParam(value = "startDate", required = false, defaultValue = "") LocalDate startDate,
-            @RequestParam(value = "endDate", required = false, defaultValue = "") LocalDate endDate,
-            @RequestParam(value = "distance", required = false, defaultValue = "None") String distance,
-            @RequestParam(value = "participants", required = false, defaultValue = "None") String participants,
-            @RequestParam(value = "status", required = false, defaultValue = "All") String status) {
+                            @RequestParam(value = "raceName", required = false, defaultValue = "") String raceName,
+                            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                            @RequestParam(value = "distance", required = false, defaultValue = "None") String distance,
+                            @RequestParam(value = "status", required = false, defaultValue = "All") String status,
+                            @RequestParam(value = "participants", required = false, defaultValue = "None") String participants, // Added participants filter
+                            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                            HttpSession session) {
 
-        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status);
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
 
-        // update status dari race, set open/closed
-        for (Race race : races) {
-            updateRaceStatus(race);
+        // Ambil user id dari session
+        Integer userId = (Integer) session.getAttribute("id_user");
+        if (userId == null) {
+            return "redirect:/login"; // Redirect jika session tidak ada
         }
 
-        model.addAttribute("size", races.size());
-        model.addAttribute("races", races);
+        // Ambil data races dari repository
+        List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status, pageSize, offset);
+        int totalRaces = raceRepository.countRaces(raceName, startDate, endDate, distance, status);
+        int totalPages = (int) Math.ceil((double) totalRaces / pageSize);
 
-        // add filter model
+        model.addAttribute("races", races);
+        model.addAttribute("size", races.size());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         model.addAttribute("raceName", raceName);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("distance", distance);
-        model.addAttribute("participants", participants);
         model.addAttribute("status", status);
+        model.addAttribute("participants", participants);
+
         return "/admin/races";
     }
+
 
     @GetMapping("/addRace")
     @RequiredRole("admin")
