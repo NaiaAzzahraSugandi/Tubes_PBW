@@ -37,7 +37,10 @@ public class JDBCActivityRepository {
             LocalDate endDate,
             String time,
             String duration,
-            String distance) {
+            String distance,
+            int offset,
+            int pageSize,
+            int page) {
         String sql = "SELECT * FROM activities WHERE id_user = ?";
         List<Object> filterList = new ArrayList<>();
         filterList.add(id_user); // Add user ID to the filter list
@@ -66,8 +69,55 @@ public class JDBCActivityRepository {
             sql += " ORDER BY distance " + distance;
         }
 
+        // Pagination
+        sql += " LIMIT " + pageSize +  " OFFSET " + offset;
+
         return jdbcTemplate.query(sql.toString(), this::mapRowToActivity, filterList.toArray());
     }
+
+    public int countActivities(int idUser, String title, LocalDate startDate, LocalDate endDate, String time, String duration, String distance) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM activities WHERE id_user = ?");
+        List<Object> params = new ArrayList<>();
+        params.add(idUser);
+    
+        if (title != null && !title.isEmpty()) {
+            sql.append(" AND title LIKE ?");
+            params.add("%" + title + "%");
+        }
+        if (startDate != null) {
+            sql.append(" AND date >= ?");
+            params.add(startDate);
+        }
+        if (endDate != null) {
+            sql.append(" AND date <= ?");
+            params.add(endDate);
+        }
+        if (time != null && !time.isEmpty() && !time.equalsIgnoreCase("None")) {
+            sql.append(" AND time IS NOT NULL");
+        }
+        if (duration != null && !duration.isEmpty() && !duration.equalsIgnoreCase("None")) {
+            sql.append(" AND duration IS NOT NULL");
+        }
+        if (distance != null && !distance.isEmpty() && !distance.equalsIgnoreCase("None")) {
+            sql.append(" AND distance IS NOT NULL");
+        }
+    
+        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Integer.class);
+    }
+
+    public List<Activity> getRecentActivities(Integer userId, int limit) {
+        String sql = "SELECT *" +
+                     "FROM activities " +
+                     "WHERE id_user = " + userId +
+                     " ORDER BY date DESC, time DESC " +
+                     "LIMIT " + limit;
+        
+        // Menggunakan jdbcTemplate untuk query dan mapper
+        return jdbcTemplate.query(sql, this::mapRowToActivity);
+    }
+    
+    
+    
 
     public Activity mapRowToActivity(ResultSet resultSet, int rowNum) throws SQLException {
         return new Activity(

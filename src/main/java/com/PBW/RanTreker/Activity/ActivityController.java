@@ -34,6 +34,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,16 +69,25 @@ public class ActivityController {
     @GetMapping("/dashboard")
     @RequiredRole("user")
     public String dashboard(Model model) {
+        // Ambil nama pengguna dari session
         String nama = (String) session.getAttribute("nama");
         model.addAttribute("nama", nama);
-    
+
+        // Ambil ID pengguna dari session
         Integer userId = (Integer) session.getAttribute("id_user");
+
+        // Ambil ringkasan aktivitas bulanan
         Map<String, Integer> activitySummary = activityRepository.getActivitySummaryByMonth(userId);
-        
         model.addAttribute("activitySummary", activitySummary);
-    
-        return "/user/dashboard";  
+
+        // Ambil 5 aktivitas terakhir (judul, tanggal, waktu, durasi)
+        List<Activity> recentActivities = activityRepository.getRecentActivities(userId, 5);
+        System.out.println(recentActivities);
+        model.addAttribute("recentActivities", recentActivities);
+
+        return "/user/dashboard";
     }
+
 
     @GetMapping("/chart")
     @RequiredRole("user")
@@ -150,11 +160,19 @@ public class ActivityController {
             @RequestParam(value = "endDate", required = false, defaultValue = "") LocalDate endDate,
             @RequestParam(value = "time", required = false, defaultValue = "") String time,
             @RequestParam(value = "duration", required = false, defaultValue = "") String duration,
-            @RequestParam(value = "distance", required = false, defaultValue = "") String distance) {
+            @RequestParam(value = "distance", required = false, defaultValue = "") String distance,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 
         int id_user = (int) session.getAttribute("id_user");
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+
         List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration,
-                distance);
+                distance, offset, pageSize, page);
+
+         // Hitung total halaman
+        int totalActivities = activityRepository.countActivities(id_user, title, startDate, endDate, time, duration, distance);
+        int totalPages = (int) Math.ceil((double) totalActivities / pageSize);
 
         // add models for filter
         model.addAttribute("title", title);
@@ -163,6 +181,12 @@ public class ActivityController {
         model.addAttribute("time", time);
         model.addAttribute("duration", duration);
         model.addAttribute("distance", distance);
+
+        System.out.println(page);
+        System.out.println(totalPages);
+        // Add pagination attributes
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
 
         // add models for table
         model.addAttribute("totalActivity", activities.size());
@@ -326,6 +350,17 @@ public class ActivityController {
         redirectAttributes.addFlashAttribute("successMessage", "Activity has been deleted successfully!");
     
         return "redirect:/user/activity";
+    }
+
+    @RequestMapping("/activity/get-page")
+    @PostMapping
+    public ResponseEntity<String> handlePageRequest(@RequestBody Map<String, Object> requestData) {
+        // Ambil nilai 'page' dari request body
+        Integer page = (Integer) requestData.get("page");
+        System.out.println("Halaman diterima: " + page);
+
+        // Lakukan sesuatu dengan nilai halaman
+        return ResponseEntity.ok("Halaman diterima: " + page);
     }
 
     @GetMapping("/exportChart")
