@@ -24,6 +24,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -128,6 +129,7 @@ public class ActivityController {
         renderer.setSeriesPaint(0, new Color(0xFC4C02)); 
         renderer.setSeriesOutlinePaint(0, Color.BLACK);  
         renderer.setSeriesOutlineStroke(0, new BasicStroke(2.0f)); 
+        renderer.setBarPainter(new StandardBarPainter()); 
 
         Font titleFont = new Font("Arial", Font.BOLD, 18); 
         barChart.getTitle().setFont(titleFont);
@@ -418,6 +420,7 @@ public class ActivityController {
         renderer.setSeriesPaint(0, new java.awt.Color(0xFC4C02)); 
         renderer.setSeriesOutlinePaint(0, java.awt.Color.BLACK);  
         renderer.setSeriesOutlineStroke(0, new java.awt.BasicStroke(2.0f));  
+        renderer.setBarPainter(new StandardBarPainter()); 
     
         java.awt.Font titleFont = new java.awt.Font("Arial", java.awt.Font.BOLD, 18); 
         chart.getTitle().setFont(titleFont);

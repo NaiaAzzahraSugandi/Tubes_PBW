@@ -162,6 +162,7 @@ public class JDBCActivityRepository {
                 SELECT TO_CHAR(date, 'Month') AS month, distance
                 FROM activities
                 WHERE id_user = ?
+                  AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)
                 UNION ALL
                 SELECT 'January', 0
                 UNION ALL
@@ -227,6 +228,8 @@ public class JDBCActivityRepository {
             LEFT JOIN activities a 
                 ON TRIM(TO_CHAR(a.date, 'Day')) = day_of_week.day
                 AND a.id_user = ?
+                AND EXTRACT(WEEK FROM a.date) = EXTRACT(WEEK FROM CURRENT_DATE)
+                AND EXTRACT(YEAR FROM a.date) = EXTRACT(YEAR FROM CURRENT_DATE)
             GROUP BY day_of_week.day
             ORDER BY 
                 CASE day_of_week.day
@@ -240,7 +243,7 @@ public class JDBCActivityRepository {
                     ELSE 8
                 END;
         """;
-    
+        
         return jdbcTemplate.query(sql, rs -> {
             Map<String, Integer> summary = new LinkedHashMap<>();
             while (rs.next()) {
