@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,52 +19,169 @@ public class JDBCRaceRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<Race> getAllRaces(String name,
-                                LocalDate startDate,
-                                LocalDate endDate,
-                                String distanceOrder,
-                                String participantsOrder,
-                                String status) {
+                                    LocalDate startDate,
+                                    LocalDate endDate,
+                                    String distanceOrder,
+                                    String status,
+                                    int pageSize,
+                                    int offset) {
+        
+        // Print parameters for debugging
+        System.out.println("Parameters:");
+        System.out.println("name = " + name);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
+        System.out.println("distanceOrder = " + distanceOrder);
+        System.out.println("status = " + status);
+        System.out.println("pageSize = " + pageSize);
+        System.out.println("offset = " + offset);
 
         StringBuilder sql = new StringBuilder("SELECT * FROM races WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        if (name != null && !name.isEmpty()) {
-            sql.append(" AND name ILIKE ?");
-            params.add("%" + name + "%");
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+        // Filter by name
+        if (name != null && !name.trim().isEmpty()) {
+            sql.append(" AND LOWER(name) LIKE " + "'%" + name.trim().toLowerCase() + "%'");
         }
 
+        // Filter by start date
         if (startDate != null) {
-            LocalDateTime startDateTime = startDate.atStartOfDay();
-            sql.append(" AND start_date_time >= ?");
-            params.add(startDateTime);
+            sql.append(" AND start_date_time >= " + "'" + startDate + " 00:00:00" + "'");
         }
 
+        // Filter by end date
         if (endDate != null) {
-            LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
-            sql.append(" AND end_date_time <= ?");
-            params.add(endDateTime);
+            sql.append(" AND end_date_time <= " + "'" + endDate + " 23:59:59" + "'");
         }
 
+        // Filter by status
+        if (status != null && !status.equals("All") && !status.equals("None")) {
+            sql.append(" AND status = " +  "'" + status + "'");
+        }
+
+        // Filter by distance order
+        if (distanceOrder != null && !distanceOrder.equals("None")) {
+            sql.append(" ORDER BY distance ").append(distanceOrder);
+        } else {
+            sql.append(" ORDER BY name ASC");
+        }
+
+        // Pagination
+        sql.append(" LIMIT " + pageSize);
+        sql.append(" OFFSET " + offset);
+
+        return jdbcTemplate.query(sql.toString(), this::mapRowToRace, params.toArray());
+    }
+
+    public List<Race> getAllRaces(String name,
+                                    LocalDate startDate,
+                                    LocalDate endDate,
+                                    String distanceOrder,
+                                    String participants,
+                                    String status,
+                                    int pageSize,
+                                    int offset) {
+        
+        // Print parameters for debugging
+        System.out.println("Parameters:");
+        System.out.println("name = " + name);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
+        System.out.println("distanceOrder = " + distanceOrder);
+        System.out.println("status = " + status);
+        System.out.println("pageSize = " + pageSize);
+        System.out.println("offset = " + offset);
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM races WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+        // Filter by name
+        if (name != null && !name.trim().isEmpty()) {
+            sql.append(" AND LOWER(name) LIKE " + "'%" + name.trim().toLowerCase() + "%'");
+        }
+
+        // Filter by start date
+        if (startDate != null) {
+            sql.append(" AND start_date_time >= " + "'" + startDate + " 00:00:00" + "'");
+        }
+
+        // Filter by end date
+        if (endDate != null) {
+            sql.append(" AND end_date_time <= " + "'" + endDate + " 23:59:59" + "'");
+        }
+
+        // Filter by status
+        if (status != null && !status.equals("All") && !status.equals("None")) {
+            sql.append(" AND status = " +  "'" + status + "'");
+        }
+
+        // Filter by distance order
+        if (distanceOrder != null && !distanceOrder.equals("None")) {
+            sql.append(" ORDER BY distance ").append(distanceOrder);
+        }
+        else if (participants != null && !participants.equals("None")) {
+            sql.append(" ORDER BY participants ").append(participants);
+        } 
+        else {
+            sql.append(" ORDER BY name ASC");
+        }
+        
+
+
+        // Pagination
+        sql.append(" LIMIT " + pageSize);
+        sql.append(" OFFSET " + offset);
+
+        return jdbcTemplate.query(sql.toString(), this::mapRowToRace, params.toArray());
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public int countRaces(String raceName, LocalDate startDate, LocalDate endDate, String distance, String status) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM races WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+    
+        if (raceName != null && !raceName.isEmpty()) {
+            sql.append(" AND name ILIKE ?");
+            params.add("%" + raceName + "%");
+        }
+    
+        // Filter by start date
+        if (startDate != null) {
+            String formattedStartDate = startDate.atStartOfDay().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            sql.append(" AND start_date_time >= '" + formattedStartDate + "'");
+        }
+
+        // Filter by end date
+        if (endDate != null) {
+            String formattedEndDate = endDate.atTime(23, 59, 59).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            sql.append(" AND end_date_time <= '" + formattedEndDate + "'");
+        }
+
+
+    
         if (status != null && !status.equals("All")) {
             sql.append(" AND status = ?");
             params.add(status);
         }
-
-        if (distanceOrder != null && !distanceOrder.equals("None")) {
-            sql.append(" ORDER BY distance ");
-            sql.append(distanceOrder);
+    
+        // Hapus filter untuk distance jika tidak relevan
+        if (distance != null && !distance.equals("None") && !distance.equals("ASC") && !distance.equals("DESC")) {
+            sql.append(" AND distance = ?");
+            params.add(distance);
         }
-        else if (participantsOrder != null && !participantsOrder.equals("None")) {
-            sql.append(" ORDER BY participants ");
-            sql.append(participantsOrder);
-        }
-        // kalau filter order by ga ada yang diisi, default berdasarkan name
-        else{
-            sql.append(" ORDER BY name ASC");
-        }
-
-        return jdbcTemplate.query(sql.toString(), this::mapRowToRace, params.toArray());
+    
+        return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Integer.class);
     }
+                             
+
+
 
     public List<Race> findByRaceID(int raceID){
         String sql = "SELECT * FROM races WHERE id = ?";
