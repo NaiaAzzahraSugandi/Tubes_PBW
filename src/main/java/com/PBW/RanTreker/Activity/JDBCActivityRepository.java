@@ -43,7 +43,7 @@ public class JDBCActivityRepository {
             int page) {
         String sql = "SELECT * FROM activities WHERE id_user = ?";
         List<Object> filterList = new ArrayList<>();
-        filterList.add(id_user); // Add user ID to the filter list
+        filterList.add(id_user);
 
         if (title.length() > 0) {
             sql += " AND title ILIKE ?";
@@ -58,7 +58,7 @@ public class JDBCActivityRepository {
             filterList.add(endDate);
         }
 
-        // Append ORDER BY clause based on the sorting parameter
+        // tambah filter ORDER BY
         if (!time.equals("None")) {
             sql += " ORDER BY time " + time;
         } 
@@ -75,6 +75,7 @@ public class JDBCActivityRepository {
         return jdbcTemplate.query(sql.toString(), this::mapRowToActivity, filterList.toArray());
     }
 
+    @SuppressWarnings("deprecation")
     public int countActivities(int idUser, String title, LocalDate startDate, LocalDate endDate, String time, String duration, String distance) {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM activities WHERE id_user = ?");
         List<Object> params = new ArrayList<>();
@@ -116,9 +117,6 @@ public class JDBCActivityRepository {
         return jdbcTemplate.query(sql, this::mapRowToActivity);
     }
     
-    
-    
-
     public Activity mapRowToActivity(ResultSet resultSet, int rowNum) throws SQLException {
         return new Activity(
                 resultSet.getInt("id"),
@@ -215,8 +213,6 @@ public class JDBCActivityRepository {
         }, userId);
     }
     
-    
-
     public Map<String, Integer> getActivitySummaryByWeek(Integer userId) {
         String sql = """
             SELECT 
@@ -252,7 +248,6 @@ public class JDBCActivityRepository {
             return summary;
         }, userId);
     }
-    
     
     public Map<String, Integer> getActivitySummaryByYear(Integer userId) {
         String sql = """
