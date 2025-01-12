@@ -16,7 +16,8 @@ public class UserService {
 
     public boolean register(User user){
         try{
-            userRepository.save(user);            
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -35,9 +36,12 @@ public class UserService {
         User user = findUser.get();
         // cek password
         // kalau salah throw exception salah password
-        if(!user.getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw new Exception("PasswordFault");
         }
+        // if(!user.getPassword().equals(password)){
+        //     throw new Exception("PasswordFault");
+        // }
 
         return user;
     }

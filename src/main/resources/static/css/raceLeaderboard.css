@@ -1,0 +1,154 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    font-weight: bold;
+    background-color: white;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar .logo {
+    margin-bottom: 20px;
+}
+
+.sidebar .logo img {
+    width: 135px;
+    height: 75px;
+}
+
+.sidebar .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar .menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar .menu a:last-child {
+    margin-top: 100%;
+}
+
+.sidebar .menu .active {
+    background-color: #fc4c02;
+    color: white;
+}
+
+.sidebar .menu .inactive:hover {
+    background-color: #f1f1f1;
+}
+
+.content {
+    margin: 20px;
+    margin-left: 270px;
+    width: calc(100% - 270px);
+}
+
+.container {
+    padding: 20px 35px 20px 35px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#bannerImage {
+    max-width: 1032px;
+    max-height: 200px;
+}
+
+.description-box {
+    text-align: justify;
+}
+
+.image-box {
+    text-align: center;
+}
+
+.position-box {
+    background-color: #d4edda;
+    /* Light green background */
+    color: #155724;
+    /* Dark green text */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #fc4c02;
+    color: white;
+    text-align: center;
+}
+
+.gold {
+    background-color: gold;
+    /* Gold color for 1st place */
+    color: black;
+    /* Black text for contrast */
+}
+
+.silver {
+    background-color: silver;
+    /* Silver color for 2nd place */
+    color: black;
+    /* Black text for contrast */
+}
+
+.bronze {
+    background-color: #cd7f32;
+    /* Bronze color */
+    color: white;
+    /* White text for contrast */
+}
+
+.back-button {
+    background-color: #fc4c02;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #c94100;
+    color: white;
+}

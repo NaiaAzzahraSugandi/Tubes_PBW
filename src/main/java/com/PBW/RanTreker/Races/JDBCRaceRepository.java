@@ -26,7 +26,7 @@ public class JDBCRaceRepository {
                                     int pageSize,
                                     int offset) {
         
-        // Print parameters for debugging
+        // debugging
         System.out.println("Parameters:");
         System.out.println("name = " + name);
         System.out.println("startDate = " + startDate);
@@ -54,7 +54,7 @@ public class JDBCRaceRepository {
 
         // Filter by end date
         if (endDate != null) {
-            sql.append(" AND end_date_time <= " + "'" + endDate + " 23:59:59" + "'");
+            sql.append(" AND start_date_time <= " + "'" + endDate + " 23:59:59" + "'");
         }
 
         // Filter by status
@@ -132,8 +132,6 @@ public class JDBCRaceRepository {
             sql.append(" ORDER BY name ASC");
         }
         
-
-
         // Pagination
         sql.append(" LIMIT " + pageSize);
         sql.append(" OFFSET " + offset);
@@ -164,8 +162,6 @@ public class JDBCRaceRepository {
             sql.append(" AND end_date_time <= '" + formattedEndDate + "'");
         }
 
-
-    
         if (status != null && !status.equals("All")) {
             sql.append(" AND status = ?");
             params.add(status);

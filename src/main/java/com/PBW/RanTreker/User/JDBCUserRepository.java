@@ -2,8 +2,6 @@ package com.PBW.RanTreker.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +60,7 @@ public class JDBCUserRepository {
         );
     }
 
+    @SuppressWarnings("deprecation")
     public int countUsers(String name, String nameSort, String peran) {
         String sql = "SELECT COUNT(*) FROM users";
         List<Object> params = new ArrayList<>();

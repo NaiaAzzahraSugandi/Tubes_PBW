@@ -48,26 +48,20 @@ public class AdminController {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             HttpSession session) {
 
-
+        // set jumlah record per halaman dan offsetnya
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
 
-        // Ambil user id dari session
-        Integer userId = (Integer) session.getAttribute("id_user");
-        if (userId == null) {
-            return "redirect:/login"; // Redirect jika session tidak ada
-        }
-
+        // ambil data user, hitung jumlah dan halamannya
         List<User> users = userRepository.findAll(name, nameSort, peran, pageSize, offset);
-        int totalRaces = userRepository.countUsers(name, nameSort, peran);
-        int totalPages = (int) Math.ceil((double) totalRaces / pageSize);
+        int totalUsers = userRepository.countUsers(name, nameSort, peran);
+        int totalPages = (int) Math.ceil((double) totalUsers / pageSize);
 
-
+        // tambah data ke model
         model.addAttribute("users", users);
         model.addAttribute("size", users.size());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         model.addAttribute("users", users);
         model.addAttribute("name", name);
         model.addAttribute("nameSort", nameSort);
