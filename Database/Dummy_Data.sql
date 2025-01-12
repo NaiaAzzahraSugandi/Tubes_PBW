@@ -1,3 +1,5 @@
+-- Password terenkripsi
+-- Semua password dalam dummy data adalah : password123
 INSERT INTO users (name, email, password, peran) VALUES
 ('John Doe', 'john.doe@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
 ('Jane Smith', 'jane.smith@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
