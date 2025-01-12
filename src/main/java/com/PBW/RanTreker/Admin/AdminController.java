@@ -44,9 +44,29 @@ public class AdminController {
     public String memberView(Model model,
             @RequestParam(value = "name", required = false, defaultValue = "") String name,
             @RequestParam(value = "nameSort", required = false, defaultValue = "ASC") String nameSort,
-            @RequestParam(value = "peran", required = false, defaultValue = "") String peran) {
+            @RequestParam(value = "peran", required = false, defaultValue = "") String peran,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            HttpSession session) {
 
-        List<User> users = userRepository.findAll(name, nameSort, peran);
+
+        int pageSize = 5;
+        int offset = (page - 1) * pageSize;
+
+        // Ambil user id dari session
+        Integer userId = (Integer) session.getAttribute("id_user");
+        if (userId == null) {
+            return "redirect:/login"; // Redirect jika session tidak ada
+        }
+
+        List<User> users = userRepository.findAll(name, nameSort, peran, pageSize, offset);
+        int totalRaces = userRepository.countUsers(name, nameSort, peran);
+        int totalPages = (int) Math.ceil((double) totalRaces / pageSize);
+
+
+        model.addAttribute("users", users);
+        model.addAttribute("size", users.size());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
 
         model.addAttribute("users", users);
         model.addAttribute("name", name);

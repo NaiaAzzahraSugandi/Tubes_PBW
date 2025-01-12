@@ -236,6 +236,46 @@
       border-radius: 5px; 
       cursor: pointer;
     }
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        list-style-type: none;
+        padding: 0;
+        margin: 20px 0;
+      }
+
+      .pagination-container li {
+        margin: 0 5px;
+      }
+
+      .pagination-container a {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .pagination-container a:hover {
+        background-color: #fc4c02;
+        color: white;
+        border-color: #fc4c02;
+      }
+
+      .pagination-container a.active {
+        background-color: #fc4c02;
+        color: white;
+        border-color: #fc4c02;
+        pointer-events: none;
+      }
+
+      .pagination-container a.disabled {
+        color: #aaa;
+        border-color: #ddd;
+        pointer-events: none;
+      }
   </style>
 </head>
 
@@ -294,7 +334,7 @@
           <div class="filter-items">
             <label for="status">Status:</label>
             <select id="status" name="status" onchange="this.form.submit()">
-              <option value="None" th:selected="${status == 'All'}">All</option>
+              <option value="All" th:selected="${status == 'All'}">All</option>
               <option value="Scheduled" th:selected="${status == 'Scheduled'}">Scheduled</option>
               <option value="Ongoing" th:selected="${status == 'Ongoing'}">Ongoing</option>
               <option value="Closed" th:selected="${status == 'Closed'}">Closed</option>
@@ -306,8 +346,7 @@
       <br>
       <hr>
 
-      <h2 th:text="${size} + ' Races'"></h2>
-
+      <h2 th:text="${size} + ' Races'"></h2>         
       <table>
         <thead>
           <tr>
@@ -340,6 +379,37 @@
           </tr>
         </tbody>
       </table>
+    </div>
+      <div th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination-container">
+                <!-- Tombol Previous -->
+                <!-- Tombol Previous -->
+              <li>
+                <a th:href="@{/user/races(page=${currentPage > 1 ? currentPage - 1 : 1}, raceName=${raceName}, startDate=${startDate}, endDate=${endDate}, distance=${distance}, status=${status})}" 
+                  aria-label="Previous" 
+                  th:class="${currentPage == 1} ? 'disabled' : null">
+                    &laquo;
+                </a>
+              </li>
+
+              <!-- Tombol Halaman -->
+              <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/user/races(page=${i}, raceName=${raceName}, startDate=${startDate}, endDate=${endDate}, distance=${distance}, status=${status})}" 
+                  th:text="${i}" 
+                  th:class="${currentPage == i} ? 'active' : null"></a>
+              </li>
+
+              <!-- Tombol Next -->
+              <li>
+                <a th:href="@{/user/races(page=${currentPage < totalPages ? currentPage + 1 : totalPages}, raceName=${raceName}, startDate=${startDate}, endDate=${endDate}, distance=${distance}, status=${status})}" 
+                  aria-label="Next" 
+                  th:class="${currentPage == totalPages} ? 'disabled' : null">
+                    &raquo;
+                </a>
+              </li>
+            </ul>
+        </nav>
     </div>
   </div>
 
