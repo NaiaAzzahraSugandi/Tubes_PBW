@@ -1,15 +1,15 @@
 INSERT INTO users (name, email, password, peran) VALUES
-('John Doe', 'john.doe@example.com', 'password123', 'user'),
-('Jane Smith', 'jane.smith@example.com', 'password456', 'admin'),
-('Mike Johnson', 'mike.j@example.com', 'securepass', 'user'),
-('Emily Davis', 'emily.d@example.com', 'mypassword', 'user'),
-('Chris Brown', 'chris.b@example.com', 'topsecret', 'user'),
-('Sophia Miller', 'sophia.m@example.com', 'welcome1', 'user'),
-('Liam Wilson', 'liam.w@example.com', 'qwertyuiop', 'admin'),
-('Olivia Martinez', 'olivia.m@example.com', 'hello123', 'user'),
-('Ethan Thomas', 'ethan.t@example.com', 'letmein', 'user'),
-('Ava Taylor', 'ava.t@example.com', 'runrunrun', 'admin'),
-('Admin', 'admin@gmail.com', 'admin123', 'admin');
+('John Doe', 'john.doe@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Jane Smith', 'jane.smith@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Mike Johnson', 'mike.j@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Emily Davis', 'emily.d@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Chris Brown', 'chris.b@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Sophia Miller', 'sophia.m@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Liam Wilson', 'liam.w@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Olivia Martinez', 'olivia.m@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Ethan Thomas', 'ethan.t@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Ava Taylor', 'ava.t@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Admin', 'admin@gmail.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin');
 
 INSERT INTO races (name, distance, start_date_time, end_date_time, participants, status, description, image_location) VALUES
 ('Spring Marathon', 42.20, '2025-04-15 08:00:00', '2025-04-15 14:00:00', 0, 'Scheduled', 'Annual spring marathon', NULL),
