@@ -25,6 +25,10 @@
   <div class="content">
     <div class="container"> 
       <h1>Members</h1> 
+      
+      <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+      </div>
 
       <form th:action="@{/admin/members}" method="GET">
         <p style="font-weight: bold;">Search</p>
