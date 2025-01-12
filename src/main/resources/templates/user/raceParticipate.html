@@ -6,6 +6,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/raceParticipate.css">
+    <script src="/js/raceParticipate.js" defer></script>
 </head>
 
 <body>
@@ -65,24 +66,6 @@
                     </div>
                     <input type="text" id="duration" name="duration" th:field="*{duration}" placeholder="HH:MM:SS" readonly style="margin-top: 10px; width: 180px;">
                   </div>
-                  
-                  <script>
-                    const hoursInput = document.getElementById('hours');
-                    const minutesInput = document.getElementById('minutes');
-                    const secondsInput = document.getElementById('seconds');
-                    const durationInput = document.getElementById('duration');
-                  
-                    function updateDuration() {
-                      const hours = hoursInput.value.padStart(2, '0') || '00';
-                      const minutes = minutesInput.value.padStart(2, '0') || '00';
-                      const seconds = secondsInput.value.padStart(2, '0') || '00';
-                      durationInput.value = `${hours}:${minutes}:${seconds}`;
-                    }
-                  
-                    hoursInput.addEventListener('input', updateDuration);
-                    minutesInput.addEventListener('input', updateDuration);
-                    secondsInput.addEventListener('input', updateDuration);
-                  </script>
 
                 <div>
                     <label for="image_file">Image</label>
@@ -96,34 +79,6 @@
             </form>
         </div>
     </div>
-
-    <script>
-        const distanceInput = document.getElementById('distance');
-        const raceLengthInput = document.getElementById('raceLength');
-        const participateButton = document.getElementById('participate-button');
-        const raceLengthValid = document.getElementById('raceLengthValid');
-
-        // Function to check distance and enable/disable button
-        function checkDistance() {
-            const distanceValue = parseFloat(distanceInput.value);
-            const raceLengthValue = parseFloat(raceLengthInput.value);
-
-            if ( distanceValue < raceLengthValue) {
-                participateButton.disabled = true;
-                raceLengthValid.style.display = 'block';
-            } else {
-                participateButton.disabled = false;
-                participateButton.textContent = "Participate"
-                raceLengthValid.style.display = 'none';
-            }
-        }
-
-        // Event listener for distance input
-        distanceInput.addEventListener('input', checkDistance);
-
-        // Initial check on page load
-        checkDistance();
-    </script>
 </body>
 
 </html>

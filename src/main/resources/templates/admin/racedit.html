@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RanTreker - Add Race</title>
+  <title>RanTreker Admin - Add Race</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/racedit.css">
+  <script src="/js/racedit.js" defer></script>
 </head>
 <body>
 
@@ -89,26 +90,5 @@
       </div>
     </div>
   </div>
-
-  <script>
-    let raceIDToDelete
-    function confirmDelete(raceID){
-      raceIDToDelete = raceID;
-      document.getElementById('confirmationModal').style.display = 'flex';
-      document.body.style.overflow = "hidden";
-      console.log(raceIDToDelete);
-    }
-    function closeModal(event){
-      document.getElementById('confirmationModal').style.display = 'none';
-      document.body.style.overflow = "auto";
-      event.preventDefault();
-    }
-
-    document.getElementById('confirmDeleteButton').onclick = function() {
-      event.preventDefault();
-      window.location.href = '/admin/races/delete?id=' + raceIDToDelete;
-      return false;
-    }
-  </script>
 </body>
 </html>

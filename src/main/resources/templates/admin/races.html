@@ -6,6 +6,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/races.css">
+  <script src="/js/races.js" defer></script>
 </head>
 
 <body>
@@ -148,20 +149,5 @@
         </nav>
     </div>            
   </div>
-  <script>
-    function resetOthers(changed) {
-      const distanceSelect = document.getElementById('distance');
-      const participantSelect = document.getElementById('participants')
-
-      if (changed === 'distance') {
-        participantSelect.value = 'None';
-      } 
-      else if (changed === 'participants') {
-        distanceSelect.value = 'None';
-      }
-      // Submit the form to apply the filters
-      document.forms[0].submit();
-    }
-  </script>
 </body>
 </html>
