@@ -1,15 +1,17 @@
+-- Password terenkripsi
+-- Semua password dalam dummy data adalah : password123
 INSERT INTO users (name, email, password, peran) VALUES
-('John Doe', 'john.doe@example.com', 'password123', 'user'),
-('Jane Smith', 'jane.smith@example.com', 'password456', 'admin'),
-('Mike Johnson', 'mike.j@example.com', 'securepass', 'user'),
-('Emily Davis', 'emily.d@example.com', 'mypassword', 'user'),
-('Chris Brown', 'chris.b@example.com', 'topsecret', 'user'),
-('Sophia Miller', 'sophia.m@example.com', 'welcome1', 'user'),
-('Liam Wilson', 'liam.w@example.com', 'qwertyuiop', 'admin'),
-('Olivia Martinez', 'olivia.m@example.com', 'hello123', 'user'),
-('Ethan Thomas', 'ethan.t@example.com', 'letmein', 'user'),
-('Ava Taylor', 'ava.t@example.com', 'runrunrun', 'admin'),
-('Admin', 'admin@gmail.com', 'admin123', 'admin');
+('John Doe', 'john.doe@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Jane Smith', 'jane.smith@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Mike Johnson', 'mike.j@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Emily Davis', 'emily.d@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Chris Brown', 'chris.b@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Sophia Miller', 'sophia.m@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Liam Wilson', 'liam.w@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Olivia Martinez', 'olivia.m@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Ethan Thomas', 'ethan.t@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'user'),
+('Ava Taylor', 'ava.t@example.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin'),
+('Admin', 'admin@gmail.com', '$2a$10$vO3S2qTZvyxPdhd06HxrFeBLIQyi/QfgwtnvgxDQCUufwUv4IND.y', 'admin');
 
 INSERT INTO races (name, distance, start_date_time, end_date_time, participants, status, description, image_location) VALUES
 ('Spring Marathon', 42.20, '2025-04-15 08:00:00', '2025-04-15 14:00:00', 0, 'Scheduled', 'Annual spring marathon', NULL),
@@ -68,11 +70,11 @@ VALUES
 (1, 'Park Jog', 4.50, '00:30:00', '2024-12-01', '08:00:00', 'Jog in the park for testing', NULL),
 (1, 'Trail Run', 6.50, '00:40:00', '2024-12-15', '07:15:00', 'Trail run for testing', NULL),
 (1, 'Beach Run', 5.50, '00:35:00', '2024-12-25', '09:30:00', 'Beach run for testing', NULL),
-(1, 'Sprint Run', 4.00, '00:20:00', '2024-12-30', '06:15:00', 'Sprint run for testing', NULL);
+(1, 'Sprint Run', 4.00, '00:20:00', '2024-12-30', '06:15:00', 'Sprint run for testing', NULL),
 (1, 'Spring Run', 5.00, '00:30:00', '2023-03-15', '06:30:00', 'Spring run to enjoy the weather', NULL),
 (1, 'Summer Run', 6.50, '00:40:00', '2023-06-10', '18:00:00', 'Summer evening run for fitness', NULL),
 (1, 'Autumn Trail', 7.00, '00:50:00', '2023-09-05', '07:30:00', 'Autumn trail running through the forest', NULL),
-(1, 'Winter Jog', 5.50, '00:35:00', '2023-12-20', '08:00:00', 'Jogging in winter conditions', NULL);
+(1, 'Winter Jog', 5.50, '00:35:00', '2023-12-20', '08:00:00', 'Jogging in winter conditions', NULL),
 (1, 'New Year Run', 6.00, '00:40:00', '2024-01-01', '07:30:00', 'New Year’s Day run to start the year', NULL),
 (1, 'January Jog', 4.50, '00:30:00', '2024-01-15', '08:00:00', 'Jogging through the city park', NULL),
 (1, 'Winter Sprint', 5.00, '00:25:00', '2024-02-05', '06:30:00', 'Short winter sprint training', NULL),

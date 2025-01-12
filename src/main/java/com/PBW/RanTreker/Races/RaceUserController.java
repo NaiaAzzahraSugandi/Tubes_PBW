@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-// import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +56,12 @@ public class RaceUserController {
                             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                             HttpSession session) {
 
+        // set jumlah record dalam satu page dan offsetnya
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
 
         // Ambil user id dari session
         Integer userId = (Integer) session.getAttribute("id_user");
-        if (userId == null) {
-            return "redirect:/login"; // Redirect jika session tidak ada
-        }
 
         // Ambil data races dari repository
         List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, status, pageSize, offset);
@@ -75,30 +72,33 @@ public class RaceUserController {
         List<Boolean> participationList = new ArrayList<>();
 
         for (Race race : races) {
-            updateRaceStatus(race); // Update status race
+            updateRaceStatus(race);
             int raceID = race.getRaceID();
             Optional<RaceParticipant> findRaceParticipant = raceParticipantRepository.findByParticipantID(raceID, userId);
 
+            // set kolom isi dari kolom "joined" dalam tabel, untuk mengetahui user sudah join race atau tidak
             if (findRaceParticipant.isPresent()) {
                 joinStatuses.add("Joined");
                 participationList.add(true);
-            } else if (race.getStatus().equals("Scheduled") || race.getStatus().equals("Closed")) {
+            } 
+            else if (race.getStatus().equals("Scheduled") || race.getStatus().equals("Closed")) {
                 joinStatuses.add("Not Joined");
                 participationList.add(true);
-            } else {
+            } 
+            else {
                 joinStatuses.add("Not Joined");
                 participationList.add(false);
             }
         }
 
+        // add page model
         model.addAttribute("races", races);
         model.addAttribute("size", races.size());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("joinStatuses", joinStatuses);
         model.addAttribute("participationList", participationList);
-
-        // Add filter model
+        // add pagination model
         model.addAttribute("raceName", raceName);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -107,9 +107,6 @@ public class RaceUserController {
 
         return "/user/raceUser";
     }
-
-
-
 
     /**
      * Method untuk update status race

@@ -26,9 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-// import java.util.ArrayList;
 import java.util.List;
-// import java.util.Optional;
 
 @Controller
 @RequestMapping("admin")
@@ -51,29 +49,31 @@ public class RaceController {
                             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                             @RequestParam(value = "distance", required = false, defaultValue = "None") String distance,
                             @RequestParam(value = "status", required = false, defaultValue = "All") String status,
-                            @RequestParam(value = "participants", required = false, defaultValue = "None") String participants, // Added participants filter
+                            @RequestParam(value = "participants", required = false, defaultValue = "None") String participants,
                             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                             HttpSession session) {
 
+        // set jumlah record per page dan offset
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
 
-        // Ambil user id dari session
-        Integer userId = (Integer) session.getAttribute("id_user");
-        if (userId == null) {
-            return "redirect:/login"; // Redirect jika session tidak ada
-        }
-
         // Ambil data races dari repository
         List<Race> races = raceRepository.getAllRaces(raceName, startDate, endDate, distance, participants, status, pageSize, offset);
+
+        // update status race
+        for (Race race : races) {
+            updateRaceStatus(race);
+        }
+
+        // hitung jumlah race dan jumlah halaman
         int totalRaces = raceRepository.countRaces(raceName, startDate, endDate, distance, status);
         int totalPages = (int) Math.ceil((double) totalRaces / pageSize);
 
+        // tambah atribut untuk ditampilkan ke view
         model.addAttribute("races", races);
         model.addAttribute("size", races.size());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         model.addAttribute("raceName", raceName);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -97,6 +97,7 @@ public class RaceController {
     @RequiredRole("admin")
     public String addRace(@Valid Race race, BindingResult bindingResult, Model model,
             RedirectAttributes redirectAttributes) {
+        // cek apakah masukkan ada error
         if (bindingResult.hasErrors()) {
             model.addAttribute("race", race);
             return "/admin/raceadd";
@@ -207,9 +208,9 @@ public class RaceController {
         catch(IOException e){
             System.out.println(e.getMessage());
         }
-
+        // update status dari race
         updateRaceStatus(race);
-
+        // panggil query edit dari repository
         raceRepository.editRace(race);
 
         redirectAttributes.addFlashAttribute("successMessage", "Race edited successfully!");

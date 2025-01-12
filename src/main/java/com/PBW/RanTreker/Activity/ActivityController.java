@@ -1,6 +1,5 @@
 package com.PBW.RanTreker.Activity;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -88,7 +87,6 @@ public class ActivityController {
         return "/user/dashboard";
     }
 
-
     @GetMapping("/chart")
     @RequiredRole("user")
     public ResponseEntity<byte[]> getChartImage(@RequestParam String type) {
@@ -164,16 +162,20 @@ public class ActivityController {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 
         int id_user = (int) session.getAttribute("id_user");
+        // set jumlah record per halaman, dan offsetnya
         int pageSize = 5;
         int offset = (page - 1) * pageSize;
 
-        List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration,
-                distance, offset, pageSize, page);
+        // ambil semua aktivitas yang dilakukan oleh user
+        List<Activity> activities = activityRepository.findAll(id_user, title, startDate, endDate, time, duration, distance, offset, pageSize, page);
 
-         // Hitung total halaman
+        // Hitung total halaman
         int totalActivities = activityRepository.countActivities(id_user, title, startDate, endDate, time, duration, distance);
         int totalPages = (int) Math.ceil((double) totalActivities / pageSize);
-
+        
+        System.out.println(page);
+        System.out.println(totalPages);
+        
         // add models for filter
         model.addAttribute("title", title);
         model.addAttribute("startDate", startDate);
@@ -181,13 +183,9 @@ public class ActivityController {
         model.addAttribute("time", time);
         model.addAttribute("duration", duration);
         model.addAttribute("distance", distance);
-
-        System.out.println(page);
-        System.out.println(totalPages);
-        // Add pagination attributes
+        // add models for pagination
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-
         // add models for table
         model.addAttribute("totalActivity", activities.size());
         model.addAttribute("activities", activities);

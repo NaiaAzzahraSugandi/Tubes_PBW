@@ -1,6 +1,5 @@
 package com.PBW.RanTreker.Notification;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
