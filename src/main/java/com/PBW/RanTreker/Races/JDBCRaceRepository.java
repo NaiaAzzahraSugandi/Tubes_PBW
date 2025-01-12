@@ -54,7 +54,7 @@ public class JDBCRaceRepository {
 
         // Filter by end date
         if (endDate != null) {
-            sql.append(" AND end_date_time <= " + "'" + endDate + " 23:59:59" + "'");
+            sql.append(" AND start_date_time <= " + "'" + endDate + " 23:59:59" + "'");
         }
 
         // Filter by status
