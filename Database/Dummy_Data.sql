@@ -25,7 +25,6 @@ INSERT INTO races (name, distance, start_date_time, end_date_time, participants,
 ('Halloween Hustle', 13.00, '2024-10-31 18:00:00', '2024-10-31 20:30:00', 0, 'Closed', 'Spooky themed run', NULL),
 ('Charity Walk', 3.50, '2025-09-15 10:00:00', '2025-09-15 11:30:00', 0, 'Scheduled', 'Community charity event', NULL);
 
--- Dummy data for activities table (running-related only)
 INSERT INTO activities (id_user, title, distance, duration, date, time, description, image_location)
 VALUES
 (1, 'Morning Run', 5.00, '00:30:00', '2024-12-01', '06:30:00', 'Quick morning run around the park', NULL),
@@ -59,7 +58,6 @@ VALUES
 (10, 'Endurance Run', 11.00, '01:30:00', '2024-12-23', '07:00:00', 'Endurance training run', NULL),
 (10, 'Morning Sprint', 5.00, '00:30:00', '2025-01-05', '06:30:00', 'Sprint session to start the day', NULL);
 
--- Insert records to ensure good coverage for weekly, monthly, and yearly charts (username John Doe)
 INSERT INTO activities (id_user, title, distance, duration, date, time, description, image_location)
 VALUES
 (1, 'Morning Run', 5.00, '00:30:00', '2024-06-01', '06:30:00', 'Morning run for testing', NULL),
@@ -83,7 +81,6 @@ VALUES
 (1, 'Mountain Run', 9.00, '01:15:00', '2024-05-03', '08:00:00', 'Running on mountain trails', NULL),
 (1, 'Park Run', 4.00, '00:30:00', '2024-05-15', '06:30:00', 'Easy run through the park', NULL);
 
--- Insert dummy race participants (no NULL values)
 INSERT INTO race_participants (race_id, user_id, registration_date, distance, duration, speed_km_min, image_location) VALUES
 (1, 1, '2024-01-10 12:00:00', 42.20, '03:45:00', 0.1875, 'marathon1.jpg'),
 (1, 3, '2024-01-12 14:30:00', 42.20, '04:00:00', 0.1750, 'marathon2.jpg'),
