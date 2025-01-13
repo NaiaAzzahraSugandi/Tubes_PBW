@@ -154,6 +154,7 @@ public class RaceController {
         Race race = raceRepository.findByRaceID(id).get(0);
         model.addAttribute("race", race);
 
+        System.out.println(race.getImage_location());
         return "/admin/racedit";
     }
 
@@ -177,8 +178,9 @@ public class RaceController {
                 // buang image yang lama
                 String directory = "public/banner_images/";
 
-                if(!race.getImage_location().equals("")){
+                if(race.getImage_location() != null && !race.getImage_location().equals("")){
                     Path oldImagePath = Paths.get(directory + race.getImage_location());
+                    
                     try{
                         Files.delete(oldImagePath);
                     }

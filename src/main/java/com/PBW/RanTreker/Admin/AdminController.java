@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.PBW.RanTreker.RequiredRole;
 import com.PBW.RanTreker.Activity.Activity;
@@ -83,19 +84,20 @@ public class AdminController {
 
     @PostMapping("/editMember")
     @RequiredRole("admin")
-    public String editMember(@Valid User user, BindingResult bindingResult, Model model) {
+    public String editMember(@Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "admin/memberedit";
         }
 
         userRepository.updateMember(user.getId_user(), user.getName(), user.getEmail(), user.getPeran());
+        redirectAttributes.addFlashAttribute("successMessage", "Member has been edited successfully!");
 
         return "redirect:/admin/members";
     }
 
     @GetMapping("delete")
     @RequiredRole("admin")
-    public String deleteMember(@RequestParam(value = "id", required = true) int id) {
+    public String deleteMember(@RequestParam(value = "id", required = true) int id, RedirectAttributes redirectAttributes) {
         // delete activities milik member
         List<Activity> activitiesToDelete = activityRepository.findByUserID(id);
         System.out.println(activitiesToDelete.size());
@@ -119,6 +121,8 @@ public class AdminController {
 
         // delete member
         userRepository.deleteMember(id);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Members successfully deleted!");
         return "redirect:/admin/members";
     }
 
