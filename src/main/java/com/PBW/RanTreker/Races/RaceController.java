@@ -180,6 +180,7 @@ public class RaceController {
 
                 if(race.getImage_location() != null && !race.getImage_location().equals("")){
                     Path oldImagePath = Paths.get(directory + race.getImage_location());
+                    
                     try{
                         Files.delete(oldImagePath);
                     }
